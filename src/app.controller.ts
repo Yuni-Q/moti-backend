@@ -8,9 +8,9 @@ import {
 } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Token } from './common/decorators/token.decorator';
-import { SampleRequestDto } from './dto/sample.request.dto';
-import { TransformInterceptor } from './interceptors/transformInterceptor.interceptor';
-import { UndefinedToNullInterceptor } from './interceptors/undefined.interceptor';
+import { SampleRequestDto } from './common/dto/sample.request.dto';
+import { TransformInterceptor } from './common/interceptors/transformInterceptor.interceptor';
+import { UndefinedToNullInterceptor } from './common/interceptors/undefined.interceptor';
 
 @UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('참고')

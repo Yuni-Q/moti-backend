@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -9,9 +16,9 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { TokenDto } from 'src/dto/token.dto';
-import { User } from 'src/entity/User.entity';
-import { TransformInterceptor } from 'src/interceptors/transformInterceptor.interceptor';
+import { TokenDto } from 'src/common/dto/token.dto';
+import { User } from 'src/common/entity/User.entity';
+import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
@@ -85,6 +92,12 @@ export class UsersController {
   @ApiBearerAuth('authorization')
   @Get(':id')
   async getUserInfo(@Token() user: User, @Id() id: number): Promise<UserDto> {
+    const my = await this.usersService.get(id);
+    return { data: my };
+  }
+
+  @Put(':id')
+  async updateUser(@Token() user: User, @Id() id: number): Promise<UserDto> {
     const my = await this.usersService.get(id);
     return { data: my };
   }

@@ -2,11 +2,11 @@ import { Module, Global, DynamicModule } from '@nestjs/common';
 import { EnvModule } from '../env/env.module';
 import { EnvService } from '../env/env.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/entity/User.entity';
-import { Answer } from 'src/entity/Answer.entity';
-import { File } from 'src/entity/File.entity';
-import { Mission } from 'src/entity/Mission.entity';
-import { Question } from 'src/entity/Question.entity';
+import { User } from 'src/common/entity/User.entity';
+import { Answer } from 'src/common/entity/Answer.entity';
+import { File } from 'src/common/entity/File.entity';
+import { Mission } from 'src/common/entity/Mission.entity';
+import { Question } from 'src/common/entity/Question.entity';
 
 function DatabaseOrmModule(): DynamicModule {
   const config = new EnvService().read();

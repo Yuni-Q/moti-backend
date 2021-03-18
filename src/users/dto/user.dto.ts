@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RequestDto } from 'src/dto/response.dto';
-import { User } from 'src/entity/User.entity';
+import { RequestDto } from 'src/common/dto/response.dto';
+import { User } from 'src/common/entity/User.entity';
 
 export class UserDto extends RequestDto {
   @ApiProperty({

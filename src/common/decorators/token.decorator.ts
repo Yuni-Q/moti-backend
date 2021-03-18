@@ -5,7 +5,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
-import { User } from 'src/entity/User.entity';
+import { User } from 'src/common/entity/User.entity';
 
 export const Token = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
