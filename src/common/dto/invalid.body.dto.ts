@@ -2,17 +2,18 @@ import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { RequestDto } from './response.dto';
 
-export class TokenDto extends RequestDto {
+export class InvalidBodyDto extends RequestDto {
   @ApiProperty({
-    example: HttpStatus.BAD_REQUEST,
+    example: HttpStatus.PRECONDITION_FAILED,
     description: '상태 코드',
     required: true,
   })
-  public status = HttpStatus.BAD_REQUEST;
+  public status = HttpStatus.PRECONDITION_FAILED;
+
   @ApiProperty({
-    example: '토큰이 필요합니다.',
+    example: '필수 파라이터가 없습니다.',
     description: '에러 메시지',
     required: true,
   })
-  public message: string;
+  public message = '필수 파라이터가 없습니다.';
 }

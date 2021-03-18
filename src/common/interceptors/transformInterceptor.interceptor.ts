@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Response<T> {
-  status: number;
-  message: string;
+  status?: number;
+  statusCode?: number;
+  message?: string;
   data: T;
 }
 
@@ -22,7 +23,7 @@ export class TransformInterceptor<T>
     next: CallHandler,
   ): Observable<Response<T>> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: Response<T>) => {
         const status = data.status || HttpStatus.OK;
         context.switchToHttp().getResponse().status(status);
         return {

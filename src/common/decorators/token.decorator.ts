@@ -6,19 +6,15 @@ import {
 } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
 import { User } from 'src/common/entity/User.entity';
+import { InvalidTokenDto } from '../dto/invalid.token.dto';
+import { TokenDto } from '../dto/token.dto';
 
 export const Token = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization as string;
     if (!token) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: '토큰이 필요합니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(new TokenDto(), HttpStatus.BAD_REQUEST);
     }
     if ((token as string).startsWith('Bearer ')) {
       token = token.slice(7);
@@ -31,31 +27,13 @@ export const Token = createParamDecorator(
         };
       };
     } catch (e) {
-      throw new HttpException(
-        {
-          status: 1100,
-          message: '올바르지 못한 토큰 입니다.',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
     }
-    if (typeof result === 'object' && !('user' in result)) {
-      throw new HttpException(
-        {
-          status: 1100,
-          message: '올바르지 못한 토큰 입니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    if (!result.user.id) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: '유저 아이디가 존재하지 않습니다. 토큰을 확인해 주세요.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+    if (
+      typeof result === 'object' &&
+      (!('user' in result) || !result.user.id)
+    ) {
+      throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
     }
     return result.user as User;
   },

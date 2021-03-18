@@ -1,13 +1,14 @@
 import {
   Controller,
   Get,
-  Param,
+  HttpStatus,
   Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -16,31 +17,34 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
+import { InvalidBodyDto } from 'src/common/dto/invalid.body.dto';
 import { TokenDto } from 'src/common/dto/token.dto';
 import { User } from 'src/common/entity/User.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
+import { ValidBody } from './decorators/valid.body';
+import { BodyDto } from './dto/body.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
 @UseInterceptors(TransformInterceptor)
+@ApiBearerAuth('authorization')
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  type: TokenDto,
+  description: '토큰이 필요합니다.',
+})
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: UsersDto,
     description: '성공',
   })
-  @ApiResponse({
-    status: 400,
-    type: TokenDto,
-    description: '토큰이 필요합니다.',
-  })
   @ApiOperation({ summary: '유저 정보 조회' })
-  @ApiBearerAuth('authorization')
   @ApiQuery({
     name: 'id',
     required: false,
@@ -60,13 +64,7 @@ export class UsersController {
     type: UserDto,
     description: '성공',
   })
-  @ApiResponse({
-    status: 400,
-    type: TokenDto,
-    description: '토큰이 필요합니다.',
-  })
   @ApiOperation({ summary: '내 정보 조회' })
-  @ApiBearerAuth('authorization')
   @Get('my')
   async getMyInfo(@Token() user: User): Promise<UserDto> {
     const my = await this.usersService.get(user.id);
@@ -74,14 +72,9 @@ export class UsersController {
   }
 
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     type: UserDto,
     description: '성공',
-  })
-  @ApiResponse({
-    status: 400,
-    type: TokenDto,
-    description: '토큰이 필요합니다.',
   })
   @ApiParam({
     name: 'id',
@@ -89,16 +82,34 @@ export class UsersController {
     description: 'path',
   })
   @ApiOperation({ summary: '특정 정보 조회' })
-  @ApiBearerAuth('authorization')
   @Get(':id')
   async getUserInfo(@Token() user: User, @Id() id: number): Promise<UserDto> {
     const my = await this.usersService.get(id);
     return { data: my };
   }
 
-  @Put(':id')
-  async updateUser(@Token() user: User, @Id() id: number): Promise<UserDto> {
-    const my = await this.usersService.get(id);
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: HttpStatus.PRECONDITION_FAILED,
+    type: InvalidBodyDto,
+    description: '필수 파라이터가 없습니다.',
+  })
+  @ApiBody({
+    type: BodyDto,
+    required: true,
+    description: 'body',
+  })
+  @ApiOperation({ summary: '내 정보 수정' })
+  @Put('')
+  async updateUser(
+    @Token() user: User,
+    @ValidBody() body: BodyDto,
+  ): Promise<UserDto> {
+    const my = await this.usersService.updateMyInfo(user.id, body);
     return { data: my };
   }
 }
