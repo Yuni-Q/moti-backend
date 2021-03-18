@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/common/entity/User.entity';
 import { MoreThan, Repository } from 'typeorm';
 import { BodyDto } from './dto/body.dto';
+import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,6 +37,9 @@ export class UsersService {
         id: id,
       },
     });
+    if (!user) {
+      throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
+    }
     const newUser = { ...user, ...body };
     await this.userRepository.save(newUser);
     const returnUser = await this.userRepository.findOne({

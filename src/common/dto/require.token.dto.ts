@@ -1,8 +1,8 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { RequestDto } from './response.dto';
+import { ResponseDto } from './response.dto';
 
-export class TokenDto extends RequestDto {
+export class RequireTokenDto extends ResponseDto {
   @ApiProperty({
     example: HttpStatus.BAD_REQUEST,
     description: '상태 코드',

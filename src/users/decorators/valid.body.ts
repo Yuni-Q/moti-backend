@@ -4,7 +4,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { InvalidBodyDto } from 'src/common/dto/invalid.body.dto';
+import { RequireBodyDto } from 'src/common/dto/require.body.dto';
 
 export const ValidBody = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
@@ -12,7 +12,7 @@ export const ValidBody = createParamDecorator(
     const { name, birthday, gender } = request.body;
     if (!name || !birthday || !gender) {
       throw new HttpException(
-        new InvalidBodyDto(),
+        new RequireBodyDto(),
         HttpStatus.PRECONDITION_FAILED,
       );
     }

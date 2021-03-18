@@ -7,14 +7,14 @@ import {
 import jwt from 'jsonwebtoken';
 import { User } from 'src/common/entity/User.entity';
 import { InvalidTokenDto } from '../dto/invalid.token.dto';
-import { TokenDto } from '../dto/token.dto';
+import { RequireTokenDto } from '../dto/require.token.dto';
 
 export const Token = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization as string;
     if (!token) {
-      throw new HttpException(new TokenDto(), HttpStatus.BAD_REQUEST);
+      throw new HttpException(new RequireTokenDto(), HttpStatus.BAD_REQUEST);
     }
     if ((token as string).startsWith('Bearer ')) {
       token = token.slice(7);

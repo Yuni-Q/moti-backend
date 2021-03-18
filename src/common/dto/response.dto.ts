@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RequestDto {
+export class ResponseDto {
   @ApiProperty({
     example: HttpStatus.OK,
     description: '상태 코드',

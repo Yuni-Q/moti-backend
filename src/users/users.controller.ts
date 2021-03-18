@@ -17,12 +17,13 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { InvalidBodyDto } from 'src/common/dto/invalid.body.dto';
-import { TokenDto } from 'src/common/dto/token.dto';
+import { RequireBodyDto } from 'src/common/dto/require.body.dto';
+import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { User } from 'src/common/entity/User.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { BodyDto } from './dto/body.dto';
+import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
@@ -31,7 +32,7 @@ import { UsersService } from './users.service';
 @ApiBearerAuth('authorization')
 @ApiResponse({
   status: HttpStatus.BAD_REQUEST,
-  type: TokenDto,
+  type: RequireTokenDto,
   description: '토큰이 필요합니다.',
 })
 @ApiTags('users')
@@ -94,8 +95,13 @@ export class UsersController {
     description: '성공',
   })
   @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: InvalidUserIdDto,
+    description: '유저가 없습니다.',
+  })
+  @ApiResponse({
     status: HttpStatus.PRECONDITION_FAILED,
-    type: InvalidBodyDto,
+    type: RequireBodyDto,
     description: '필수 파라이터가 없습니다.',
   })
   @ApiBody({
