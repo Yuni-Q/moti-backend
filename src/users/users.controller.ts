@@ -8,7 +8,9 @@ import {
 } from '@nestjs/swagger';
 import { Token } from 'src/common/decorators/token.decorator';
 import { TokenDto } from 'src/dto/token.dto';
+import { User } from 'src/entity/User.entity';
 import { TransformInterceptor } from 'src/interceptors/transformInterceptor.interceptor';
+import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
@@ -36,8 +38,26 @@ export class UsersController {
     description: 'id',
   })
   @Get()
-  async getAll(@Token() token, @Query('id') id): Promise<any> {
+  async getAll(@Token() user: User, @Query('id') id: string): Promise<any> {
     const users = await this.usersService.getAll(id);
+    return { data: users };
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: 400,
+    type: TokenDto,
+    description: '토큰이 필요합니다.',
+  })
+  @ApiOperation({ summary: '내 정보 조회' })
+  @ApiBearerAuth('authorization')
+  @Get('my')
+  async getMyInfo(@Token() user: User): Promise<any> {
+    const users = await this.usersService.get(user.id);
     return { data: users };
   }
 }

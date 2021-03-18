@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -7,7 +8,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [UsersModule, DatabaseModule, EnvModule],
+  imports: [ConfigModule.forRoot(), UsersModule, DatabaseModule, EnvModule],
   controllers: [AppController],
   providers: [AppService],
 })

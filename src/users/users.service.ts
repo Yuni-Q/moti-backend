@@ -10,13 +10,22 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async getAll(id?: number): Promise<User[]> {
+  async getAll(id?: string): Promise<User[]> {
     const users = await this.userRepository.find({
       where: {
-        id: MoreThan(id || 0),
+        id: MoreThan(parseInt(id, 10) || 0),
       },
       take: 10,
     });
     return users;
+  }
+
+  async get(id?: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return user;
   }
 }
