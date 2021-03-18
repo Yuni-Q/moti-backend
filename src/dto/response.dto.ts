@@ -6,11 +6,11 @@ export class RequestDto {
     description: '상태 코드',
     required: true,
   })
-  public status: string;
+  public status?: string;
   @ApiProperty({
     example: '',
     description: '에러 메시지',
     required: true,
   })
-  public error: string;
+  public error?: string;
 }

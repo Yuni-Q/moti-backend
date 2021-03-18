@@ -38,7 +38,10 @@ export class UsersController {
     description: 'id',
   })
   @Get()
-  async getAll(@Token() user: User, @Query('id') id: string): Promise<any> {
+  async getAll(
+    @Token() user: User,
+    @Query('id') id: string,
+  ): Promise<UsersDto> {
     const users = await this.usersService.getAll(id);
     return { data: users };
   }
@@ -56,8 +59,8 @@ export class UsersController {
   @ApiOperation({ summary: '내 정보 조회' })
   @ApiBearerAuth('authorization')
   @Get('my')
-  async getMyInfo(@Token() user: User): Promise<any> {
-    const users = await this.usersService.get(user.id);
-    return { data: users };
+  async getMyInfo(@Token() user: User): Promise<UserDto> {
+    const my = await this.usersService.get(user.id);
+    return { data: my };
   }
 }
