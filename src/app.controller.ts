@@ -9,6 +9,7 @@ import {
 import { AppService } from './app.service';
 import { Token } from './common/decorators/token.decorator';
 import { SampleRequestDto } from './dto/sample.request.dto';
+import { TransformInterceptor } from './interceptors/transformInterceptor.interceptor';
 import { UndefinedToNullInterceptor } from './interceptors/undefined.interceptor';
 
 @UseInterceptors(UndefinedToNullInterceptor)
@@ -18,8 +19,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @UseInterceptors(TransformInterceptor)
+  getHello(): any {
+    return { data: this.appService.getHello() };
   }
 
   @ApiResponse({
@@ -44,7 +46,7 @@ export class AppController {
   })
   @ApiOperation({ summary: 'hi' })
   @Get('hi')
-  getHi(@Body() body: SampleRequestDto, @Token() token): string {
-    return this.appService.getHi();
+  getHi(@Body() body: SampleRequestDto, @Token() token): any {
+    return { data: 'bye' };
   }
 }

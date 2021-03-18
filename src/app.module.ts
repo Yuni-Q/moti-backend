@@ -1,11 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
+import { DatabaseModule } from './database/database.module';
+import { EnvModule } from './env/env.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [UsersModule, DatabaseModule, EnvModule],
   controllers: [AppController],
   providers: [AppService],
 })
