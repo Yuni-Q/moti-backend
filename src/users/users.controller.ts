@@ -1,11 +1,13 @@
-import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import { TokenDto } from 'src/dto/token.dto';
 import { User } from 'src/entity/User.entity';
@@ -61,6 +63,29 @@ export class UsersController {
   @Get('my')
   async getMyInfo(@Token() user: User): Promise<UserDto> {
     const my = await this.usersService.get(user.id);
+    return { data: my };
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: 400,
+    type: TokenDto,
+    description: '토큰이 필요합니다.',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'path',
+  })
+  @ApiOperation({ summary: '특정 정보 조회' })
+  @ApiBearerAuth('authorization')
+  @Get(':id')
+  async getUserInfo(@Token() user: User, @Id() id: number): Promise<UserDto> {
+    const my = await this.usersService.get(id);
     return { data: my };
   }
 }
