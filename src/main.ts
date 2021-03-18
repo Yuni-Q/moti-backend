@@ -10,13 +10,24 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
 
   const config = new DocumentBuilder()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'authorization', // This name here is important for matching up with @ApiBearerAuth() in your controller!
+    )
     .setTitle('API')
     .setDescription('개발을 위한 API 문서입니다.')
     .setVersion('1.0.0')
     .addCookieAuth('connect.id')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('apiDocs', app, document);
   await app.listen(port);
   console.log(`listening on port ${port}`);
 

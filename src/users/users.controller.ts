@@ -1,7 +1,12 @@
-import { Controller, Get, UseInterceptors } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Token } from 'src/common/decorators/token.decorator';
-import { SampleRequestDto } from 'src/dto/sample.request.dto';
 import { TokenDto } from 'src/dto/token.dto';
 import { TransformInterceptor } from 'src/interceptors/transformInterceptor.interceptor';
 import { UsersDto } from './dto/users.dto';
@@ -24,14 +29,15 @@ export class UsersController {
     description: '토큰이 필요합니다.',
   })
   @ApiOperation({ summary: '유저 정보 조회' })
-  @ApiHeader({
-    name: 'authorization',
-    required: true,
-    description: 'token',
+  @ApiBearerAuth('authorization')
+  @ApiQuery({
+    name: 'id',
+    required: false,
+    description: 'id',
   })
   @Get()
-  async find(@Token() token): Promise<any> {
-    const users = await this.usersService.find();
+  async getAll(@Token() token, @Query('id') id): Promise<any> {
+    const users = await this.usersService.getAll(id);
     return { data: users };
   }
 }
