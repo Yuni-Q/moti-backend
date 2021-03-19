@@ -32,21 +32,13 @@ export class UsersService {
   }
 
   async updateMyInfo(id: number, body: BodyDto): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
+    const user = await this.get(id);
     if (!user) {
       throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
     }
     const newUser = { ...user, ...body };
     await this.userRepository.save(newUser);
-    const returnUser = await this.userRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
+    const returnUser = await this.get(id);
     return returnUser;
   }
 }
