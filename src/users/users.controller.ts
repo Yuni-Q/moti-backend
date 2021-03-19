@@ -118,4 +118,23 @@ export class UsersController {
     const my = await this.usersService.updateMyInfo(user.id, body);
     return { data: my };
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: InvalidUserIdDto,
+    description: '유저가 없습니다.',
+  })
+  @ApiOperation({ summary: 'refreshDate 초기화' })
+  @Put('refresh')
+  async resetRefreshDate(@Token() user: User): Promise<UserDto> {
+    const my = await this.usersService.updateMyInfo(user.id, {
+      refreshDate: null,
+    });
+    return { data: my };
+  }
 }

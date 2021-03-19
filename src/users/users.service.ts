@@ -31,14 +31,22 @@ export class UsersService {
     return user;
   }
 
-  async updateMyInfo(id: number, body: BodyDto): Promise<User> {
-    const user = await this.get(id);
-    if (!user) {
-      throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
-    }
+  async updateMyInfo(
+    id: number,
+    body: BodyDto | { refreshDate: null },
+  ): Promise<User> {
+    const user = await this.checkUser(id);
     const newUser = { ...user, ...body };
     await this.userRepository.save(newUser);
     const returnUser = await this.get(id);
     return returnUser;
+  }
+
+  async checkUser(id: number): Promise<User> {
+    const user = await this.get(id);
+    if (!user) {
+      throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
+    }
+    return user;
   }
 }
