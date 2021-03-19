@@ -1,9 +1,17 @@
-import { Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Question } from 'src/common/entity/Question.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { QuestionDto } from './dto/question.dto';
+import { QuestionsDto } from './dto/questions.dto';
 import { QuestionsPostRequestDto } from './dto/questions.post.request.dto';
 import { QuestionsService } from './questions.service';
 
@@ -23,5 +31,22 @@ export class QuestionsController {
   async post(@ValidBody() body: QuestionsPostRequestDto): Promise<QuestionDto> {
     const result = await this.QuestionsService.post(body.content);
     return { status: 201, data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: QuestionsDto,
+    description: '성공',
+  })
+  @ApiOperation({ summary: '질문 조회' })
+  @Get('')
+  async get(
+    @Query('page') pageString,
+    @Query('limit') limitString,
+  ): Promise<QuestionsDto> {
+    const page = parseInt(pageString || 1, 10);
+    const limit = parseInt(limitString || 1, 20);
+    const result = await this.QuestionsService.get(page, limit);
+    return { data: result };
   }
 }
