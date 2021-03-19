@@ -1,10 +1,4 @@
-import {
-  Controller,
-  HttpStatus,
-  Post,
-  UseInterceptors,
-  Headers,
-} from '@nestjs/common';
+import { Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -12,13 +6,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Token } from './decorators/token.decorator';
 import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
-import { SigninService } from './signin.service';
+import { Token } from './decorators/token.decorator';
 import { ValidBody } from './decorators/valid.body';
-import { SigninResponseDto } from './dto/signin.response.dto';
 import { SigninRequestDto } from './dto/signin.request.dto';
+import { SigninResponseDto } from './dto/signin.response.dto';
+import { SigninService } from './signin.service';
 
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')
@@ -31,6 +25,18 @@ import { SigninRequestDto } from './dto/signin.request.dto';
 @Controller('signin')
 export class SigninController {
   constructor(private readonly SigninService: SigninService) {}
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SigninResponseDto,
+    description: '성공',
+  })
+  @ApiOperation({ summary: 'refresh token으로 로그인' })
+  @Post('refresh')
+  async refresh(@Token() token: string): Promise<SigninResponseDto> {
+    const result = await this.SigninService.refresh(token);
+    return { status: 201, data: result };
+  }
 
   @ApiResponse({
     status: HttpStatus.OK,

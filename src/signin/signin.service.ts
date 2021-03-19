@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InvalidTokenDto } from 'src/common/dto/invalid.token.dto';
 import { User } from 'src/common/entity/User.entity';
-import { Repository } from 'typeorm';
+import { InvalidUserIdDto } from 'src/users/dto/invalid.user.id.dto';
 import { UsersService } from 'src/users/users.service';
 import { SigninResponseDto } from './dto/signin.response.dto';
 
@@ -79,6 +79,28 @@ export class SigninService {
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  async refresh(token: string): Promise<SigninResponseDto['data']> {
+    try {
+      const result = jwt.verify(token, process.env.privateKey) as {
+        snsId: string;
+        snsType: string;
+      };
+      if (!result?.snsType) {
+        throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
+      }
+      const user = await this.usersService.getUserBySnsIdAndSnsType(result);
+      if (!user?.id) {
+        throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
+      }
+      const { accessToken, refreshToken } = await this.createToken(user);
+      const signUp =
+        !!user.name && !!user.birthday && !!user.email && !!user.gender;
+      return { accessToken, refreshToken, signUp };
+    } catch (e) {
+      throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
     }
   }
 
