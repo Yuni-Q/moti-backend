@@ -6,9 +6,17 @@ import { DatabaseModule } from './common/database/database.module';
 import { EnvModule } from './common/env/env.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { UsersModule } from './users/users.module';
+import { SigninController } from './signin/signin.controller';
+import { SigninModule } from './signin/signin.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UsersModule, DatabaseModule, EnvModule],
+  imports: [
+    ConfigModule.forRoot(),
+    UsersModule,
+    DatabaseModule,
+    EnvModule,
+    SigninModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

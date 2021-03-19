@@ -24,6 +24,7 @@ import { User } from 'src/common/entity/User.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { BodyDto } from './dto/body.dto';
+import { DeleteUserDto } from './dto/delete.user.dto';
 import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
@@ -141,7 +142,7 @@ export class UsersController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    type: UserDto,
+    type: DeleteUserDto,
     description: '성공',
   })
   @ApiResponse({
@@ -151,7 +152,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '유저 삭제' })
   @Delete('')
-  async deleteUser(@Token() user: User): Promise<{ data: boolean }> {
+  async deleteUser(@Token() user: User): Promise<DeleteUserDto> {
     const result = await this.usersService.deleteUser(user.id);
     return { data: result };
   }

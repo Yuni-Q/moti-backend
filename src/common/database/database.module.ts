@@ -20,6 +20,7 @@ function DatabaseOrmModule(): DynamicModule {
     password: config.DB_PASSWORD,
     database: config.DATABASE,
     synchronize: false,
+    logging: true,
     entities: [User, Answer, File, Mission, Question], // 설정 부분
   });
 }

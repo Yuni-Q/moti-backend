@@ -12,14 +12,14 @@ export class DeleteUserDto extends ResponseDto {
     description: '상태 코드',
     required: true,
   })
-  public status = status;
+  public status? = status;
 
   @ApiProperty({
     example: message,
     description: '에러 메시지',
     required: true,
   })
-  public message = message;
+  public message? = message;
 
   @ApiProperty({
     example: data,

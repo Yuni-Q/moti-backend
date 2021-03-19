@@ -12,6 +12,12 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
+  async createUser(body: User): Promise<User> {
+    const user = await this.userRepository.create({ ...body });
+    const newUser = this.userRepository.save(user);
+    return newUser;
+  }
+
   async getAll(id?: string): Promise<User[]> {
     const users = await this.userRepository.find({
       where: {
@@ -31,6 +37,19 @@ export class UsersService {
     return user;
   }
 
+  async getUserBySnsIdAndSnsType({
+    snsId,
+    snsType,
+  }: {
+    snsId: string;
+    snsType: string;
+  }): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { snsId, snsType },
+    });
+    return user;
+  }
+
   async updateMyInfo(
     id: number,
     body: BodyDto | { refreshDate: null },
@@ -42,7 +61,7 @@ export class UsersService {
     return returnUser;
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: number): Promise<null> {
     const user = await this.checkUser(id);
     await this.userRepository.remove(user);
     return null;
