@@ -42,6 +42,12 @@ export class UsersService {
     return returnUser;
   }
 
+  async deleteUser(id: number) {
+    const user = await this.checkUser(id);
+    await this.userRepository.remove(user);
+    return null;
+  }
+
   async checkUser(id: number): Promise<User> {
     const user = await this.get(id);
     if (!user) {

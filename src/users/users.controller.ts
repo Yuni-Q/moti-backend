@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Put,
@@ -136,5 +137,22 @@ export class UsersController {
       refreshDate: null,
     });
     return { data: my };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: InvalidUserIdDto,
+    description: '유저가 없습니다.',
+  })
+  @ApiOperation({ summary: '유저 삭제' })
+  @Delete('')
+  async deleteUser(@Token() user: User): Promise<{ data: boolean }> {
+    const result = await this.usersService.deleteUser(user.id);
+    return { data: result };
   }
 }
