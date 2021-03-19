@@ -6,7 +6,7 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Question } from 'src/common/entity/Question.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
@@ -38,6 +38,8 @@ export class QuestionsController {
     type: QuestionsDto,
     description: '성공',
   })
+  @ApiQuery({ name: 'page', required: false, description: 'page' })
+  @ApiQuery({ name: 'limit', required: false, description: 'limit' })
   @ApiOperation({ summary: '질문 조회' })
   @Get('')
   async get(
