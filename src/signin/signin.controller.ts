@@ -27,7 +27,7 @@ export class SigninController {
   constructor(private readonly SigninService: SigninService) {}
 
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     type: SigninResponseDto,
     description: '성공',
   })
@@ -35,11 +35,11 @@ export class SigninController {
   @Post('refresh')
   async refresh(@Token() token: string): Promise<SigninResponseDto> {
     const result = await this.SigninService.refresh(token);
-    return { status: 201, data: result };
+    return { status: HttpStatus.CREATED, data: result };
   }
 
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     type: SigninResponseDto,
     description: '성공',
   })
@@ -55,6 +55,6 @@ export class SigninController {
     @ValidBody() body: SigninRequestDto,
   ): Promise<SigninResponseDto> {
     const result = await this.SigninService.signin(token, body.snsType);
-    return { status: 201, data: result };
+    return { status: HttpStatus.CREATED, data: result };
   }
 }

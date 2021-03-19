@@ -8,6 +8,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { UsersModule } from './users/users.module';
 import { SigninController } from './signin/signin.controller';
 import { SigninModule } from './signin/signin.module';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SigninModule } from './signin/signin.module';
     DatabaseModule,
     EnvModule,
     SigninModule,
+    QuestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
