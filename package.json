@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^7.6.13",
     "@nestjs/swagger": "^4.7.15",
     "@nestjs/typeorm": "^7.1.5",
+    "dayjs": "^1.10.4",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.13",

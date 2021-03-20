@@ -7,7 +7,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Question } from 'src/common/entity/Question.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { QuestionDto } from './dto/question.dto';

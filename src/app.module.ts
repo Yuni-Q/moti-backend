@@ -9,6 +9,9 @@ import { UsersModule } from './users/users.module';
 import { SigninController } from './signin/signin.controller';
 import { SigninModule } from './signin/signin.module';
 import { QuestionsModule } from './questions/questions.module';
+import { MissionsModule } from './missions/missions.module';
+import { AnswersController } from './answers/answers.controller';
+import { AnswersModule } from './answers/answers.module';
 
 @Module({
   imports: [
@@ -18,6 +21,8 @@ import { QuestionsModule } from './questions/questions.module';
     EnvModule,
     SigninModule,
     QuestionsModule,
+    MissionsModule,
+    AnswersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

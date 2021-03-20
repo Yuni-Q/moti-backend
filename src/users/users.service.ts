@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
+import { getDateString } from 'src/common/util/date';
 import { MoreThan, Repository } from 'typeorm';
 import { BodyDto } from './dto/body.dto';
 import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
@@ -73,5 +75,19 @@ export class UsersService {
       throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
     }
     return user;
+  }
+
+  async setMissionsInUser({
+    missions,
+    id,
+  }: {
+    id: number;
+    missions: Mission[];
+  }) {
+    const date = getDateString({});
+    const user = await this.checkUser(id);
+    const newUser = { ...user, mission: JSON.stringify({ date, missions }) };
+    const returnUser = await this.userRepository.save(newUser);
+    return returnUser;
   }
 }
