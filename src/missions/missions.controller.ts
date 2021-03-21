@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Post,
@@ -24,6 +25,9 @@ import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
 import { MissionDto } from './dto/mission.dto';
 import { MissionsDto } from './dto/missions.dto';
 import { MissionsService } from './missions.service';
+import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
+import { RequireBodyDto } from 'src/common/dto/require.body.dto';
+import { DeleteMissionDto } from './dto/delete.mission.dto';
 
 @ApiResponse({
   status: HttpStatus.BAD_REQUEST,
@@ -77,7 +81,7 @@ export class MissionsController {
   @Get(':id')
   async mission(@Token() user, @Id() id): Promise<MissionDto> {
     const result = await this.missionsService.findOne(id);
-    return { status: 201, data: result };
+    return { data: result };
   }
 
   @ApiResponse({
@@ -101,6 +105,16 @@ export class MissionsController {
     type: MissionsDto,
     description: '성공',
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: InvalidMissionIdDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: new RequireBodyDto().status,
+    type: RequireBodyDto,
+    description: new RequireBodyDto().message,
+  })
   @ApiBody({
     type: MissionBodyDto,
     required: true,
@@ -118,6 +132,27 @@ export class MissionsController {
     @Id() id,
   ): Promise<MissionDto> {
     const result = await this.missionsService.update(id, body);
-    return { status: 201, data: result };
+    return { data: result };
+  }
+
+  @ApiResponse({
+    status: new InvalidMissionIdDto().status,
+    type: InvalidMissionIdDto,
+    description: new InvalidMissionIdDto().message,
+  })
+  @ApiResponse({
+    status: new DeleteMissionDto().status,
+    type: DeleteMissionDto,
+    description: new DeleteMissionDto().message,
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'path',
+  })
+  @Delete(':id')
+  async destroy(@Token() user, @Id() id): Promise<DeleteMissionDto> {
+    const result = await this.missionsService.destroy(id);
+    return { data: result };
   }
 }

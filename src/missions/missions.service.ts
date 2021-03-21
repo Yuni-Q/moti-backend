@@ -6,10 +6,10 @@ import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
-import { In, Raw, Not, Repository } from 'typeorm';
-import { MissionBodyDto } from './dto/mission.body.dto';
+import { Repository } from 'typeorm';
 import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
 import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
+import { MissionBodyDto } from './dto/mission.body.dto';
 import { MissionsDto } from './dto/missions.dto';
 
 @Injectable()
@@ -20,26 +20,59 @@ export class MissionsService {
     private readonly answersService: AnswersService,
     private readonly usersService: UsersService,
   ) {}
+  async destroy(id: number): Promise<null> {
+    try {
+      const mission = await this.checkMission(id);
+      await this.missionRepository.remove(mission);
+      return null;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   async update(id: number, body: MissionBodyDto): Promise<Mission> {
-    const mission = await this.checkMission(id);
-    console.log(11, mission);
-    const newMission = { ...mission, ...body };
-    console.log(22, newMission);
-    await this.missionRepository.save(newMission);
-    const returnMission = await this.findOne(id);
-    return returnMission;
+    try {
+      const mission = await this.checkMission(id);
+      const newMission = { ...mission, ...body };
+      await this.missionRepository.save(newMission);
+      const returnMission = await this.findOne(id);
+      return returnMission;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async checkMission(id: number): Promise<Mission> {
-    const mission = await this.findOne(id);
-    if (!mission) {
+    try {
+      const mission = await this.findOne(id);
+      if (!mission) {
+        throw new HttpException(
+          new InvalidMissionIdDto(),
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return mission;
+    } catch (error) {
       throw new HttpException(
-        new InvalidMissionIdDto(),
-        HttpStatus.BAD_REQUEST,
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return mission;
   }
 
   async create(body: MissionBodyDto): Promise<Mission> {
