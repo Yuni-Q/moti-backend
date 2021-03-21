@@ -12,6 +12,7 @@ import { QuestionsModule } from './questions/questions.module';
 import { MissionsModule } from './missions/missions.module';
 import { AnswersController } from './answers/answers.controller';
 import { AnswersModule } from './answers/answers.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AnswersModule } from './answers/answers.module';
     QuestionsModule,
     MissionsModule,
     AnswersModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
