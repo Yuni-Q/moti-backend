@@ -16,6 +16,22 @@ export class FilesService {
     @InjectRepository(File)
     private fileRepository: Repository<File>,
   ) {}
+  async destroy(id): Promise<null> {
+    try {
+      const file = await this.checkFile(id);
+      await this.fileRepository.remove(file);
+      return null;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async update(id, body): Promise<File> {
     try {
       const file = await this.checkFile(id);

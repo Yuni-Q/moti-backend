@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   HttpStatus,
   Post,
   Put,
@@ -17,6 +18,7 @@ import { ApiImplicitFormData } from 'src/common/decorators/api-implicit-form-dat
 import { Id } from 'src/common/decorators/id.decorator';
 import { ImageUploaderLiveName } from 'src/common/decorators/image.uploade.live.name.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
+import { DeleteFileDto } from './dto/delete.file.dto';
 import { FileDto } from './dto/file.dto';
 import { FilesService } from './files.service';
 
@@ -27,7 +29,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @ApiResponse({
-    status: new FileDto().status,
+    status: HttpStatus.OK,
     type: FileDto,
     description: '성공',
   })
@@ -61,11 +63,11 @@ export class FilesController {
       ? parseInt(partString, 10)
       : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
     const result = await this.filesService.update(id, { cardSvgUrl, part });
-    return { status: HttpStatus.CREATED, data: result };
+    return { data: result };
   }
 
   @ApiResponse({
-    status: new FileDto().status,
+    status: HttpStatus.OK,
     type: FileDto,
     description: '성공',
   })
@@ -99,11 +101,27 @@ export class FilesController {
       ? parseInt(partString, 10)
       : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
     const result = await this.filesService.update(id, { cardUrl, part });
-    return { status: HttpStatus.CREATED, data: result };
+    return { data: result };
   }
 
   @ApiResponse({
-    status: new FileDto().status,
+    status: new DeleteFileDto().status,
+    type: DeleteFileDto,
+    description: '성공',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'id',
+  })
+  @Delete(':id')
+  async destroy(@Id() id): Promise<DeleteFileDto> {
+    const result = await this.filesService.destroy(id);
+    return { data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
     type: FileDto,
     description: '성공',
   })
