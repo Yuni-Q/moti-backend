@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -30,6 +31,7 @@ import { MissionsService } from 'src/missions/missions.service';
 import { AnswersService } from './answers.service';
 import { AnswerDto } from './dto/answer.dto';
 import { AnswersDto } from './dto/answers.dto';
+import { DeleteAnswerDto } from './dto/delete.answer.dto';
 import { ListAnswersDto } from './dto/list.answers.dto';
 import { MonthAnswersDto } from './dto/month.answers.dto';
 import { WeekAnswerDto } from './dto/week.answer.dto';
@@ -305,5 +307,22 @@ export class AnswersController {
     });
     const returnAnswer = await this.answersService.get(result.id, userId);
     return { data: returnAnswer };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DeleteAnswerDto,
+    description: '답변',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'id',
+  })
+  @Delete(':id')
+  async delete(@Token() user, @Id() id): Promise<DeleteAnswerDto> {
+    const answer = await this.answersService.checkAnswerId(id, user.id);
+    await this.answersService.destroy(answer);
+    return { data: null, message: new DeleteAnswerDto().message };
   }
 }

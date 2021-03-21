@@ -26,6 +26,20 @@ export class AnswersService {
     private answersRepository: Repository<Answer>,
   ) {}
 
+  async destroy(answer: Answer) {
+    try {
+      await this.answersRepository.remove(answer);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async updateAnswer(body): Promise<Answer> {
     const answer = await this.answersRepository.save(body);
     return answer;
