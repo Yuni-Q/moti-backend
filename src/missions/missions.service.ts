@@ -7,6 +7,7 @@ import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
 import { In, Raw, Not, Repository } from 'typeorm';
+import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
 import { MissionsDto } from './dto/missions.dto';
 
 @Injectable()
@@ -17,6 +18,28 @@ export class MissionsService {
     private readonly answersService: AnswersService,
     private readonly usersService: UsersService,
   ) {}
+
+  async refresh(id: number): Promise<MissionsDto['data']> {
+    const user = await this.usersService.checkUser(id);
+    if (this.hasRefresh(user)) {
+      throw new HttpException(
+        new InsufficientRefreshCount(),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const missions = await this.getNewMission(id);
+    await this.usersService.setMissionsAndRefreshDateInUser({
+      missions,
+      id: id,
+    });
+    return { refresh: false, missions };
+  }
+
+  hasRefresh(user: User) {
+    const date = getDateString({});
+    return !!user.refreshDate && user.refreshDate === date;
+  }
+
   async getAll(id: number): Promise<MissionsDto['data']> {
     try {
       const user = await this.usersService.checkUser(id);
@@ -25,8 +48,8 @@ export class MissionsService {
       if (this.hasOldMissions(oldMission)) {
         return { refresh, missions: oldMission.missions };
       }
-      const missions = await this.getNewMission(user.id);
-      await this.usersService.setMissionsInUser({ missions, id: user.id });
+      const missions = await this.getNewMission(id);
+      await this.usersService.setMissionsInUser({ missions, id: id });
       return { refresh, missions };
     } catch (error) {
       throw new HttpException(

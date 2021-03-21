@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Token } from 'src/common/decorators/token.decorator';
 import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
+import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
 import { MissionsDto } from './dto/missions.dto';
 import { MissionsService } from './missions.service';
 
@@ -32,6 +33,22 @@ export class MissionsController {
   @Get()
   async missions(@Token() user): Promise<MissionsDto> {
     const result = await this.missionsService.getAll(user.id);
+    return { status: 201, data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: MissionsDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: InsufficientRefreshCount,
+    description: '갱신 횟수가 모자랍니다.',
+  })
+  @Get('refresh')
+  async refresh(@Token() user): Promise<MissionsDto> {
+    const result = await this.missionsService.refresh(user.id);
     return { status: 201, data: result };
   }
 }

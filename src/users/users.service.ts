@@ -90,4 +90,22 @@ export class UsersService {
     const returnUser = await this.userRepository.save(newUser);
     return returnUser;
   }
+
+  async setMissionsAndRefreshDateInUser({
+    id,
+    missions,
+  }: {
+    id: number;
+    missions: Mission[];
+  }) {
+    const date = getDateString({});
+    const user = await this.checkUser(id);
+    const newUser = {
+      ...user,
+      refreshDate: date,
+      mission: JSON.stringify({ date, missions }),
+    };
+    const returnUser = await this.userRepository.save(newUser);
+    return returnUser;
+  }
 }
