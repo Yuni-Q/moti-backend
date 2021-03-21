@@ -5,11 +5,13 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
+import { MissionDto } from './dto/mission.dto';
 import { MissionsDto } from './dto/missions.dto';
 import { MissionsService } from './missions.service';
 
@@ -49,6 +51,22 @@ export class MissionsController {
   @Get('refresh')
   async refresh(@Token() user): Promise<MissionsDto> {
     const result = await this.missionsService.refresh(user.id);
+    return { status: 201, data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: MissionsDto,
+    description: '성공',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'path',
+  })
+  @Get(':id')
+  async mission(@Token() user, @Id() id): Promise<MissionDto> {
+    const result = await this.missionsService.findOne(id);
     return { status: 201, data: result };
   }
 }

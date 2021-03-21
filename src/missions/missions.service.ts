@@ -19,6 +19,11 @@ export class MissionsService {
     private readonly usersService: UsersService,
   ) {}
 
+  async findOne(id: number): Promise<Mission> {
+    const mission = this.missionRepository.findOne({ where: { id } });
+    return mission;
+  }
+
   async refresh(id: number): Promise<MissionsDto['data']> {
     const user = await this.usersService.checkUser(id);
     if (this.hasRefresh(user)) {
