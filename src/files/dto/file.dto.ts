@@ -12,11 +12,13 @@ export class FileDto extends ResponseDto {
 
   @ApiProperty({
     example: {
-      id: 1,
-      cardUrl: 'https://cdn.moti.company/yzjOM7m5.jpg',
-      part: 1,
-      updatedAt: '2020-01-12T10:50:35.282Z',
-      createdAt: '2020-01-12T10:50:35.282Z',
+      id: 73,
+      cardUrl: 'https://cdn.moti.company/로고4 (1)_.jpg',
+      part: 55,
+      createdAt: null,
+      updatedAt: null,
+      cardSvgUrl: 'https://cdn.moti.company/yuniq.png',
+      cardPngUrl: 'https://cdn.moti.company/yuniq.png',
     },
     description: '파일',
     required: true,
