@@ -13,6 +13,40 @@ export class AnswersService {
     private answersRepository: Repository<Answer>,
   ) {}
 
+  async date(userId: number, date: string): Promise<Answer> {
+    const answer = date
+      ? await this.getAnswerByDateAndUserId({ userId, date })
+      : await this.getAnswerByUserId({ userId });
+    return answer;
+  }
+
+  async getAnswerByDateAndUserId({
+    userId,
+    date,
+  }: {
+    userId: number;
+    date: string;
+  }) {
+    return this.answersRepository.findOne({
+      where: {
+        userId,
+        date,
+      },
+      relations: ['file', 'mission', 'user'],
+    });
+  }
+  async getAnswerByUserId({ userId }: { userId: number }) {
+    return this.answersRepository.findOne({
+      where: {
+        userId,
+      },
+      order: {
+        setDate: -1,
+      },
+      relations: ['file', 'mission', 'user'],
+    });
+  }
+
   async getAnswersByUserIdAndDateRange({
     userId,
     dateGt,
