@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answer } from 'src/common/entity/Answer.entity';
 import { Mission } from 'src/common/entity/Mission.entity';
 import { File } from 'src/common/entity/File.entity';
 import { MoreThan, Repository } from 'typeorm';
 import { User } from 'src/common/entity/User.entity';
+import { getDateString } from 'src/common/util/date';
+import { WeekAnswerDto } from './dto/week.answer.dto';
 
 @Injectable()
 export class AnswersService {
@@ -12,6 +14,56 @@ export class AnswersService {
     @InjectRepository(Answer)
     private answersRepository: Repository<Answer>,
   ) {}
+
+  async week(userId: number): Promise<WeekAnswerDto['data']> {
+    try {
+      const answers = await this.getAnswerByUserId({ userId });
+      const recentAnswers: Answer[] =
+        answers && answers.setDate
+          ? await this.getRecentAnswers({ userId, setDate: answers.setDate })
+          : [];
+      // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
+      const newAnswers =
+        !!recentAnswers && !this.hasSixParsAndNotToday(recentAnswers)
+          ? recentAnswers
+          : [];
+      const today = getDateString({});
+      return { today, answers: newAnswers };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getRecentAnswers({
+    userId,
+    setDate,
+  }: {
+    userId: number;
+    setDate: string;
+  }): Promise<Answer[]> {
+    const answers = await this.answersRepository.find({
+      where: {
+        userId,
+        setDate,
+      },
+      relations: ['file', 'mission', 'user'],
+    });
+    return answers;
+  }
+
+  hasSixParsAndNotToday(answers: Answer[]) {
+    return (
+      answers.length === 6 &&
+      answers[5] &&
+      answers[5].date !== getDateString({})
+    );
+  }
 
   async date(userId: number, date: string): Promise<Answer> {
     const answer = date

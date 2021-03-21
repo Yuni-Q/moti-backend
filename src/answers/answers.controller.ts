@@ -12,6 +12,7 @@ import { Answer } from 'src/common/entity/Answer.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { AnswersService } from './answers.service';
 import { AnswerDto } from './dto/answer.dto';
+import { WeekAnswerDto } from './dto/week.answer.dto';
 
 @ApiResponse({
   status: HttpStatus.BAD_REQUEST,
@@ -38,6 +39,17 @@ export class AnswersController {
   @Get()
   async date(@Token() user, @Query('date') date): Promise<AnswerDto> {
     const result = await this.answersService.date(user.id, date);
-    return { status: 201, data: result };
+    return { data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: WeekAnswerDto,
+    description: '최근 답변 리스트',
+  })
+  @Get('week')
+  async week(@Token() user): Promise<WeekAnswerDto> {
+    const result = await this.answersService.week(user.id);
+    return { data: result };
   }
 }
