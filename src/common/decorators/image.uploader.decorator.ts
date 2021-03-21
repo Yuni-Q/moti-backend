@@ -2,12 +2,15 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import AWS from 'aws-sdk';
 import formidable from 'formidable';
 import fs from 'fs';
+import path from 'path';
 
-export const ImageUploaderLiveName = createParamDecorator(
+const possible =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+export const ImageUploader = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const form = new formidable.IncomingForm();
-    console.log(request.body);
     const file = await new Promise(function (resolve, reject) {
       form.parse(request, async (err, fields, files) => {
         try {
@@ -16,12 +19,17 @@ export const ImageUploaderLiveName = createParamDecorator(
           if (!file) {
             return resolve(null);
           }
-          await AWS.config.update({
+          AWS.config.update({
             accessKeyId: process.env.AWSAccessKeyId,
             secretAccessKey: process.env.AWSSecretKey,
           });
           const s3 = new AWS.S3();
-          const key = file.name;
+          let fileName = '';
+          for (let i = 0; i < 8; i += 1)
+            fileName += possible.charAt(
+              Math.floor(Math.random() * possible.length),
+            );
+          const key = fileName + path.parse(file.name).ext;
           s3.upload(
             {
               Bucket: process.env.buket as string,

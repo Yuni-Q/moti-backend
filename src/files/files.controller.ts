@@ -1,6 +1,7 @@
 import {
   Controller,
   Delete,
+  HttpException,
   HttpStatus,
   Post,
   Put,
@@ -9,14 +10,13 @@ import {
 import {
   ApiBody,
   ApiConsumes,
-  ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiImplicitFormData } from 'src/common/decorators/api-implicit-form-data.decorator';
 import { Id } from 'src/common/decorators/id.decorator';
 import { ImageUploaderLiveName } from 'src/common/decorators/image.uploade.live.name.decorator';
+import { RequireBodyDto } from 'src/common/dto/require.body.dto';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { DeleteFileDto } from './dto/delete.file.dto';
 import { FileDto } from './dto/file.dto';
@@ -59,6 +59,12 @@ export class FilesController {
   @Put(':id/svg')
   async updateSvg(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
     const { file: cardSvgUrl, part: partString } = body;
+    if (!cardSvgUrl || !partString) {
+      throw new HttpException(
+        new RequireBodyDto(),
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     const part = partString
       ? parseInt(partString, 10)
       : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
@@ -97,6 +103,12 @@ export class FilesController {
   @Put(':id')
   async update(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
     const { file: cardUrl, part: partString } = body;
+    if (!cardUrl || !partString) {
+      throw new HttpException(
+        new RequireBodyDto(),
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     const part = partString
       ? parseInt(partString, 10)
       : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
@@ -147,6 +159,12 @@ export class FilesController {
   async missions(@ImageUploaderLiveName() body): Promise<FileDto> {
     // TODO svg와 png도 함께 올리기
     const { file: cardUrl, part: partString } = body;
+    if (!cardUrl || !partString) {
+      throw new HttpException(
+        new RequireBodyDto(),
+        HttpStatus.PRECONDITION_FAILED,
+      );
+    }
     const part = partString
       ? parseInt(partString, 10)
       : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);

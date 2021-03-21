@@ -16,6 +16,15 @@ export class FilesService {
     @InjectRepository(File)
     private fileRepository: Repository<File>,
   ) {}
+
+  async getFileByPart(part: number) {
+    return this.fileRepository
+      .createQueryBuilder('files')
+      .where(`part=${part}`)
+      .orderBy('RAND()')
+      .getOne();
+  }
+
   async destroy(id): Promise<null> {
     try {
       const file = await this.checkFile(id);
