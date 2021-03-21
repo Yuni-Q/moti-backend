@@ -4,7 +4,7 @@ import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { MoreThan, Repository } from 'typeorm';
-import { BodyDto } from './dto/body.dto';
+import { UserBodyDto } from './dto/user.body.dto';
 import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class UsersService {
 
   async updateMyInfo(
     id: number,
-    body: BodyDto | { refreshDate: null },
+    body: UserBodyDto | { refreshDate: null },
   ): Promise<User> {
     const user = await this.checkUser(id);
     const newUser = { ...user, ...body };

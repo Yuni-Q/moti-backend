@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class BodyDto {
+export class UserBodyDto {
   @ApiProperty({
     example: '모티',
     description: '이름',

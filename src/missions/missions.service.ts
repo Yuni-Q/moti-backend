@@ -7,7 +7,9 @@ import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
 import { In, Raw, Not, Repository } from 'typeorm';
+import { MissionBodyDto } from './dto/mission.body.dto';
 import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
+import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
 import { MissionsDto } from './dto/missions.dto';
 
 @Injectable()
@@ -19,25 +21,77 @@ export class MissionsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findOne(id: number): Promise<Mission> {
-    const mission = this.missionRepository.findOne({ where: { id } });
-    return mission;
+  async update(id: number, body: MissionBodyDto): Promise<Mission> {
+    const mission = await this.checkMission(id);
+    console.log(11, mission);
+    const newMission = { ...mission, ...body };
+    console.log(22, newMission);
+    await this.missionRepository.save(newMission);
+    const returnMission = await this.findOne(id);
+    return returnMission;
   }
 
-  async refresh(id: number): Promise<MissionsDto['data']> {
-    const user = await this.usersService.checkUser(id);
-    if (this.hasRefresh(user)) {
+  async checkMission(id: number): Promise<Mission> {
+    const mission = await this.findOne(id);
+    if (!mission) {
       throw new HttpException(
-        new InsufficientRefreshCount(),
+        new InvalidMissionIdDto(),
         HttpStatus.BAD_REQUEST,
       );
     }
-    const missions = await this.getNewMission(id);
-    await this.usersService.setMissionsAndRefreshDateInUser({
-      missions,
-      id: id,
-    });
-    return { refresh: false, missions };
+    return mission;
+  }
+
+  async create(body: MissionBodyDto): Promise<Mission> {
+    try {
+      const mission = await this.missionRepository.create({ ...body });
+      const newMission = this.missionRepository.save(mission);
+      return newMission;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOne(id: number): Promise<Mission> {
+    try {
+      const mission = this.missionRepository.findOne({ where: { id } });
+      return mission;
+    } catch (error) {
+      const mission = this.missionRepository.findOne({ where: { id } });
+      return mission;
+    }
+  }
+
+  async refresh(id: number): Promise<MissionsDto['data']> {
+    try {
+      const user = await this.usersService.checkUser(id);
+      if (this.hasRefresh(user)) {
+        throw new HttpException(
+          new InsufficientRefreshCount(),
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const missions = await this.getNewMission(id);
+      await this.usersService.setMissionsAndRefreshDateInUser({
+        missions,
+        id: id,
+      });
+      return { refresh: false, missions };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   hasRefresh(user: User) {

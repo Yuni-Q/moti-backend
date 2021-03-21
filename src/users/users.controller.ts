@@ -23,7 +23,7 @@ import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { User } from 'src/common/entity/User.entity';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
-import { BodyDto } from './dto/body.dto';
+import { UserBodyDto } from './dto/user.body.dto';
 import { DeleteUserDto } from './dto/delete.user.dto';
 import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 import { UserDto } from './dto/user.dto';
@@ -107,7 +107,7 @@ export class UsersController {
     description: '필수 파라이터가 없습니다.',
   })
   @ApiBody({
-    type: BodyDto,
+    type: UserBodyDto,
     required: true,
     description: 'body',
   })
@@ -115,7 +115,7 @@ export class UsersController {
   @Put('')
   async updateUser(
     @Token() user: User,
-    @ValidBody() body: BodyDto,
+    @ValidBody() body: UserBodyDto,
   ): Promise<UserDto> {
     const my = await this.usersService.updateMyInfo(user.id, body);
     return { data: my };
