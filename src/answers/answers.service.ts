@@ -168,6 +168,7 @@ export class AnswersService {
   async month(userId: number, date?: string): Promise<MonthAnswersDto['data']> {
     const now = getNow(date);
     const { firstDate, lastDate } = getMonthDate(now);
+    console.log(firstDate, lastDate);
     const notGroupAnswers = await this.getMonthAnswers({
       firstDate,
       lastDate,
