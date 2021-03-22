@@ -129,7 +129,8 @@ let AnswersController = class AnswersController {
             setDate,
             no,
         });
-        return { status: common_1.HttpStatus.CREATED, data: result };
+        const answer = await this.answersService.checkAnswerId(result.id, userId);
+        return { status: common_1.HttpStatus.CREATED, data: answer };
     }
     async put(user, body, id) {
         const userId = user.id;
