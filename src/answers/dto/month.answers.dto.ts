@@ -42,5 +42,5 @@ export class MonthAnswersDto extends ResponseDto {
     description: '답변 조회',
     required: true,
   })
-  data: { firstDate: string; monthAnswer: Answer[][] };
+  data: { date: string; monthAnswer: Answer[][] };
 }

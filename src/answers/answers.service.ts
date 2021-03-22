@@ -181,7 +181,7 @@ export class AnswersService {
       {},
     );
     const monthAnswer = Object.values(answers) as Answer[][];
-    return { firstDate, monthAnswer };
+    return { date, monthAnswer };
   }
 
   async getMonthAnswers({

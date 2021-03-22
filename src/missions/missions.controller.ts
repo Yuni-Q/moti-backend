@@ -81,7 +81,7 @@ export class MissionsController {
   }
 
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status: HttpStatus.OK,
     type: MissionsDto,
     description: '성공',
   })
@@ -105,7 +105,7 @@ export class MissionsController {
         missions,
         id: id,
       });
-      return { status: HttpStatus.CREATED, data: { refresh: false, missions } };
+      return { status: HttpStatus.OK, data: { refresh: false, missions } };
     } catch (error) {
       throw new HttpException(
         {
