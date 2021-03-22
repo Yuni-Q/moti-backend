@@ -23,11 +23,11 @@ __decorate([
     __metadata("design:type", String)
 ], Mission.prototype, "title", void 0);
 __decorate([
-    typeorm_1.Column('tinyint', { name: 'isContent', nullable: true, width: 1 }),
+    typeorm_1.Column(),
     __metadata("design:type", Boolean)
 ], Mission.prototype, "isContent", void 0);
 __decorate([
-    typeorm_1.Column('tinyint', { name: 'isImage', nullable: true, width: 1 }),
+    typeorm_1.Column(),
     __metadata("design:type", Boolean)
 ], Mission.prototype, "isImage", void 0);
 __decorate([

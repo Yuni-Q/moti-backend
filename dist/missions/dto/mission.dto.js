@@ -20,7 +20,7 @@ __decorate([
         example: {
             id: 57,
             title: '당신이 불리고 싶은 별명은 무엇인가요?',
-            isContent: 1,
+            isContent: true,
             isImage: 0,
             cycle: 730,
             createdAt: '2021-02-17T14:08:53.000Z',

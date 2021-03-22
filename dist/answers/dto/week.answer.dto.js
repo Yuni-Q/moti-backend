@@ -44,8 +44,8 @@ __decorate([
                     mission: {
                         id: 7,
                         title: '오늘 당신의 패션을 알려주세요!',
-                        isContent: 1,
-                        isImage: 1,
+                        isContent: true,
+                        isImage: true,
                         cycle: 3,
                         createdAt: '2020-04-01T05:14:17.000Z',
                         updatedAt: '2020-04-01T05:14:17.000Z',
