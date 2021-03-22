@@ -282,7 +282,8 @@ export class AnswersController {
       setDate,
       no,
     } as Answer);
-    return { status: HttpStatus.CREATED, data: result };
+    const answer = await this.answersService.checkAnswerId(result.id, userId);
+    return { status: HttpStatus.CREATED, data: answer };
   }
   @ApiResponse({
     status: HttpStatus.OK,
