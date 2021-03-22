@@ -50,7 +50,7 @@ export class MissionsController {
   ) {}
 
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status: HttpStatus.OK,
     type: MissionsDto,
     description: '성공',
   })
@@ -62,13 +62,13 @@ export class MissionsController {
       const refresh = this.missionsService.isRefresh(user);
       if (this.missionsService.hasOldMissions(oldMission)) {
         return {
-          status: HttpStatus.CREATED,
+          status: HttpStatus.OK,
           data: { refresh, missions: oldMission.missions },
         };
       }
       const missions = await this.getNewMission(id);
       await this.usersService.setMissionsInUser({ missions, id: id });
-      return { status: HttpStatus.CREATED, data: { refresh, missions } };
+      return { status: HttpStatus.OK, data: { refresh, missions } };
     } catch (error) {
       throw new HttpException(
         {
