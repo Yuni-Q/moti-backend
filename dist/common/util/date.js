@@ -16,16 +16,16 @@ const getDateString = ({ date = undefined, years, month, day, }) => {
 exports.getDateString = getDateString;
 const getFirstDate = (now) => {
     const date = now.locale('ko');
-    return dayjs_1.default(new Date(parseInt(date.format('YYYY'), 10), parseInt(date.format('MM'), 10) + 1, 0))
+    return dayjs_1.default(new Date(parseInt(date.format('YYYY'), 10), parseInt(date.format('MM'), 10) - 1, 1))
         .locale('ko')
         .format('YYYY-MM-DD');
 };
 exports.getFirstDate = getFirstDate;
 const getLastDate = (now) => {
     const date = now.locale('ko');
-    return dayjs_1.default(new Date(parseInt(date.format('YYYY'), 10), parseInt(date.format('MM'), 10) + 1, 0))
-        .locale('ko')
-        .format('YYYY-MM-DD');
+    const day = new Date(parseInt(date.format('YYYY'), 10), parseInt(date.format('MM'), 10), 0);
+    console.log(222, day);
+    return dayjs_1.default(day).locale('ko').format('YYYY-MM-DD');
 };
 exports.getLastDate = getLastDate;
 const getNow = (date) => {
@@ -33,6 +33,7 @@ const getNow = (date) => {
 };
 exports.getNow = getNow;
 const getMonthDate = (now) => {
+    console.log(1331, now.format('YYYY-MM-DD'));
     const firstDate = exports.getFirstDate(now);
     const lastDate = exports.getLastDate(now);
     return { firstDate, lastDate };

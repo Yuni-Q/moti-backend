@@ -133,6 +133,7 @@ let AnswersService = class AnswersService {
     async month(userId, date) {
         const now = date_1.getNow(date);
         const { firstDate, lastDate } = date_1.getMonthDate(now);
+        console.log(firstDate, lastDate);
         const notGroupAnswers = await this.getMonthAnswers({
             firstDate,
             lastDate,
