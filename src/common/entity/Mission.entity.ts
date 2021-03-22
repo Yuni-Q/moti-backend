@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Answer } from './Answer.entity';
 
@@ -24,10 +26,10 @@ export class Mission extends BaseEntity {
   @Column('int', { name: 'cycle', nullable: true })
   cycle: number | null;
 
-  @Column('datetime', { name: 'createdAt' })
+  @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 
   @OneToMany(() => Answer, (answers) => answers.mission)

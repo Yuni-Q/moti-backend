@@ -38,7 +38,7 @@ import { UsersService } from './users.service';
   description: '토큰이 필요합니다.',
 })
 @ApiTags('users')
-@Controller('users')
+@Controller('api/v1/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

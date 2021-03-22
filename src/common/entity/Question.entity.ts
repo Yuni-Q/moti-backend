@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('questions', { schema: 'chocopie' })
 export class Question extends BaseEntity {
@@ -8,9 +15,9 @@ export class Question extends BaseEntity {
   @Column('varchar', { name: 'content', nullable: true, length: 255 })
   content: string | null;
 
-  @Column('datetime', { name: 'createdAt' })
+  @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 }

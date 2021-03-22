@@ -16,7 +16,7 @@ import { QuestionsService } from './questions.service';
 
 @UseInterceptors(TransformInterceptor)
 @ApiTags('questions')
-@Controller('questions')
+@Controller('api/v1/questions')
 export class QuestionsController {
   constructor(private readonly QuestionsService: QuestionsService) {}
 

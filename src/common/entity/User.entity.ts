@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Answer } from './Answer.entity';
 
@@ -39,10 +41,10 @@ export class User extends BaseEntity {
   @Column('varchar', { name: 'snsType', nullable: true, length: 255 })
   snsType: string | null;
 
-  @Column('datetime', { name: 'createdAt' })
+  @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 
   @OneToMany(() => Answer, (answers) => answers.user)

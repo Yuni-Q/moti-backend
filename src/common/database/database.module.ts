@@ -21,6 +21,7 @@ function DatabaseOrmModule(): DynamicModule {
     database: config.DATABASE,
     synchronize: false,
     logging: true,
+    timezone: '+09:00',
     entities: [User, Answer, File, Mission, Question], // 설정 부분
   });
 }

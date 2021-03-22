@@ -13,6 +13,6 @@ import { MissionsService } from './missions.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Mission, User, Answer, File])],
   controllers: [MissionsController],
-  providers: [MissionsService, UsersService, AnswersService, FilesService],
+  providers: [MissionsService, AnswersService, UsersService, FilesService],
 })
 export class MissionsModule {}

@@ -22,7 +22,7 @@ import { SigninService } from './signin.service';
   description: '토큰이 없습니다.',
 })
 @ApiTags('signin')
-@Controller('signin')
+@Controller('api/v1/signin')
 export class SigninController {
   constructor(private readonly SigninService: SigninService) {}
 

@@ -45,7 +45,7 @@ import { WeekAnswerDto } from './dto/week.answer.dto';
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')
 @ApiTags('answers')
-@Controller('answers')
+@Controller('api/v1/answers')
 export class AnswersController {
   constructor(
     private readonly answersService: AnswersService,
@@ -324,7 +324,7 @@ export class AnswersController {
   ): Promise<AnswerDto> {
     const userId = user.id;
     const { file, content, missionId } = body;
-    if ((!file && !content) || !missionId) {
+    if (!file && !content) {
       throw new HttpException(
         new RequireBodyDto(),
         new RequireBodyDto().status,

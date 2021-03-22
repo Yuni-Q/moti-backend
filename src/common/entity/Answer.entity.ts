@@ -1,11 +1,13 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { File } from './File.entity';
 import { Mission } from './Mission.entity';
@@ -34,10 +36,10 @@ export class Answer extends BaseEntity {
   @Column('int', { name: 'no', nullable: true })
   no: number | null;
 
-  @Column('datetime', { name: 'createdAt' })
+  @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 
   @Column('int', { name: 'missionId', nullable: true })

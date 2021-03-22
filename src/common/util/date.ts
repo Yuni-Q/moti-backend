@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export const getDateString = ({
   date = undefined,
@@ -12,29 +12,44 @@ export const getDateString = ({
   day?: number;
 }) => {
   return dayjs(date)
+    .locale('ko')
     .add(years || 0, 'years')
     .add(month || 0, 'months')
     .add(day || 0, 'days')
     .format('YYYY-MM-DD');
 };
 
-export const getFirstDate = (now: Date) => {
-  return dayjs(new Date(now.getFullYear(), now.getMonth(), 1)).format(
-    'YYYY-MM-DD',
-  );
+export const getFirstDate = (now: Dayjs) => {
+  const date = now.locale('ko');
+  return dayjs(
+    new Date(
+      parseInt(date.format('YYYY'), 10),
+      parseInt(date.format('MM'), 10) + 1,
+      0,
+    ),
+  )
+    .locale('ko')
+    .format('YYYY-MM-DD');
 };
 
-export const getLastDate = (now: Date) => {
-  return dayjs(new Date(now.getFullYear(), now.getMonth() + 1, 0)).format(
-    'YYYY-MM-DD',
-  );
+export const getLastDate = (now: Dayjs) => {
+  const date = now.locale('ko');
+  return dayjs(
+    new Date(
+      parseInt(date.format('YYYY'), 10),
+      parseInt(date.format('MM'), 10) + 1,
+      0,
+    ),
+  )
+    .locale('ko')
+    .format('YYYY-MM-DD');
 };
 
 export const getNow = (date?: string | null) => {
-  return !!date ? new Date(date) : new Date();
+  return !!date ? dayjs(date).locale('ko') : dayjs().locale('ko');
 };
 
-export const getMonthDate = (now: Date) => {
+export const getMonthDate = (now: Dayjs) => {
   const firstDate = getFirstDate(now);
   const lastDate = getLastDate(now);
   return { firstDate, lastDate };

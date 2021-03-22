@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Answer } from './Answer.entity';
 
@@ -18,10 +20,10 @@ export class File extends BaseEntity {
   @Column('int', { name: 'part', nullable: true })
   part: number | null;
 
-  @Column('datetime', { name: 'createdAt' })
+  @CreateDateColumn({ type: 'datetime', name: 'createdAt' })
   createdAt: Date;
 
-  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 
   @Column('varchar', { name: 'cardSvgUrl', nullable: true, length: 255 })

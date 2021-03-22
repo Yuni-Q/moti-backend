@@ -17,7 +17,7 @@ export class SigninService {
   ): Promise<SigninResponseDto['data']> {
     try {
       let snsId, email;
-      if (snsType === 'apple') {
+      if (snsType === 'apple' || snsType === 'google') {
         const snsData =
           process.env.NODE_ENV === 'test'
             ? {
@@ -37,7 +37,7 @@ export class SigninService {
             : ((await jwt.decode(token)) as { sub: string; email: string });
         snsId = snsData.sub;
         email = snsData.email;
-      } else if (snsType === 'google') {
+      } else if (snsType === 'web') {
         const { data: snsData } = await axios.get(
           `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
         );
