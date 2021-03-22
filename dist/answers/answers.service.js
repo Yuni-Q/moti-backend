@@ -140,7 +140,7 @@ let AnswersService = class AnswersService {
         });
         const answers = notGroupAnswers.reduce((acc, it) => (Object.assign(Object.assign({}, acc), { [it.setDate]: [...(acc[it.setDate] || []), it] })), {});
         const monthAnswer = Object.values(answers);
-        return { firstDate, monthAnswer };
+        return { date, monthAnswer };
     }
     async getMonthAnswers({ firstDate, lastDate, userId, }) {
         return this.answersRepository.find({

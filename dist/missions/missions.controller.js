@@ -70,7 +70,7 @@ let MissionsController = class MissionsController {
                 missions,
                 id: id,
             });
-            return { status: common_1.HttpStatus.CREATED, data: { refresh: false, missions } };
+            return { status: common_1.HttpStatus.OK, data: { refresh: false, missions } };
         }
         catch (error) {
             throw new common_1.HttpException({
@@ -126,7 +126,7 @@ __decorate([
 ], MissionsController.prototype, "missions", null);
 __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.CREATED,
+        status: common_1.HttpStatus.OK,
         type: missions_dto_1.MissionsDto,
         description: '성공',
     }),
