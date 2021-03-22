@@ -32,6 +32,7 @@ import { AnswersService } from './answers.service';
 import { AnswerDto } from './dto/answer.dto';
 import { AnswersDto } from './dto/answers.dto';
 import { DeleteAnswerDto } from './dto/delete.answer.dto';
+import { DiaryAnswersDto } from './dto/diary.answers.dto';
 import { ListAnswersDto } from './dto/list.answers.dto';
 import { MonthAnswersDto } from './dto/month.answers.dto';
 import { WeekAnswerDto } from './dto/week.answer.dto';
@@ -77,6 +78,58 @@ export class AnswersController {
   async week(@Token() user): Promise<WeekAnswerDto> {
     const result = await this.answersService.week(user.id);
     return { data: result };
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DiaryAnswersDto,
+    description: '일기 형식으로 답변 조회',
+  })
+  @ApiQuery({
+    name: 'lastId',
+    required: false,
+    description: 'lastId',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'limit',
+  })
+  @ApiQuery({
+    name: 'direction',
+    required: false,
+    description: 'direction',
+  })
+  @Get('diary')
+  async diary(
+    @Token() user,
+    @Query('lastId') lastIdString,
+    @Query('limit') limitString,
+    @Query('direction') directionString,
+  ): Promise<DiaryAnswersDto> {
+    try {
+      const lastId = parseInt(lastIdString, 10);
+      const limit = parseInt(limitString || 100, 10);
+      const direction = parseInt(directionString || 0, 10);
+      const userId = user.id;
+      const answers = lastId
+        ? await this.answersService.getAnswersDiaryByLastId({
+            userId,
+            lastId,
+            limit,
+            direction,
+          })
+        : await await this.answersService.getAnswersDiary({ userId, limit });
+      return { data: { lastId, limit, direction, answers } };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @ApiResponse({

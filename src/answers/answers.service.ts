@@ -26,6 +26,50 @@ export class AnswersService {
     private answersRepository: Repository<Answer>,
   ) {}
 
+  async getAnswersDiary({
+    userId,
+    limit,
+  }: {
+    userId: number;
+    limit: number;
+  }): Promise<Answer[]> {
+    return this.answersRepository.find({
+      where: {
+        userId,
+      },
+      take: limit,
+      order: {
+        id: -1,
+      },
+      relations: ['file', 'mission', 'user'],
+    });
+  }
+
+  async getAnswersDiaryByLastId({
+    userId,
+    lastId,
+    limit,
+    direction,
+  }: {
+    userId: number;
+    lastId: number;
+    limit: number;
+    direction: number;
+  }): Promise<Answer[]> {
+    const id = direction === 0 ? LessThan(lastId) : MoreThan(lastId);
+    return this.answersRepository.find({
+      where: {
+        id,
+        userId,
+      },
+      take: limit,
+      order: {
+        id: -1,
+      },
+      relations: ['file', 'mission', 'user'],
+    });
+  }
+
   async destroy(answer: Answer) {
     try {
       await this.answersRepository.remove(answer);
