@@ -17,10 +17,10 @@ export class Mission extends BaseEntity {
   @Column('varchar', { name: 'title', nullable: true, length: 255 })
   title: string | null;
 
-  @Column('tinyint', { name: 'isContent', nullable: true, width: 1 })
+  @Column()
   isContent: boolean | null;
 
-  @Column('tinyint', { name: 'isImage', nullable: true, width: 1 })
+  @Column()
   isImage: boolean | null;
 
   @Column('int', { name: 'cycle', nullable: true })
