@@ -44,13 +44,13 @@ let MissionsController = class MissionsController {
             const refresh = this.missionsService.isRefresh(user);
             if (this.missionsService.hasOldMissions(oldMission)) {
                 return {
-                    status: common_1.HttpStatus.CREATED,
+                    status: common_1.HttpStatus.OK,
                     data: { refresh, missions: oldMission.missions },
                 };
             }
             const missions = await this.getNewMission(id);
             await this.usersService.setMissionsInUser({ missions, id: id });
-            return { status: common_1.HttpStatus.CREATED, data: { refresh, missions } };
+            return { status: common_1.HttpStatus.OK, data: { refresh, missions } };
         }
         catch (error) {
             throw new common_1.HttpException({
@@ -114,7 +114,7 @@ let MissionsController = class MissionsController {
 };
 __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.CREATED,
+        status: common_1.HttpStatus.OK,
         type: missions_dto_1.MissionsDto,
         description: '성공',
     }),
