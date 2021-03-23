@@ -65,8 +65,21 @@ export class AnswersController {
   })
   @Get()
   async date(@Token() user, @Query('date') date): Promise<AnswerDto> {
-    const result = await this.answersService.date(user.id, date);
-    return { data: result };
+    try {
+      const userId = user.id;
+      const answer = date
+        ? await this.answersService.getAnswerByDateAndUserId({ userId, date })
+        : await this.answersService.getAnswerByUserId({ userId });
+      return { data: answer };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @ApiResponse({
@@ -76,8 +89,33 @@ export class AnswersController {
   })
   @Get('week')
   async week(@Token() user): Promise<WeekAnswerDto> {
-    const result = await this.answersService.week(user.id);
-    return { data: result };
+    try {
+      const userId = user.id;
+      const answers = await this.answersService.getAnswerByUserId({ userId });
+      const recentAnswers: Answer[] =
+        answers && answers.setDate
+          ? await this.answersService.getRecentAnswers({
+              userId,
+              setDate: answers.setDate,
+            })
+          : [];
+      // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
+      const newAnswers =
+        !!recentAnswers &&
+        !this.answersService.hasSixParsAndNotToday(recentAnswers)
+          ? recentAnswers
+          : [];
+      const today = getDateString({});
+      return { data: { today, answers: newAnswers } };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @ApiResponse({

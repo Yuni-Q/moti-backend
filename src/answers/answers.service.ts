@@ -1,23 +1,15 @@
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answer } from 'src/common/entity/Answer.entity';
-import { Mission } from 'src/common/entity/Mission.entity';
-import { File } from 'src/common/entity/File.entity';
-import { Between, LessThan, MoreThan, Repository } from 'typeorm';
-import { User } from 'src/common/entity/User.entity';
 import { getDateString, getMonthDate, getNow } from 'src/common/util/date';
-import { WeekAnswerDto } from './dto/week.answer.dto';
+import { Between, LessThan, MoreThan, Repository } from 'typeorm';
+import { ExistAnswerDto } from './dto/exist.answer.dto';
+import { InvalidAnswerIdDto } from './dto/invalid.answer.id.dto';
 import { ListAnswersDto } from './dto/list.answers.dto';
 import { MonthAnswersDto } from './dto/month.answers.dto';
-import { ExistAnswerDto } from './dto/exist.answer.dto';
-import { MissionsService } from 'src/missions/missions.service';
-import { FilesService } from 'src/files/files.service';
-import { InvalidAnswerIdDto } from './dto/invalid.answer.id.dto';
+import { WeekAnswerDto } from './dto/week.answer.dto';
+
+const relations = ['file', 'mission', 'user'];
 
 @Injectable()
 export class AnswersService {
@@ -41,7 +33,7 @@ export class AnswersService {
       order: {
         id: -1,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
   }
 
@@ -66,7 +58,7 @@ export class AnswersService {
       order: {
         id: -1,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
   }
 
@@ -92,7 +84,7 @@ export class AnswersService {
   async checkAnswerId(id: number, userId: number): Promise<Answer> {
     const answer = await this.answersRepository.findOne({
       where: { id, userId },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
     if (!answer) {
       throw new HttpException(
@@ -160,7 +152,7 @@ export class AnswersService {
   async get(id: number, userId: number) {
     const answer = await this.answersRepository.findOne({
       where: { id, userId },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
     return answer;
   }
@@ -202,7 +194,7 @@ export class AnswersService {
       order: {
         no: -1,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
   }
 
@@ -223,7 +215,7 @@ export class AnswersService {
         setDate: answer.setDate,
       },
       order: { id: -1 },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
     return answers;
   }
@@ -267,36 +259,11 @@ export class AnswersService {
           order: {
             id: -1,
           },
-          relations: ['file', 'mission', 'user'],
+          relations,
         });
         answerId = answers[i][answers[i].length - 1].id;
       }
       return answers;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  async week(userId: number): Promise<WeekAnswerDto['data']> {
-    try {
-      const answers = await this.getAnswerByUserId({ userId });
-      const recentAnswers: Answer[] =
-        answers && answers.setDate
-          ? await this.getRecentAnswers({ userId, setDate: answers.setDate })
-          : [];
-      // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
-      const newAnswers =
-        !!recentAnswers && !this.hasSixParsAndNotToday(recentAnswers)
-          ? recentAnswers
-          : [];
-      const today = getDateString({});
-      return { today, answers: newAnswers };
     } catch (error) {
       throw new HttpException(
         {
@@ -320,7 +287,7 @@ export class AnswersService {
         userId,
         setDate,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
     return answers;
   }
@@ -331,13 +298,6 @@ export class AnswersService {
       answers[5] &&
       answers[5].date !== getDateString({})
     );
-  }
-
-  async date(userId: number, date?: string): Promise<Answer> {
-    const answer = date
-      ? await this.getAnswerByDateAndUserId({ userId, date })
-      : await this.getAnswerByUserId({ userId });
-    return answer;
   }
 
   async getAnswerByDateAndUserId({
@@ -352,7 +312,7 @@ export class AnswersService {
         userId,
         date,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
   }
   async getAnswerByUserId({ userId }: { userId: number }) {
@@ -363,7 +323,7 @@ export class AnswersService {
       order: {
         setDate: -1,
       },
-      relations: ['file', 'mission', 'user'],
+      relations,
     });
   }
 
@@ -375,7 +335,7 @@ export class AnswersService {
     dateGt: string;
   }): Promise<Answer[]> {
     return this.answersRepository.find({
-      relations: ['file', 'mission', 'user'],
+      relations,
       where: {
         userId,
         date: MoreThan(dateGt),
