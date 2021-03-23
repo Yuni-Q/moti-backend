@@ -19,7 +19,7 @@ function DatabaseOrmModule(): DynamicModule {
     username: config.DB_USERNAME,
     password: config.DB_PASSWORD,
     database: config.DATABASE,
-    synchronize: true,
+    synchronize: false,
     logging: true,
     timezone: '+09:00',
     entities: [User, Answer, File, Mission, Question], // 설정 부분

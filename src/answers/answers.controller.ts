@@ -91,12 +91,12 @@ export class AnswersController {
   async week(@Token() user): Promise<WeekAnswerDto> {
     try {
       const userId = user.id;
-      const answers = await this.answersService.getAnswerByUserId({ userId });
+      const answer = await this.answersService.getAnswerByUserId({ userId });
       const recentAnswers: Answer[] =
-        answers && answers.setDate
+        answer && answer.setDate
           ? await this.answersService.getRecentAnswers({
               userId,
-              setDate: answers.setDate,
+              setDate: answer.setDate,
             })
           : [];
       // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
@@ -185,8 +185,36 @@ export class AnswersController {
     @Token() user,
     @Query('answerId') answerId,
   ): Promise<ListAnswersDto> {
-    const result = await this.answersService.list(user.id, answerId);
-    return { data: result };
+    try {
+      const userId = user.id;
+      let answer: Answer;
+      const answers = [] as Answer[][];
+      for (let i = 0; i < 4; i++) {
+        answer = answerId
+          ? await this.answersService.getAnswerByUserIdAndLessThanId({
+              userId,
+              answerId,
+            })
+          : await this.answersService.getAnswerByUserId({ userId });
+        if (!answer) {
+          break;
+        }
+        answers[i] = await this.answersService.getAnswersByUserIdAndSetDate({
+          userId,
+          setDate: answer.setDate,
+        });
+        answerId = answers[i][answers[i].length - 1].id;
+      }
+      return { data: answers };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @ApiResponse({

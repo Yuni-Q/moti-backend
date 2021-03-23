@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NumberAttributeValue } from 'aws-sdk/clients/dynamodb';
 import { Answer } from 'src/common/entity/Answer.entity';
 import { getDateString, getMonthDate, getNow } from 'src/common/util/date';
 import { Between, LessThan, MoreThan, Repository } from 'typeorm';
@@ -17,6 +18,43 @@ export class AnswersService {
     @InjectRepository(Answer)
     private answersRepository: Repository<Answer>,
   ) {}
+
+  async getAnswersByUserIdAndSetDate({
+    userId,
+    setDate,
+  }: {
+    userId: NumberAttributeValue;
+    setDate: string;
+  }): Promise<Answer[]> {
+    return this.answersRepository.find({
+      where: {
+        userId,
+        setDate,
+      },
+      order: {
+        id: -1,
+      },
+      relations,
+    });
+  }
+
+  async getAnswerByUserIdAndLessThanId({
+    userId,
+    answerId,
+  }: {
+    userId: number;
+    answerId: number;
+  }): Promise<Answer> {
+    return this.answersRepository.findOne({
+      where: {
+        userId,
+        id: LessThan(answerId),
+      },
+      order: {
+        id: -1,
+      },
+    });
+  }
 
   async getAnswersDiary({
     userId,
@@ -220,61 +258,6 @@ export class AnswersService {
     return answers;
   }
 
-  async list(
-    userId: number,
-    answerId?: string,
-  ): Promise<ListAnswersDto['data']> {
-    try {
-      let answer;
-      const answers = [];
-      for (let i = 0; i < 4; i++) {
-        if (answerId) {
-          answer = await this.answersRepository.findOne({
-            where: {
-              userId,
-              id: LessThan(answerId),
-            },
-            order: {
-              id: -1,
-            },
-          });
-        } else {
-          answer = await this.answersRepository.findOne({
-            where: {
-              userId,
-            },
-            order: {
-              id: -1,
-            },
-          });
-        }
-        if (!answer) {
-          break;
-        }
-        answers[i] = await this.answersRepository.find({
-          where: {
-            userId,
-            setDate: answer.setDate,
-          },
-          order: {
-            id: -1,
-          },
-          relations,
-        });
-        answerId = answers[i][answers[i].length - 1].id;
-      }
-      return answers;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
   async getRecentAnswers({
     userId,
     setDate,
@@ -315,13 +298,13 @@ export class AnswersService {
       relations,
     });
   }
-  async getAnswerByUserId({ userId }: { userId: number }) {
+  async getAnswerByUserId({ userId }: { userId: number }): Promise<Answer> {
     return this.answersRepository.findOne({
       where: {
         userId,
       },
       order: {
-        setDate: -1,
+        id: -1,
       },
       relations,
     });
