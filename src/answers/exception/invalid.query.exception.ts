@@ -1,21 +1,25 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseDto } from './response.dto';
 
 const status = HttpStatus.PRECONDITION_FAILED;
-const message = '필수 파라이터가 없습니다.';
-export class RequireBodyDto extends ResponseDto {
+const message = 'query 값이 올바르지 않습니다.';
+
+export class InvalidQueryException extends HttpException {
   @ApiProperty({
     example: status,
     description: '상태 코드',
     required: true,
   })
-  public status = status;
-
+  public statusCode = status;
   @ApiProperty({
     example: message,
     description: '에러 메시지',
     required: true,
   })
   public message = message;
+
+  constructor() {
+    // TODO : status 제거
+    super({ status, statusCode: status, message }, status);
+  }
 }

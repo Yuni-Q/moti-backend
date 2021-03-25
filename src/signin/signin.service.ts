@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { InvalidTokenDto } from 'src/common/dto/invalid.token.dto';
 import { User } from 'src/common/entity/User.entity';
+import { InvalidTokenException } from 'src/common/exception/invalid.token.exception';
 import { InvalidUserIdDto } from 'src/users/dto/invalid.user.id.dto';
 import { UsersService } from 'src/users/users.service';
 import { SigninResponseDto } from './dto/signin.response.dto';
@@ -89,7 +89,7 @@ export class SigninService {
         snsType: string;
       };
       if (!result?.snsType) {
-        throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
+        throw new InvalidTokenException();
       }
       const user = await this.usersService.getUserBySnsIdAndSnsType(result);
       if (!user?.id) {
@@ -100,7 +100,7 @@ export class SigninService {
         !!user.name && !!user.birthday && !!user.email && !!user.gender;
       return { accessToken, refreshToken, signUp };
     } catch (e) {
-      throw new HttpException(new InvalidTokenDto(), HttpStatus.BAD_REQUEST);
+      throw new InvalidTokenException();
     }
   }
 

@@ -11,7 +11,6 @@ export class VersionMiddleware implements NestMiddleware {
         next();
         return;
       }
-      console.log(11, request.headers.appVersion, request.headers.appversion);
       if (
         !!(request.headers.appVersion || request.headers.appversion) &&
         parseInt(

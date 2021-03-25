@@ -18,14 +18,14 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { RequireBodyDto } from 'src/common/dto/require.body.dto';
 import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { User } from 'src/common/entity/User.entity';
+import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
-import { UserBodyDto } from './dto/user.body.dto';
 import { DeleteUserDto } from './dto/delete.user.dto';
 import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
+import { UserBodyDto } from './dto/user.body.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
@@ -102,9 +102,9 @@ export class UsersController {
     description: '유저가 없습니다.',
   })
   @ApiResponse({
-    status: HttpStatus.PRECONDITION_FAILED,
-    type: RequireBodyDto,
-    description: '필수 파라이터가 없습니다.',
+    status: new RequireBodyException().statusCode,
+    type: RequireBodyException,
+    description: new RequireBodyException().message,
   })
   @ApiBody({
     type: UserBodyDto,

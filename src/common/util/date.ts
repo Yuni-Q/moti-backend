@@ -48,7 +48,6 @@ export const getNow = (date?: string | null) => {
 };
 
 export const getMonthDate = (now: Dayjs) => {
-  console.log(1331, now.format('YYYY-MM-DD'));
   const firstDate = getFirstDate(now);
   const lastDate = getLastDate(now);
   return { firstDate, lastDate };

@@ -1,7 +1,6 @@
 import {
   Controller,
   Delete,
-  HttpException,
   HttpStatus,
   Post,
   Put,
@@ -16,7 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { ImageUploaderLiveName } from 'src/common/decorators/image.uploade.live.name.decorator';
-import { RequireBodyDto } from 'src/common/dto/require.body.dto';
+import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { DeleteFileDto } from './dto/delete.file.dto';
 import { FileDto } from './dto/file.dto';
@@ -60,10 +59,7 @@ export class FilesController {
   async updateSvg(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
     const { file: cardSvgUrl, part: partString } = body;
     if (!cardSvgUrl || !partString) {
-      throw new HttpException(
-        new RequireBodyDto(),
-        HttpStatus.PRECONDITION_FAILED,
-      );
+      throw new RequireBodyException();
     }
     const part = partString
       ? parseInt(partString, 10)
@@ -104,10 +100,7 @@ export class FilesController {
   async update(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
     const { file: cardUrl, part: partString } = body;
     if (!cardUrl || !partString) {
-      throw new HttpException(
-        new RequireBodyDto(),
-        HttpStatus.PRECONDITION_FAILED,
-      );
+      throw new RequireBodyException();
     }
     const part = partString
       ? parseInt(partString, 10)
@@ -160,10 +153,7 @@ export class FilesController {
     // TODO svg와 png도 함께 올리기
     const { file: cardUrl, part: partString } = body;
     if (!cardUrl || !partString) {
-      throw new HttpException(
-        new RequireBodyDto(),
-        HttpStatus.PRECONDITION_FAILED,
-      );
+      throw new RequireBodyException();
     }
     const part = partString
       ? parseInt(partString, 10)

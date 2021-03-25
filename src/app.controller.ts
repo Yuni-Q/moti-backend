@@ -1,14 +1,6 @@
-import { Body, Controller, Get, UseInterceptors } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { Token } from './common/decorators/token.decorator';
-import { SampleRequestDto } from './common/dto/sample.request.dto';
 import { TransformInterceptor } from './common/interceptors/transformInterceptor.interceptor';
 import { UndefinedToNullInterceptor } from './common/interceptors/undefined.interceptor';
 
@@ -22,31 +14,5 @@ export class AppController {
   @UseInterceptors(TransformInterceptor)
   getHello(): any {
     return { data: this.appService.getHello() };
-  }
-
-  @ApiResponse({
-    status: 200,
-    type: SampleRequestDto,
-    description: '성공',
-  })
-  @ApiResponse({
-    status: 500,
-    type: SampleRequestDto,
-    description: '에러',
-  })
-  @ApiQuery({
-    name: 'perPage',
-    required: true,
-    description: '쿼리 사용하기',
-  })
-  @ApiParam({
-    name: 'url',
-    required: true,
-    description: 'path',
-  })
-  @ApiOperation({ summary: 'hi' })
-  @Get('hi')
-  getHi(@Body() body: SampleRequestDto, @Token() token): any {
-    return { data: 'bye' };
   }
 }

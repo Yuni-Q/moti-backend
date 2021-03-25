@@ -2,7 +2,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   HttpStatus,
   Post,
   Put,
@@ -20,12 +19,13 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { ImageUploader } from 'src/common/decorators/image.uploader.decorator';
-import { Token } from 'src/common/decorators/token.decorator';
-import { RequireBodyDto } from 'src/common/dto/require.body.dto';
-import { RequireTokenDto } from 'src/common/dto/require.token.dto';
+import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
 import { Answer } from 'src/common/entity/Answer.entity';
+import { CustomInternalServerErrorException } from 'src/common/exception/custom.interval.server.error.exception';
+import { RequireBodyException } from 'src/common/exception/require.body.exception';
+import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
-import { getDateString } from 'src/common/util/date';
+import { getDateString, getMonthDate, getNow } from 'src/common/util/date';
 import { FilesService } from 'src/files/files.service';
 import { MissionsService } from 'src/missions/missions.service';
 import { AnswersService } from './answers.service';
@@ -36,11 +36,15 @@ import { DiaryAnswersDto } from './dto/diary.answers.dto';
 import { ListAnswersDto } from './dto/list.answers.dto';
 import { MonthAnswersDto } from './dto/month.answers.dto';
 import { WeekAnswerDto } from './dto/week.answer.dto';
+import { ExistAnswerException } from './exception/exist.answer.exception';
+import { InvalidQueryException } from './exception/invalid.query.exception';
+import { RequireContentException } from './exception/requrie.content.exception';
+import { RequireFileException } from './exception/requrie.file.exception';
 
 @ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  type: RequireTokenDto,
-  description: '토큰이 필요합니다.',
+  status: new RequireTokenException().getStatus(),
+  type: RequireTokenException,
+  description: new RequireTokenException().message,
 })
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')
@@ -56,65 +60,54 @@ export class AnswersController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: AnswerDto,
-    description: '성공',
+    description: '특정 날짜의 답변',
   })
   @ApiQuery({
     name: 'date',
-    required: true,
-    description: '특정 날짜의 답변',
+    required: false,
+    description: '답변을 원하는 날짜',
   })
   @Get()
-  async date(@Token() user, @Query('date') date): Promise<AnswerDto> {
+  async date(
+    @TokenUserId() userId,
+    @Query('date') dateString,
+  ): Promise<AnswerDto> {
     try {
-      const userId = user.id;
+      const date = dateString ? getDateString({ date: dateString }) : null;
       const answer = date
         ? await this.answersService.getAnswerByDateAndUserId({ userId, date })
         : await this.answersService.getAnswerByUserId({ userId });
       return { data: answer };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: new WeekAnswerDto().statusCode,
     type: WeekAnswerDto,
     description: '최근 답변 리스트',
   })
   @Get('week')
-  async week(@Token() user): Promise<WeekAnswerDto> {
+  async week(@TokenUserId() userId): Promise<WeekAnswerDto> {
     try {
-      const userId = user.id;
       const answer = await this.answersService.getAnswerByUserId({ userId });
-      const recentAnswers: Answer[] =
-        answer && answer.setDate
-          ? await this.answersService.getRecentAnswers({
-              userId,
-              setDate: answer.setDate,
-            })
-          : [];
+      const recentAnswers = !!answer?.setDate
+        ? await this.answersService.getRecentAnswers({
+            userId,
+            setDate: answer.setDate,
+          })
+        : ([] as Answer[]);
       // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
-      const newAnswers =
+      const answers =
         !!recentAnswers &&
         !this.answersService.hasSixParsAndNotToday(recentAnswers)
           ? recentAnswers
           : [];
       const today = getDateString({});
-      return { data: { today, answers: newAnswers } };
+      return { data: { today, answers } };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
@@ -140,16 +133,18 @@ export class AnswersController {
   })
   @Get('diary')
   async diary(
-    @Token() user,
+    @TokenUserId() userId,
     @Query('lastId') lastIdString,
     @Query('limit') limitString,
     @Query('direction') directionString,
   ): Promise<DiaryAnswersDto> {
     try {
-      const lastId = parseInt(lastIdString, 10);
+      const lastId = parseInt(lastIdString || 0, 10);
       const limit = parseInt(limitString || 100, 10);
       const direction = parseInt(directionString || 0, 10);
-      const userId = user.id;
+      if (isNaN(lastId) || isNaN(limit) || isNaN(direction)) {
+        throw new InvalidQueryException();
+      }
       const answers = lastId
         ? await this.answersService.getAnswersDiaryByLastId({
             userId,
@@ -160,13 +155,7 @@ export class AnswersController {
         : await await this.answersService.getAnswersDiary({ userId, limit });
       return { data: { lastId, limit, direction, answers } };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
@@ -182,11 +171,10 @@ export class AnswersController {
   })
   @Get('list')
   async list(
-    @Token() user,
+    @TokenUserId() userId,
     @Query('answerId') answerId,
   ): Promise<ListAnswersDto> {
     try {
-      const userId = user.id;
       let answer: Answer;
       const answers = [] as Answer[][];
       for (let i = 0; i < 4; i++) {
@@ -207,13 +195,7 @@ export class AnswersController {
       }
       return { data: answers };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
@@ -228,9 +210,24 @@ export class AnswersController {
     description: 'id',
   })
   @Get('list/:id')
-  async listId(@Token() user, @Id() id): Promise<AnswersDto> {
-    const result = await this.answersService.listId(id, user.id);
-    return { data: result };
+  async listId(@TokenUserId() userId, @Id() id): Promise<AnswersDto> {
+    try {
+      const answer = await this.answersService.getAnswerByIdAndUserId({
+        id,
+        userId,
+      });
+      if (!answer || !answer.setDate) {
+        return { data: [] };
+      }
+      const setDate = answer.setDate;
+      const answers = await this.answersService.getAnswersByUserIdAndSetDate({
+        userId,
+        setDate,
+      });
+      return { data: answers };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -244,9 +241,31 @@ export class AnswersController {
     description: '특정 날짜의 답변',
   })
   @Get('month')
-  async month(@Token() user, @Query('date') date): Promise<MonthAnswersDto> {
-    const result = await this.answersService.month(user.id, date);
-    return { data: result };
+  async month(
+    @TokenUserId() userId,
+    @Query('date') dateString,
+  ): Promise<MonthAnswersDto> {
+    try {
+      const date = dateString ? getDateString({ date: dateString }) : null;
+      const now = getNow(date);
+      const { firstDate, lastDate } = getMonthDate(now);
+      const notGroupAnswers = await this.answersService.getMonthAnswers({
+        firstDate,
+        lastDate,
+        userId,
+      });
+      const answers = notGroupAnswers.reduce(
+        (acc: { [key: string]: Answer[] }, it: Answer) => ({
+          ...acc,
+          [it.setDate]: [...(acc[it.setDate] || []), it],
+        }),
+        {},
+      );
+      const monthAnswer = Object.values(answers) as Answer[][];
+      return { data: { date, monthAnswer } };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -260,9 +279,16 @@ export class AnswersController {
     description: 'id',
   })
   @Get(':id')
-  async get(@Token() user, @Id() id): Promise<AnswerDto> {
-    const result = await this.answersService.get(id, user.id);
-    return { data: result };
+  async get(@TokenUserId() userId, @Id() id): Promise<AnswerDto> {
+    try {
+      const result = await this.answersService.getAnswerByIdAndUserId({
+        id,
+        userId,
+      });
+      return { data: result };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -293,64 +319,66 @@ export class AnswersController {
     },
   })
   @Post('')
-  async post(@Token() user, @ImageUploader() body): Promise<AnswerDto> {
-    const userId = user.id;
-    const { file: imageUrl, content, missionId } = body;
-    if ((!imageUrl && !content) || !missionId) {
-      throw new HttpException(
-        new RequireBodyDto(),
-        new RequireBodyDto().status,
-      );
-    }
-    await this.answersService.existAnswerByDateAndUserId(userId);
+  async post(@TokenUserId() userId, @ImageUploader() body): Promise<AnswerDto> {
+    try {
+      const { file: imageUrl, content, missionId } = body;
+      if ((!imageUrl && !content) || !missionId) {
+        throw new RequireBodyException();
+      }
+      const date = getDateString({});
+      const answer = await this.answersService.getAnswerByDateAndUserId({
+        userId,
+        date,
+      });
+      if (!!answer) {
+        throw new ExistAnswerException();
+      }
 
-    const lastAnswer = await this.answersService.getAnswerByUserId({ userId });
-    // 데이터가 있어야 무언가를 할수가...
-    const recentAnswers: Answer[] = this.answersService.hasSetDate(lastAnswer)
-      ? await this.answersService.getRecentAnswers({
-          userId,
-          setDate: lastAnswer?.setDate as string,
-        })
-      : [];
-    // 6개의 파츠를 모두 모았다면 새로운 파츠를 시작한다.
-    const setDate = this.answersService.getSetDate(recentAnswers);
-    const no = this.answersService.getNo(recentAnswers);
-    const partNumber = this.answersService.getPartNumber(recentAnswers);
-    const cardFile = await this.filesService.getFileByPart(partNumber);
-    const { id: fileId = 1 } = cardFile;
-    const mission = await this.missionsService.checkMission(missionId);
-    if (!!mission?.isImage && !imageUrl) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'file이 필요한 미션 입니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      const lastAnswer = await this.answersService.getAnswerByUserId({
+        userId,
+      });
+      // 데이터가 있어야 무언가를 할수가...
+      const recentAnswers: Answer[] = !!lastAnswer?.setDate
+        ? await this.answersService.getRecentAnswers({
+            userId,
+            setDate: lastAnswer.setDate,
+          })
+        : [];
+      // 6개의 파츠를 모두 모았다면 새로운 파츠를 시작한다.
+      const setDate = this.answersService.getSetDate(recentAnswers);
+      const no = this.answersService.getNo(recentAnswers);
+      const partNumber = this.answersService.getPartNumber(recentAnswers);
+      const cardFile = await this.filesService.getFileByPart(partNumber);
+      const { id: fileId = 1 } = cardFile;
+      const mission = await this.missionsService.checkMission({
+        id: missionId,
+      });
+      if (!!mission?.isImage && !imageUrl) {
+        throw new RequireFileException();
+      }
+      if (!!mission?.isContent && !content) {
+        throw new RequireContentException();
+      }
+      const result = await this.answersService.create({
+        userId,
+        missionId,
+        imageUrl,
+        fileId,
+        content,
+        date,
+        setDate,
+        no,
+      } as Answer);
+      const returnAnswer = await this.answersService.checkAnswerId({
+        id: result.id,
+        userId,
+      });
+      return { status: HttpStatus.CREATED, data: returnAnswer };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
     }
-    if (!!mission?.isContent && !content) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'content가 필요한 미션 입니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const date = getDateString({});
-    const result = await this.answersService.create(user.id, {
-      userId,
-      missionId,
-      imageUrl,
-      fileId,
-      content,
-      date,
-      setDate,
-      no,
-    } as Answer);
-    const answer = await this.answersService.checkAnswerId(result.id, userId);
-    return { status: HttpStatus.CREATED, data: answer };
   }
+
   @ApiResponse({
     status: HttpStatus.OK,
     type: AnswerDto,
@@ -385,48 +413,39 @@ export class AnswersController {
   })
   @Put(':id')
   async put(
-    @Token() user,
+    @TokenUserId() userId,
     @ImageUploader() body,
     @Id() id,
   ): Promise<AnswerDto> {
-    const userId = user.id;
-    const { file, content, missionId } = body;
-    if (!file && !content) {
-      throw new HttpException(
-        new RequireBodyDto(),
-        new RequireBodyDto().status,
-      );
-    }
-    const answer = await this.answersService.checkAnswerId(id, userId);
+    try {
+      const { file, content, missionId } = body;
+      if (!file && !content) {
+        throw new RequireBodyException();
+      }
+      const answer = await this.answersService.checkAnswerId({ id, userId });
 
-    const imageUrl = file ? file : answer.imageUrl;
-    if (!!answer.mission.isImage && !imageUrl) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'file이 필요한 미션 입니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      const imageUrl = file ? file : answer.imageUrl;
+      if (!!answer.mission.isImage && !imageUrl) {
+        throw new RequireFileException();
+      }
+      if (!!answer.mission.isContent && !content) {
+        throw new RequireContentException();
+      }
+      const result = await this.answersService.updateAnswer({
+        ...answer,
+        userId,
+        missionId,
+        imageUrl,
+        content,
+      });
+      const returnAnswer = await this.answersService.getAnswerByIdAndUserId({
+        id: result.id,
+        userId,
+      });
+      return { data: returnAnswer };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
     }
-    if (!!answer.mission.isContent && !content) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'content가 필요한 미션 입니다.',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const result = await this.answersService.updateAnswer({
-      ...answer,
-      userId,
-      missionId,
-      imageUrl,
-      content,
-    });
-    const returnAnswer = await this.answersService.get(result.id, userId);
-    return { data: returnAnswer };
   }
 
   @ApiResponse({
@@ -440,9 +459,13 @@ export class AnswersController {
     description: 'id',
   })
   @Delete(':id')
-  async delete(@Token() user, @Id() id): Promise<DeleteAnswerDto> {
-    const answer = await this.answersService.checkAnswerId(id, user.id);
-    await this.answersService.destroy(answer);
-    return { data: null, message: new DeleteAnswerDto().message };
+  async delete(@TokenUserId() userId, @Id() id): Promise<DeleteAnswerDto> {
+    try {
+      const answer = await this.answersService.checkAnswerId({ id, userId });
+      await this.answersService.destroy(answer);
+      return { data: null, message: new DeleteAnswerDto().message };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 }

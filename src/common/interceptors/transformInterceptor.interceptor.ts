@@ -24,10 +24,12 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data: Response<T>) => {
-        const status = data.status || HttpStatus.OK;
+        const statusCode = data.statusCode;
+        const status = data.status || statusCode || HttpStatus.OK;
         context.switchToHttp().getResponse().status(status);
         return {
-          status: data.statusCode || status,
+          status: statusCode || status,
+          statusCode: statusCode || status,
           message: data.message || '',
           data: data.data,
         };

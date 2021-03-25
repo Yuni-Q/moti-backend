@@ -71,3 +71,8 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## 생각해 볼점
+
+- 사용자 토큰 검사를 커스텀 guard로 설정하는걸 고려
+- HttpException / Exception Filters 사용하기

@@ -234,17 +234,17 @@ exports.AppModule = void 0;
 const common_1 = __webpack_require__(8);
 const config_1 = __webpack_require__(9);
 const answers_module_1 = __webpack_require__(10);
-const app_controller_1 = __webpack_require__(51);
-const app_service_1 = __webpack_require__(52);
-const database_module_1 = __webpack_require__(55);
-const env_module_1 = __webpack_require__(56);
-const logger_middleware_1 = __webpack_require__(60);
-const version_middleware_1 = __webpack_require__(61);
-const files_module_1 = __webpack_require__(62);
-const missions_module_1 = __webpack_require__(67);
-const questions_module_1 = __webpack_require__(74);
-const signin_module_1 = __webpack_require__(81);
-const users_module_1 = __webpack_require__(89);
+const app_controller_1 = __webpack_require__(56);
+const app_service_1 = __webpack_require__(57);
+const database_module_1 = __webpack_require__(59);
+const env_module_1 = __webpack_require__(60);
+const logger_middleware_1 = __webpack_require__(64);
+const version_middleware_1 = __webpack_require__(65);
+const files_module_1 = __webpack_require__(66);
+const missions_module_1 = __webpack_require__(71);
+const questions_module_1 = __webpack_require__(79);
+const signin_module_1 = __webpack_require__(86);
+const users_module_1 = __webpack_require__(94);
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -309,7 +309,7 @@ const files_service_1 = __webpack_require__(17);
 const missions_service_1 = __webpack_require__(20);
 const users_service_1 = __webpack_require__(24);
 const answers_controller_1 = __webpack_require__(26);
-const answers_service_1 = __webpack_require__(41);
+const answers_service_1 = __webpack_require__(43);
 let AnswersModule = class AnswersModule {
 };
 AnswersModule = __decorate([
@@ -798,22 +798,33 @@ exports.ResponseDto = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
 class ResponseDto {
+    constructor() {
+        this.message = '';
+    }
 }
 __decorate([
     swagger_1.ApiProperty({
         example: common_1.HttpStatus.OK,
-        description: '상태 코드',
+        description: 'http 상태 코드',
         required: true,
     }),
     __metadata("design:type", Number)
 ], ResponseDto.prototype, "status", void 0);
 __decorate([
     swagger_1.ApiProperty({
+        example: common_1.HttpStatus.OK,
+        description: 'custom 상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Number)
+], ResponseDto.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
         example: '',
         description: '에러 메시지',
         required: true,
     }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ResponseDto.prototype, "message", void 0);
 exports.ResponseDto = ResponseDto;
 
@@ -851,7 +862,7 @@ let MissionsService = class MissionsService {
     }
     async destroy(id) {
         try {
-            const mission = await this.checkMission(id);
+            const mission = await this.checkMission({ id });
             await this.missionRepository.remove(mission);
             return null;
         }
@@ -864,7 +875,7 @@ let MissionsService = class MissionsService {
     }
     async update(id, body) {
         try {
-            const mission = await this.checkMission(id);
+            const mission = await this.checkMission({ id });
             const newMission = Object.assign(Object.assign({}, mission), body);
             await this.missionRepository.save(newMission);
             const returnMission = await this.findOne(id);
@@ -877,7 +888,7 @@ let MissionsService = class MissionsService {
             }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    async checkMission(id) {
+    async checkMission({ id }) {
         try {
             const mission = await this.findOne(id);
             if (!mission) {
@@ -932,11 +943,10 @@ let MissionsService = class MissionsService {
         return (!!oldMission && oldMission.date === date && oldMission.missions.length > 0);
     }
     async hasMissionInAnswer({ answer, date }) {
-        return (!!answer &&
-            !!answer.date &&
-            answer.mission &&
-            answer.mission.cycle &&
-            answer.mission.id &&
+        return (!!(answer === null || answer === void 0 ? void 0 : answer.date) &&
+            !!(answer === null || answer === void 0 ? void 0 : answer.mission) &&
+            !!(answer === null || answer === void 0 ? void 0 : answer.mission.cycle) &&
+            !!(answer === null || answer === void 0 ? void 0 : answer.mission.id) &&
             date_1.getDateString({ date: answer.date, day: answer.mission.cycle }) >= date);
     }
     async getMissionsByNotInIdAndLimit({ ids, limit = 3, }) {
@@ -996,7 +1006,6 @@ const getNow = (date) => {
 };
 exports.getNow = getNow;
 const getMonthDate = (now) => {
-    console.log(1331, now.format('YYYY-MM-DD'));
     const firstDate = exports.getFirstDate(now);
     const lastDate = exports.getLastDate(now);
     return { firstDate, lastDate };
@@ -1233,41 +1242,72 @@ const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
 const id_decorator_1 = __webpack_require__(27);
 const image_uploader_decorator_1 = __webpack_require__(29);
-const token_decorator_1 = __webpack_require__(34);
-const require_body_dto_1 = __webpack_require__(38);
-const require_token_dto_1 = __webpack_require__(37);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
+const token_user_id_decorator_1 = __webpack_require__(34);
+const custom_interval_server_error_exception_1 = __webpack_require__(38);
+const require_body_exception_1 = __webpack_require__(39);
+const require_token_exception_1 = __webpack_require__(40);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
 const date_1 = __webpack_require__(21);
 const files_service_1 = __webpack_require__(17);
 const missions_service_1 = __webpack_require__(20);
-const answers_service_1 = __webpack_require__(41);
-const answer_dto_1 = __webpack_require__(44);
-const answers_dto_1 = __webpack_require__(45);
-const delete_answer_dto_1 = __webpack_require__(46);
-const diary_answers_dto_1 = __webpack_require__(47);
-const list_answers_dto_1 = __webpack_require__(48);
-const month_answers_dto_1 = __webpack_require__(49);
-const week_answer_dto_1 = __webpack_require__(50);
+const answers_service_1 = __webpack_require__(43);
+const answer_dto_1 = __webpack_require__(45);
+const answers_dto_1 = __webpack_require__(46);
+const delete_answer_dto_1 = __webpack_require__(47);
+const diary_answers_dto_1 = __webpack_require__(48);
+const list_answers_dto_1 = __webpack_require__(49);
+const month_answers_dto_1 = __webpack_require__(50);
+const week_answer_dto_1 = __webpack_require__(51);
+const exist_answer_exception_1 = __webpack_require__(52);
+const invalid_query_exception_1 = __webpack_require__(53);
+const requrie_content_exception_1 = __webpack_require__(54);
+const requrie_file_exception_1 = __webpack_require__(55);
 let AnswersController = class AnswersController {
     constructor(answersService, missionsService, filesService) {
         this.answersService = answersService;
         this.missionsService = missionsService;
         this.filesService = filesService;
     }
-    async date(user, date) {
-        const result = await this.answersService.date(user.id, date);
-        return { data: result };
-    }
-    async week(user) {
-        const result = await this.answersService.week(user.id);
-        return { data: result };
-    }
-    async diary(user, lastIdString, limitString, directionString) {
+    async date(userId, dateString) {
         try {
-            const lastId = parseInt(lastIdString, 10);
+            const date = dateString ? date_1.getDateString({ date: dateString }) : null;
+            const answer = date
+                ? await this.answersService.getAnswerByDateAndUserId({ userId, date })
+                : await this.answersService.getAnswerByUserId({ userId });
+            return { data: answer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async week(userId) {
+        try {
+            const answer = await this.answersService.getAnswerByUserId({ userId });
+            const recentAnswers = !!(answer === null || answer === void 0 ? void 0 : answer.setDate)
+                ? await this.answersService.getRecentAnswers({
+                    userId,
+                    setDate: answer.setDate,
+                })
+                : [];
+            const answers = !!recentAnswers &&
+                !this.answersService.hasSixParsAndNotToday(recentAnswers)
+                ? recentAnswers
+                : [];
+            const today = date_1.getDateString({});
+            return { data: { today, answers } };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async diary(userId, lastIdString, limitString, directionString) {
+        try {
+            const lastId = parseInt(lastIdString || 0, 10);
             const limit = parseInt(limitString || 100, 10);
             const direction = parseInt(directionString || 0, 10);
-            const userId = user.id;
+            if (isNaN(lastId) || isNaN(limit) || isNaN(direction)) {
+                throw new invalid_query_exception_1.InvalidQueryException();
+            }
             const answers = lastId
                 ? await this.answersService.getAnswersDiaryByLastId({
                     userId,
@@ -1279,132 +1319,207 @@ let AnswersController = class AnswersController {
             return { data: { lastId, limit, direction, answers } };
         }
         catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
-    async list(user, answerId) {
-        const result = await this.answersService.list(user.id, answerId);
-        return { data: result };
-    }
-    async listId(user, id) {
-        const result = await this.answersService.listId(id, user.id);
-        return { data: result };
-    }
-    async month(user, date) {
-        const result = await this.answersService.month(user.id, date);
-        return { data: result };
-    }
-    async get(user, id) {
-        const result = await this.answersService.get(id, user.id);
-        return { data: result };
-    }
-    async post(user, body) {
-        const userId = user.id;
-        const { file: imageUrl, content, missionId } = body;
-        if ((!imageUrl && !content) || !missionId) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), new require_body_dto_1.RequireBodyDto().status);
+    async list(userId, answerId) {
+        try {
+            let answer;
+            const answers = [];
+            for (let i = 0; i < 4; i++) {
+                answer = answerId
+                    ? await this.answersService.getAnswerByUserIdAndLessThanId({
+                        userId,
+                        answerId,
+                    })
+                    : await this.answersService.getAnswerByUserId({ userId });
+                if (!answer) {
+                    break;
+                }
+                answers[i] = await this.answersService.getAnswersByUserIdAndSetDate({
+                    userId,
+                    setDate: answer.setDate,
+                });
+                answerId = answers[i][answers[i].length - 1].id;
+            }
+            return { data: answers };
         }
-        await this.answersService.existAnswerByDateAndUserId(userId);
-        const lastAnswer = await this.answersService.getAnswerByUserId({ userId });
-        const recentAnswers = this.answersService.hasSetDate(lastAnswer)
-            ? await this.answersService.getRecentAnswers({
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async listId(userId, id) {
+        try {
+            const answer = await this.answersService.getAnswerByIdAndUserId({
+                id,
                 userId,
-                setDate: lastAnswer === null || lastAnswer === void 0 ? void 0 : lastAnswer.setDate,
-            })
-            : [];
-        const setDate = this.answersService.getSetDate(recentAnswers);
-        const no = this.answersService.getNo(recentAnswers);
-        const partNumber = this.answersService.getPartNumber(recentAnswers);
-        const cardFile = await this.filesService.getFileByPart(partNumber);
-        const { id: fileId = 1 } = cardFile;
-        const mission = await this.missionsService.checkMission(missionId);
-        if (!!(mission === null || mission === void 0 ? void 0 : mission.isImage) && !imageUrl) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'file이 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+            });
+            if (!answer || !answer.setDate) {
+                return { data: [] };
+            }
+            const setDate = answer.setDate;
+            const answers = await this.answersService.getAnswersByUserIdAndSetDate({
+                userId,
+                setDate,
+            });
+            return { data: answers };
         }
-        if (!!(mission === null || mission === void 0 ? void 0 : mission.isContent) && !content) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'content가 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
-        const date = date_1.getDateString({});
-        const result = await this.answersService.create(user.id, {
-            userId,
-            missionId,
-            imageUrl,
-            fileId,
-            content,
-            date,
-            setDate,
-            no,
-        });
-        const answer = await this.answersService.checkAnswerId(result.id, userId);
-        return { status: common_1.HttpStatus.CREATED, data: answer };
     }
-    async put(user, body, id) {
-        const userId = user.id;
-        const { file, content, missionId } = body;
-        if (!file && !content) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), new require_body_dto_1.RequireBodyDto().status);
+    async month(userId, dateString) {
+        try {
+            const date = dateString ? date_1.getDateString({ date: dateString }) : null;
+            const now = date_1.getNow(date);
+            const { firstDate, lastDate } = date_1.getMonthDate(now);
+            const notGroupAnswers = await this.answersService.getMonthAnswers({
+                firstDate,
+                lastDate,
+                userId,
+            });
+            const answers = notGroupAnswers.reduce((acc, it) => (Object.assign(Object.assign({}, acc), { [it.setDate]: [...(acc[it.setDate] || []), it] })), {});
+            const monthAnswer = Object.values(answers);
+            return { data: { date, monthAnswer } };
         }
-        const answer = await this.answersService.checkAnswerId(id, userId);
-        const imageUrl = file ? file : answer.imageUrl;
-        if (!!answer.mission.isImage && !imageUrl) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'file이 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
-        if (!!answer.mission.isContent && !content) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'content가 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
-        }
-        const result = await this.answersService.updateAnswer(Object.assign(Object.assign({}, answer), { userId,
-            missionId,
-            imageUrl,
-            content }));
-        const returnAnswer = await this.answersService.get(result.id, userId);
-        return { data: returnAnswer };
     }
-    async delete(user, id) {
-        const answer = await this.answersService.checkAnswerId(id, user.id);
-        await this.answersService.destroy(answer);
-        return { data: null, message: new delete_answer_dto_1.DeleteAnswerDto().message };
+    async get(userId, id) {
+        try {
+            const result = await this.answersService.getAnswerByIdAndUserId({
+                id,
+                userId,
+            });
+            return { data: result };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async post(userId, body) {
+        try {
+            const { file: imageUrl, content, missionId } = body;
+            if ((!imageUrl && !content) || !missionId) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const date = date_1.getDateString({});
+            const answer = await this.answersService.getAnswerByDateAndUserId({
+                userId,
+                date,
+            });
+            if (!!answer) {
+                throw new exist_answer_exception_1.ExistAnswerException();
+            }
+            const lastAnswer = await this.answersService.getAnswerByUserId({
+                userId,
+            });
+            const recentAnswers = !!(lastAnswer === null || lastAnswer === void 0 ? void 0 : lastAnswer.setDate)
+                ? await this.answersService.getRecentAnswers({
+                    userId,
+                    setDate: lastAnswer.setDate,
+                })
+                : [];
+            const setDate = this.answersService.getSetDate(recentAnswers);
+            const no = this.answersService.getNo(recentAnswers);
+            const partNumber = this.answersService.getPartNumber(recentAnswers);
+            const cardFile = await this.filesService.getFileByPart(partNumber);
+            const { id: fileId = 1 } = cardFile;
+            const mission = await this.missionsService.checkMission({
+                id: missionId,
+            });
+            if (!!(mission === null || mission === void 0 ? void 0 : mission.isImage) && !imageUrl) {
+                throw new requrie_file_exception_1.RequireFileException();
+            }
+            if (!!(mission === null || mission === void 0 ? void 0 : mission.isContent) && !content) {
+                throw new requrie_content_exception_1.RequireContentException();
+            }
+            const result = await this.answersService.create({
+                userId,
+                missionId,
+                imageUrl,
+                fileId,
+                content,
+                date,
+                setDate,
+                no,
+            });
+            const returnAnswer = await this.answersService.checkAnswerId({
+                id: result.id,
+                userId,
+            });
+            return { status: common_1.HttpStatus.CREATED, data: returnAnswer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async put(userId, body, id) {
+        try {
+            const { file, content, missionId } = body;
+            if (!file && !content) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const answer = await this.answersService.checkAnswerId({ id, userId });
+            const imageUrl = file ? file : answer.imageUrl;
+            if (!!answer.mission.isImage && !imageUrl) {
+                throw new requrie_file_exception_1.RequireFileException();
+            }
+            if (!!answer.mission.isContent && !content) {
+                throw new requrie_content_exception_1.RequireContentException();
+            }
+            const result = await this.answersService.updateAnswer(Object.assign(Object.assign({}, answer), { userId,
+                missionId,
+                imageUrl,
+                content }));
+            const returnAnswer = await this.answersService.getAnswerByIdAndUserId({
+                id: result.id,
+                userId,
+            });
+            return { data: returnAnswer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async delete(userId, id) {
+        try {
+            const answer = await this.answersService.checkAnswerId({ id, userId });
+            await this.answersService.destroy(answer);
+            return { data: null, message: new delete_answer_dto_1.DeleteAnswerDto().message };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
 };
 __decorate([
     swagger_1.ApiResponse({
         status: common_1.HttpStatus.OK,
         type: answer_dto_1.AnswerDto,
-        description: '성공',
+        description: '특정 날짜의 답변',
     }),
     swagger_1.ApiQuery({
         name: 'date',
-        required: true,
-        description: '특정 날짜의 답변',
+        required: false,
+        description: '답변을 원하는 날짜',
     }),
     common_1.Get(),
-    __param(0, token_decorator_1.Token()), __param(1, common_1.Query('date')),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
+    __param(1, common_1.Query('date')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
 ], AnswersController.prototype, "date", null);
 __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.OK,
+        status: new week_answer_dto_1.WeekAnswerDto().statusCode,
         type: week_answer_dto_1.WeekAnswerDto,
         description: '최근 답변 리스트',
     }),
     common_1.Get('week'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
@@ -1431,7 +1546,7 @@ __decorate([
         description: 'direction',
     }),
     common_1.Get('diary'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, common_1.Query('lastId')),
     __param(2, common_1.Query('limit')),
     __param(3, common_1.Query('direction')),
@@ -1451,7 +1566,7 @@ __decorate([
         description: '특정 날짜의 답변',
     }),
     common_1.Get('list'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, common_1.Query('answerId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
@@ -1469,7 +1584,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Get('list/:id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
@@ -1486,7 +1601,8 @@ __decorate([
         description: '특정 날짜의 답변',
     }),
     common_1.Get('month'),
-    __param(0, token_decorator_1.Token()), __param(1, common_1.Query('date')),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
+    __param(1, common_1.Query('date')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
@@ -1503,7 +1619,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Get(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
@@ -1537,7 +1653,7 @@ __decorate([
         },
     }),
     common_1.Post(''),
-    __param(0, token_decorator_1.Token()), __param(1, image_uploader_decorator_1.ImageUploader()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, image_uploader_decorator_1.ImageUploader()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
@@ -1576,7 +1692,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Put(':id'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, image_uploader_decorator_1.ImageUploader()),
     __param(2, id_decorator_1.Id()),
     __metadata("design:type", Function),
@@ -1595,16 +1711,16 @@ __decorate([
         description: 'id',
     }),
     common_1.Delete(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
 ], AnswersController.prototype, "delete", null);
 AnswersController = __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: require_token_dto_1.RequireTokenDto,
-        description: '토큰이 필요합니다.',
+        status: new require_token_exception_1.RequireTokenException().getStatus(),
+        type: require_token_exception_1.RequireTokenException,
+        description: new require_token_exception_1.RequireTokenException().message,
     }),
     common_1.UseInterceptors(transformInterceptor_interceptor_1.TransformInterceptor),
     swagger_1.ApiBearerAuth('authorization'),
@@ -1624,12 +1740,12 @@ exports.AnswersController = AnswersController;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Id = void 0;
 const common_1 = __webpack_require__(8);
-const require_id_dto_1 = __webpack_require__(28);
+const require_id_exception_1 = __webpack_require__(28);
 exports.Id = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const id = parseInt(request.params.id, 10);
     if (isNaN(id)) {
-        throw new common_1.HttpException(new require_id_dto_1.RequireIdDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_id_exception_1.RequireIdException();
     }
     return id;
 });
@@ -1651,16 +1767,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.RequireIdDto = void 0;
+exports.RequireIdException = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const response_dto_1 = __webpack_require__(19);
 const status = common_1.HttpStatus.PRECONDITION_FAILED;
 const message = 'id가 올바르지 않습니다.';
-class RequireIdDto extends response_dto_1.ResponseDto {
+class RequireIdException extends common_1.HttpException {
     constructor() {
-        super(...arguments);
-        this.status = status;
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
         this.message = message;
     }
 }
@@ -1671,7 +1786,7 @@ __decorate([
         required: true,
     }),
     __metadata("design:type", Object)
-], RequireIdDto.prototype, "status", void 0);
+], RequireIdException.prototype, "statusCode", void 0);
 __decorate([
     swagger_1.ApiProperty({
         example: message,
@@ -1679,8 +1794,8 @@ __decorate([
         required: true,
     }),
     __metadata("design:type", Object)
-], RequireIdDto.prototype, "message", void 0);
-exports.RequireIdDto = RequireIdDto;
+], RequireIdException.prototype, "message", void 0);
+exports.RequireIdException = RequireIdException;
 
 
 /***/ }),
@@ -1784,12 +1899,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Token = void 0;
+exports.TokenUserId = void 0;
 const common_1 = __webpack_require__(8);
 const jsonwebtoken_1 = __importDefault(__webpack_require__(35));
-const invalid_token_dto_1 = __webpack_require__(36);
-const require_token_dto_1 = __webpack_require__(37);
-exports.Token = common_1.createParamDecorator(async (data, ctx) => {
+const require_token_dto_1 = __webpack_require__(36);
+const invalid_token_exception_1 = __webpack_require__(37);
+exports.TokenUserId = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization;
     if (!token) {
@@ -1803,13 +1918,13 @@ exports.Token = common_1.createParamDecorator(async (data, ctx) => {
         result = (await jsonwebtoken_1.default.verify(token, process.env.privateKey));
     }
     catch (e) {
-        throw new common_1.HttpException(new invalid_token_dto_1.InvalidTokenDto(), common_1.HttpStatus.BAD_REQUEST);
+        throw new invalid_token_exception_1.InvalidTokenException();
     }
     if (typeof result === 'object' &&
         (!('user' in result) || !result.user.id)) {
-        throw new common_1.HttpException(new invalid_token_dto_1.InvalidTokenDto(), common_1.HttpStatus.BAD_REQUEST);
+        throw new invalid_token_exception_1.InvalidTokenException();
     }
-    return result.user;
+    return result.user.id;
 });
 
 
@@ -1822,53 +1937,6 @@ module.exports = require("jsonwebtoken");;
 
 /***/ }),
 /* 36 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.InvalidTokenDto = void 0;
-const swagger_1 = __webpack_require__(5);
-const response_dto_1 = __webpack_require__(19);
-const status = 1100;
-const message = '올바르지 못한 토큰 입니다.';
-class InvalidTokenDto extends response_dto_1.ResponseDto {
-    constructor() {
-        super(...arguments);
-        this.status = status;
-        this.message = message;
-    }
-}
-__decorate([
-    swagger_1.ApiProperty({
-        example: status,
-        description: '상태 코드',
-        required: true,
-    }),
-    __metadata("design:type", Object)
-], InvalidTokenDto.prototype, "status", void 0);
-__decorate([
-    swagger_1.ApiProperty({
-        example: message,
-        description: '에러 메시지',
-        required: true,
-    }),
-    __metadata("design:type", Object)
-], InvalidTokenDto.prototype, "message", void 0);
-exports.InvalidTokenDto = InvalidTokenDto;
-
-
-/***/ }),
-/* 37 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -1916,6 +1984,54 @@ exports.RequireTokenDto = RequireTokenDto;
 
 
 /***/ }),
+/* 37 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InvalidTokenException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.BAD_REQUEST;
+const statusCode = 1100;
+const message = '올바르지 못한 토큰 입니다.';
+class InvalidTokenException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode, message }, status);
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], InvalidTokenException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], InvalidTokenException.prototype, "message", void 0);
+exports.InvalidTokenException = InvalidTokenException;
+
+
+/***/ }),
 /* 38 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -1931,17 +2047,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.RequireBodyDto = void 0;
+exports.CustomInternalServerErrorException = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const response_dto_1 = __webpack_require__(19);
-const status = common_1.HttpStatus.PRECONDITION_FAILED;
-const message = '필수 파라이터가 없습니다.';
-class RequireBodyDto extends response_dto_1.ResponseDto {
-    constructor() {
-        super(...arguments);
-        this.status = status;
-        this.message = message;
+const status = common_1.HttpStatus.INTERNAL_SERVER_ERROR;
+class CustomInternalServerErrorException extends common_1.HttpException {
+    constructor(message) {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
     }
 }
 __decorate([
@@ -1951,16 +2064,16 @@ __decorate([
         required: true,
     }),
     __metadata("design:type", Object)
-], RequireBodyDto.prototype, "status", void 0);
+], CustomInternalServerErrorException.prototype, "statusCode", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: message,
+        example: '알 수 없는 에러가 발생했습니다.',
         description: '에러 메시지',
         required: true,
     }),
     __metadata("design:type", Object)
-], RequireBodyDto.prototype, "message", void 0);
-exports.RequireBodyDto = RequireBodyDto;
+], CustomInternalServerErrorException.prototype, "message", void 0);
+exports.CustomInternalServerErrorException = CustomInternalServerErrorException;
 
 
 /***/ }),
@@ -1975,17 +2088,113 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RequireBodyException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.PRECONDITION_FAILED;
+const message = '필수 파라이터가 없습니다.';
+class RequireBodyException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireBodyException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireBodyException.prototype, "message", void 0);
+exports.RequireBodyException = RequireBodyException;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RequireTokenException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.BAD_REQUEST;
+const message = '토큰이 필요합니다.';
+class RequireTokenException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireTokenException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireTokenException.prototype, "message", void 0);
+exports.RequireTokenException = RequireTokenException;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TransformInterceptor = void 0;
 const common_1 = __webpack_require__(8);
-const operators_1 = __webpack_require__(40);
+const operators_1 = __webpack_require__(42);
 let TransformInterceptor = class TransformInterceptor {
     intercept(context, next) {
         return next.handle().pipe(operators_1.map((data) => {
-            const status = data.status || common_1.HttpStatus.OK;
+            const statusCode = data.statusCode;
+            const status = data.status || statusCode || common_1.HttpStatus.OK;
             context.switchToHttp().getResponse().status(status);
             return {
-                status: data.statusCode || status,
+                status: statusCode || status,
+                statusCode: statusCode || status,
                 message: data.message || '',
                 data: data.data,
             };
@@ -1999,14 +2208,14 @@ exports.TransformInterceptor = TransformInterceptor;
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("rxjs/operators");;
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2029,13 +2238,45 @@ exports.AnswersService = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
 const Answer_entity_1 = __webpack_require__(12);
-const typeorm_2 = __webpack_require__(13);
 const date_1 = __webpack_require__(21);
-const exist_answer_dto_1 = __webpack_require__(42);
-const invalid_answer_id_dto_1 = __webpack_require__(43);
+const typeorm_2 = __webpack_require__(13);
+const invalid_answer_id_exception_1 = __webpack_require__(44);
+const relations = ['file', 'mission', 'user'];
 let AnswersService = class AnswersService {
     constructor(answersRepository) {
         this.answersRepository = answersRepository;
+    }
+    async getAnswerByIdAndUserId({ id, userId }) {
+        return this.answersRepository.findOne({
+            where: {
+                id,
+                userId,
+            },
+            order: { id: -1 },
+        });
+    }
+    async getAnswersByUserIdAndSetDate({ userId, setDate, }) {
+        return this.answersRepository.find({
+            where: {
+                userId,
+                setDate,
+            },
+            order: {
+                id: -1,
+            },
+            relations,
+        });
+    }
+    async getAnswerByUserIdAndLessThanId({ userId, answerId, }) {
+        return this.answersRepository.findOne({
+            where: {
+                userId,
+                id: typeorm_2.LessThan(answerId),
+            },
+            order: {
+                id: -1,
+            },
+        });
     }
     async getAnswersDiary({ userId, limit, }) {
         return this.answersRepository.find({
@@ -2046,7 +2287,7 @@ let AnswersService = class AnswersService {
             order: {
                 id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswersDiaryByLastId({ userId, lastId, limit, direction, }) {
@@ -2060,46 +2301,30 @@ let AnswersService = class AnswersService {
             order: {
                 id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async destroy(answer) {
-        try {
-            await this.answersRepository.remove(answer);
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return this.answersRepository.remove(answer);
     }
     async updateAnswer(body) {
         const answer = await this.answersRepository.save(body);
         return answer;
     }
-    async checkAnswerId(id, userId) {
+    async checkAnswerId({ id, userId, }) {
         const answer = await this.answersRepository.findOne({
             where: { id, userId },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
         if (!answer) {
-            throw new common_1.HttpException(new invalid_answer_id_dto_1.InvalidAnswerIdDto(), new invalid_answer_id_dto_1.InvalidAnswerIdDto().status);
+            throw new invalid_answer_id_exception_1.InvalidAnswerIdException();
         }
         return answer;
     }
-    async create(userId, body) {
-        try {
-            const answer = await this.answersRepository.create(Object.assign({}, body));
-            const returnAnswer = await this.answersRepository.save(answer);
-            return returnAnswer;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async create(body) {
+        const answer = await this.answersRepository.create(Object.assign({}, body));
+        const returnAnswer = await this.answersRepository.save(answer);
+        return returnAnswer;
     }
     getPartNumber(answers) {
         return answers.length >= 6 ? 1 : answers.length + 1;
@@ -2121,36 +2346,6 @@ let AnswersService = class AnswersService {
             return answers[0].setDate;
         }
     }
-    hasSetDate(answer) {
-        return !!answer && !!answer.setDate;
-    }
-    async existAnswerByDateAndUserId(userId) {
-        const date = date_1.getDateString({});
-        const answer = await this.getAnswerByDateAndUserId({ userId, date });
-        if (!!answer) {
-            throw new common_1.HttpException(new exist_answer_dto_1.ExistAnswerDto(), new exist_answer_dto_1.ExistAnswerDto().status);
-        }
-    }
-    async get(id, userId) {
-        const answer = await this.answersRepository.findOne({
-            where: { id, userId },
-            relations: ['file', 'mission', 'user'],
-        });
-        return answer;
-    }
-    async month(userId, date) {
-        const now = date_1.getNow(date);
-        const { firstDate, lastDate } = date_1.getMonthDate(now);
-        console.log(firstDate, lastDate);
-        const notGroupAnswers = await this.getMonthAnswers({
-            firstDate,
-            lastDate,
-            userId,
-        });
-        const answers = notGroupAnswers.reduce((acc, it) => (Object.assign(Object.assign({}, acc), { [it.setDate]: [...(acc[it.setDate] || []), it] })), {});
-        const monthAnswer = Object.values(answers);
-        return { date, monthAnswer };
-    }
     async getMonthAnswers({ firstDate, lastDate, userId, }) {
         return this.answersRepository.find({
             where: {
@@ -2160,98 +2355,8 @@ let AnswersService = class AnswersService {
             order: {
                 no: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
-    }
-    async listId(id, userId) {
-        const answer = await this.answersRepository.findOne({
-            where: {
-                userId,
-                id,
-            },
-            order: { id: -1 },
-        });
-        if (!answer || !answer.setDate) {
-            return [];
-        }
-        const answers = await this.answersRepository.find({
-            where: {
-                userId,
-                setDate: answer.setDate,
-            },
-            order: { id: -1 },
-            relations: ['file', 'mission', 'user'],
-        });
-        return answers;
-    }
-    async list(userId, answerId) {
-        try {
-            let answer;
-            const answers = [];
-            for (let i = 0; i < 4; i++) {
-                if (answerId) {
-                    answer = await this.answersRepository.findOne({
-                        where: {
-                            userId,
-                            id: typeorm_2.LessThan(answerId),
-                        },
-                        order: {
-                            id: -1,
-                        },
-                    });
-                }
-                else {
-                    answer = await this.answersRepository.findOne({
-                        where: {
-                            userId,
-                        },
-                        order: {
-                            id: -1,
-                        },
-                    });
-                }
-                if (!answer) {
-                    break;
-                }
-                answers[i] = await this.answersRepository.find({
-                    where: {
-                        userId,
-                        setDate: answer.setDate,
-                    },
-                    order: {
-                        id: -1,
-                    },
-                    relations: ['file', 'mission', 'user'],
-                });
-                answerId = answers[i][answers[i].length - 1].id;
-            }
-            return answers;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    async week(userId) {
-        try {
-            const answers = await this.getAnswerByUserId({ userId });
-            const recentAnswers = answers && answers.setDate
-                ? await this.getRecentAnswers({ userId, setDate: answers.setDate })
-                : [];
-            const newAnswers = !!recentAnswers && !this.hasSixParsAndNotToday(recentAnswers)
-                ? recentAnswers
-                : [];
-            const today = date_1.getDateString({});
-            return { today, answers: newAnswers };
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
     async getRecentAnswers({ userId, setDate, }) {
         const answers = await this.answersRepository.find({
@@ -2259,7 +2364,7 @@ let AnswersService = class AnswersService {
                 userId,
                 setDate,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
         return answers;
     }
@@ -2268,19 +2373,13 @@ let AnswersService = class AnswersService {
             answers[5] &&
             answers[5].date !== date_1.getDateString({}));
     }
-    async date(userId, date) {
-        const answer = date
-            ? await this.getAnswerByDateAndUserId({ userId, date })
-            : await this.getAnswerByUserId({ userId });
-        return answer;
-    }
     async getAnswerByDateAndUserId({ userId, date, }) {
         return this.answersRepository.findOne({
             where: {
                 userId,
                 date,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswerByUserId({ userId }) {
@@ -2289,14 +2388,14 @@ let AnswersService = class AnswersService {
                 userId,
             },
             order: {
-                setDate: -1,
+                id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswersByUserIdAndDateRange({ userId, dateGt, }) {
         return this.answersRepository.find({
-            relations: ['file', 'mission', 'user'],
+            relations,
             where: {
                 userId,
                 date: typeorm_2.MoreThan(dateGt),
@@ -2313,7 +2412,7 @@ exports.AnswersService = AnswersService;
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2328,64 +2427,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ExistAnswerDto = void 0;
+exports.InvalidAnswerIdException = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const response_dto_1 = __webpack_require__(19);
-const status = common_1.HttpStatus.BAD_REQUEST;
-const message = '해당날짜에 답변이 존재합니다.';
-class ExistAnswerDto extends response_dto_1.ResponseDto {
-    constructor() {
-        super(...arguments);
-        this.status = status;
-        this.message = message;
-    }
-}
-__decorate([
-    swagger_1.ApiProperty({
-        example: status,
-        description: '상태 코드',
-        required: true,
-    }),
-    __metadata("design:type", Object)
-], ExistAnswerDto.prototype, "status", void 0);
-__decorate([
-    swagger_1.ApiProperty({
-        example: message,
-        description: '에러 메시지',
-        required: true,
-    }),
-    __metadata("design:type", Object)
-], ExistAnswerDto.prototype, "message", void 0);
-exports.ExistAnswerDto = ExistAnswerDto;
-
-
-/***/ }),
-/* 43 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.InvalidAnswerIdDto = void 0;
-const common_1 = __webpack_require__(8);
-const swagger_1 = __webpack_require__(5);
-const response_dto_1 = __webpack_require__(19);
 const status = common_1.HttpStatus.BAD_REQUEST;
 const message = '존재하지않는 answerId.';
-class InvalidAnswerIdDto extends response_dto_1.ResponseDto {
+class InvalidAnswerIdException extends common_1.HttpException {
     constructor() {
-        super(...arguments);
-        this.status = status;
+        super({ status, statusCode: status, message: '존재하지않는 answerId.' }, status);
+        this.statusCode = status;
         this.message = message;
     }
 }
@@ -2396,7 +2446,7 @@ __decorate([
         required: true,
     }),
     __metadata("design:type", Object)
-], InvalidAnswerIdDto.prototype, "status", void 0);
+], InvalidAnswerIdException.prototype, "statusCode", void 0);
 __decorate([
     swagger_1.ApiProperty({
         example: message,
@@ -2404,12 +2454,12 @@ __decorate([
         required: true,
     }),
     __metadata("design:type", Object)
-], InvalidAnswerIdDto.prototype, "message", void 0);
-exports.InvalidAnswerIdDto = InvalidAnswerIdDto;
+], InvalidAnswerIdException.prototype, "message", void 0);
+exports.InvalidAnswerIdException = InvalidAnswerIdException;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2484,7 +2534,7 @@ exports.AnswerDto = AnswerDto;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2545,7 +2595,7 @@ exports.AnswersDto = AnswersDto;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2603,7 +2653,7 @@ exports.DeleteAnswerDto = DeleteAnswerDto;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2663,7 +2713,7 @@ exports.DiaryAnswersDto = DiaryAnswersDto;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2726,7 +2776,7 @@ exports.ListAnswersDto = ListAnswersDto;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2792,7 +2842,7 @@ exports.MonthAnswersDto = MonthAnswersDto;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2873,7 +2923,7 @@ exports.WeekAnswerDto = WeekAnswerDto;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2887,28 +2937,208 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ExistAnswerException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.BAD_REQUEST;
+const message = '해당날짜에 답변이 존재합니다.';
+class ExistAnswerException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], ExistAnswerException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], ExistAnswerException.prototype, "message", void 0);
+exports.ExistAnswerException = ExistAnswerException;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _a, _b;
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InvalidQueryException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.PRECONDITION_FAILED;
+const message = 'query 값이 올바르지 않습니다.';
+class InvalidQueryException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], InvalidQueryException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], InvalidQueryException.prototype, "message", void 0);
+exports.InvalidQueryException = InvalidQueryException;
+
+
+/***/ }),
+/* 54 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RequireContentException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.BAD_REQUEST;
+const message = 'content가 필요한 미션 입니다.';
+class RequireContentException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireContentException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireContentException.prototype, "message", void 0);
+exports.RequireContentException = RequireContentException;
+
+
+/***/ }),
+/* 55 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RequireFileException = void 0;
+const common_1 = __webpack_require__(8);
+const swagger_1 = __webpack_require__(5);
+const status = common_1.HttpStatus.BAD_REQUEST;
+const message = 'file이 필요한 미션 입니다.';
+class RequireFileException extends common_1.HttpException {
+    constructor() {
+        super({ status, statusCode: status, message }, status);
+        this.statusCode = status;
+        this.message = message;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: status,
+        description: '상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireFileException.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: message,
+        description: '에러 메시지',
+        required: true,
+    }),
+    __metadata("design:type", Object)
+], RequireFileException.prototype, "message", void 0);
+exports.RequireFileException = RequireFileException;
+
+
+/***/ }),
+/* 56 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const app_service_1 = __webpack_require__(52);
-const token_decorator_1 = __webpack_require__(34);
-const sample_request_dto_1 = __webpack_require__(53);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
-const undefined_interceptor_1 = __webpack_require__(54);
+const app_service_1 = __webpack_require__(57);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
+const undefined_interceptor_1 = __webpack_require__(58);
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     getHello() {
         return { data: this.appService.getHello() };
-    }
-    getHi(body, token) {
-        return { data: 'bye' };
     }
 };
 __decorate([
@@ -2918,45 +3148,17 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Object)
 ], AppController.prototype, "getHello", null);
-__decorate([
-    swagger_1.ApiResponse({
-        status: 200,
-        type: sample_request_dto_1.SampleRequestDto,
-        description: '성공',
-    }),
-    swagger_1.ApiResponse({
-        status: 500,
-        type: sample_request_dto_1.SampleRequestDto,
-        description: '에러',
-    }),
-    swagger_1.ApiQuery({
-        name: 'perPage',
-        required: true,
-        description: '쿼리 사용하기',
-    }),
-    swagger_1.ApiParam({
-        name: 'url',
-        required: true,
-        description: 'path',
-    }),
-    swagger_1.ApiOperation({ summary: 'hi' }),
-    common_1.Get('hi'),
-    __param(0, common_1.Body()), __param(1, token_decorator_1.Token()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof sample_request_dto_1.SampleRequestDto !== "undefined" && sample_request_dto_1.SampleRequestDto) === "function" ? _a : Object, Object]),
-    __metadata("design:returntype", Object)
-], AppController.prototype, "getHi", null);
 AppController = __decorate([
     common_1.UseInterceptors(undefined_interceptor_1.UndefinedToNullInterceptor),
     swagger_1.ApiTags('참고'),
     common_1.Controller(),
-    __metadata("design:paramtypes", [typeof (_b = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _b : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
 ], AppController);
 exports.AppController = AppController;
 
 
 /***/ }),
-/* 52 */
+/* 57 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2985,38 +3187,7 @@ exports.AppService = AppService;
 
 
 /***/ }),
-/* 53 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SampleRequestDto = void 0;
-const swagger_1 = __webpack_require__(5);
-class SampleRequestDto {
-}
-__decorate([
-    swagger_1.ApiProperty({
-        example: 'hi',
-        description: '인사',
-        required: true,
-    }),
-    __metadata("design:type", String)
-], SampleRequestDto.prototype, "hi", void 0);
-exports.SampleRequestDto = SampleRequestDto;
-
-
-/***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3030,7 +3201,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UndefinedToNullInterceptor = void 0;
 const common_1 = __webpack_require__(8);
-const operators_1 = __webpack_require__(40);
+const operators_1 = __webpack_require__(42);
 let UndefinedToNullInterceptor = class UndefinedToNullInterceptor {
     intercept(context, next) {
         return next
@@ -3045,7 +3216,7 @@ exports.UndefinedToNullInterceptor = UndefinedToNullInterceptor;
 
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3059,14 +3230,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DatabaseModule = void 0;
 const common_1 = __webpack_require__(8);
-const env_module_1 = __webpack_require__(56);
-const env_service_1 = __webpack_require__(57);
+const env_module_1 = __webpack_require__(60);
+const env_service_1 = __webpack_require__(61);
 const typeorm_1 = __webpack_require__(11);
 const User_entity_1 = __webpack_require__(16);
 const Answer_entity_1 = __webpack_require__(12);
 const File_entity_1 = __webpack_require__(14);
 const Mission_entity_1 = __webpack_require__(15);
-const Question_entity_1 = __webpack_require__(59);
+const Question_entity_1 = __webpack_require__(63);
 function DatabaseOrmModule() {
     const config = new env_service_1.EnvService().read();
     return typeorm_1.TypeOrmModule.forRoot({
@@ -3077,7 +3248,7 @@ function DatabaseOrmModule() {
         username: config.DB_USERNAME,
         password: config.DB_PASSWORD,
         database: config.DATABASE,
-        synchronize: true,
+        synchronize: false,
         logging: true,
         timezone: '+09:00',
         entities: [User_entity_1.User, Answer_entity_1.Answer, File_entity_1.File, Mission_entity_1.Mission, Question_entity_1.Question],
@@ -3095,7 +3266,7 @@ exports.DatabaseModule = DatabaseModule;
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3109,7 +3280,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EnvModule = void 0;
 const common_1 = __webpack_require__(8);
-const env_service_1 = __webpack_require__(57);
+const env_service_1 = __webpack_require__(61);
 let EnvModule = class EnvModule {
 };
 EnvModule = __decorate([
@@ -3129,7 +3300,7 @@ exports.EnvModule = EnvModule;
 
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3155,7 +3326,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EnvService = void 0;
-const dotenv = __importStar(__webpack_require__(58));
+const dotenv = __importStar(__webpack_require__(62));
 const fs = __importStar(__webpack_require__(32));
 class EnvService {
     constructor() {
@@ -3179,14 +3350,14 @@ exports.EnvService = EnvService;
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("dotenv");;
 
 /***/ }),
-/* 59 */
+/* 63 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3229,7 +3400,7 @@ exports.Question = Question;
 
 
 /***/ }),
-/* 60 */
+/* 64 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3265,7 +3436,7 @@ exports.LoggerMiddleware = LoggerMiddleware;
 
 
 /***/ }),
-/* 61 */
+/* 65 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3289,7 +3460,6 @@ let VersionMiddleware = class VersionMiddleware {
                 next();
                 return;
             }
-            console.log(11, request.headers.appVersion, request.headers.appversion);
             if (!!(request.headers.appVersion || request.headers.appversion) &&
                 parseInt((request.headers.appVersion || request.headers.appversion), 10) <= 2) {
                 response.status(200).json({
@@ -3315,7 +3485,7 @@ exports.VersionMiddleware = VersionMiddleware;
 
 
 /***/ }),
-/* 62 */
+/* 66 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3330,7 +3500,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FilesModule = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
-const files_controller_1 = __webpack_require__(63);
+const files_controller_1 = __webpack_require__(67);
 const files_service_1 = __webpack_require__(17);
 const File_entity_1 = __webpack_require__(14);
 let FilesModule = class FilesModule {
@@ -3346,7 +3516,7 @@ exports.FilesModule = FilesModule;
 
 
 /***/ }),
-/* 63 */
+/* 67 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3369,11 +3539,11 @@ exports.FilesController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
 const id_decorator_1 = __webpack_require__(27);
-const image_uploade_live_name_decorator_1 = __webpack_require__(64);
-const require_body_dto_1 = __webpack_require__(38);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
-const delete_file_dto_1 = __webpack_require__(65);
-const file_dto_1 = __webpack_require__(66);
+const image_uploade_live_name_decorator_1 = __webpack_require__(68);
+const require_body_exception_1 = __webpack_require__(39);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
+const delete_file_dto_1 = __webpack_require__(69);
+const file_dto_1 = __webpack_require__(70);
 const files_service_1 = __webpack_require__(17);
 let FilesController = class FilesController {
     constructor(filesService) {
@@ -3382,7 +3552,7 @@ let FilesController = class FilesController {
     async updateSvg(body, id) {
         const { file: cardSvgUrl, part: partString } = body;
         if (!cardSvgUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+            throw new require_body_exception_1.RequireBodyException();
         }
         const part = partString
             ? parseInt(partString, 10)
@@ -3393,7 +3563,7 @@ let FilesController = class FilesController {
     async update(body, id) {
         const { file: cardUrl, part: partString } = body;
         if (!cardUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+            throw new require_body_exception_1.RequireBodyException();
         }
         const part = partString
             ? parseInt(partString, 10)
@@ -3408,7 +3578,7 @@ let FilesController = class FilesController {
     async missions(body) {
         const { file: cardUrl, part: partString } = body;
         if (!cardUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+            throw new require_body_exception_1.RequireBodyException();
         }
         const part = partString
             ? parseInt(partString, 10)
@@ -3544,7 +3714,7 @@ exports.FilesController = FilesController;
 
 
 /***/ }),
-/* 64 */
+/* 68 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3603,7 +3773,7 @@ exports.ImageUploaderLiveName = common_1.createParamDecorator(async (data, ctx) 
 
 
 /***/ }),
-/* 65 */
+/* 69 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3661,7 +3831,7 @@ exports.DeleteFileDto = DeleteFileDto;
 
 
 /***/ }),
-/* 66 */
+/* 70 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3703,7 +3873,7 @@ exports.FileDto = FileDto;
 
 
 /***/ }),
-/* 67 */
+/* 71 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3718,14 +3888,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MissionsModule = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
-const answers_service_1 = __webpack_require__(41);
+const answers_service_1 = __webpack_require__(43);
 const Answer_entity_1 = __webpack_require__(12);
 const File_entity_1 = __webpack_require__(14);
 const Mission_entity_1 = __webpack_require__(15);
 const User_entity_1 = __webpack_require__(16);
 const files_service_1 = __webpack_require__(17);
 const users_service_1 = __webpack_require__(24);
-const missions_controller_1 = __webpack_require__(68);
+const missions_controller_1 = __webpack_require__(72);
 const missions_service_1 = __webpack_require__(20);
 let MissionsModule = class MissionsModule {
 };
@@ -3740,7 +3910,7 @@ exports.MissionsModule = MissionsModule;
 
 
 /***/ }),
-/* 68 */
+/* 72 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -3762,20 +3932,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MissionsController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const answers_service_1 = __webpack_require__(41);
+const answers_service_1 = __webpack_require__(43);
 const id_decorator_1 = __webpack_require__(27);
-const token_decorator_1 = __webpack_require__(34);
-const require_body_dto_1 = __webpack_require__(38);
-const require_token_dto_1 = __webpack_require__(37);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
+const token_decorator_1 = __webpack_require__(73);
+const require_token_dto_1 = __webpack_require__(36);
+const require_body_exception_1 = __webpack_require__(39);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
 const date_1 = __webpack_require__(21);
 const users_service_1 = __webpack_require__(24);
-const valid_body_1 = __webpack_require__(69);
-const delete_mission_dto_1 = __webpack_require__(70);
-const insufficient_refresh_count_dto_1 = __webpack_require__(71);
+const valid_body_1 = __webpack_require__(74);
+const delete_mission_dto_1 = __webpack_require__(75);
+const insufficient_refresh_count_dto_1 = __webpack_require__(76);
 const invalid_mission_id_dto_1 = __webpack_require__(23);
-const mission_body_dto_1 = __webpack_require__(72);
-const missions_dto_1 = __webpack_require__(73);
+const mission_body_dto_1 = __webpack_require__(77);
+const missions_dto_1 = __webpack_require__(78);
 const missions_service_1 = __webpack_require__(20);
 let MissionsController = class MissionsController {
     constructor(missionsService, answersService, usersService) {
@@ -3933,9 +4103,9 @@ __decorate([
         description: '성공',
     }),
     swagger_1.ApiResponse({
-        status: new require_body_dto_1.RequireBodyDto().status,
-        type: require_body_dto_1.RequireBodyDto,
-        description: new require_body_dto_1.RequireBodyDto().message,
+        status: new require_body_exception_1.RequireBodyException().statusCode,
+        type: require_body_exception_1.RequireBodyException,
+        description: new require_body_exception_1.RequireBodyException().message,
     }),
     swagger_1.ApiBody({
         type: mission_body_dto_1.MissionBodyDto,
@@ -3993,7 +4163,46 @@ exports.MissionsController = MissionsController;
 
 
 /***/ }),
-/* 69 */
+/* 73 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Token = void 0;
+const common_1 = __webpack_require__(8);
+const jsonwebtoken_1 = __importDefault(__webpack_require__(35));
+const require_token_dto_1 = __webpack_require__(36);
+const invalid_token_exception_1 = __webpack_require__(37);
+exports.Token = common_1.createParamDecorator(async (data, ctx) => {
+    const request = ctx.switchToHttp().getRequest();
+    let token = request.headers.authorization;
+    if (!token) {
+        throw new common_1.HttpException(new require_token_dto_1.RequireTokenDto(), common_1.HttpStatus.BAD_REQUEST);
+    }
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7);
+    }
+    let result;
+    try {
+        result = (await jsonwebtoken_1.default.verify(token, process.env.privateKey));
+    }
+    catch (e) {
+        throw new invalid_token_exception_1.InvalidTokenException();
+    }
+    if (typeof result === 'object' &&
+        (!('user' in result) || !result.user.id)) {
+        throw new invalid_token_exception_1.InvalidTokenException();
+    }
+    return result.user;
+});
+
+
+/***/ }),
+/* 74 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -4001,7 +4210,7 @@ exports.MissionsController = MissionsController;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidBody = void 0;
 const common_1 = __webpack_require__(8);
-const require_body_dto_1 = __webpack_require__(38);
+const require_body_exception_1 = __webpack_require__(39);
 exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const { title, isContent, isImage, cycle } = request.body;
@@ -4009,7 +4218,7 @@ exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
         (!isContent && isContent !== false) ||
         (!isImage && isImage !== false) ||
         !cycle) {
-        throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_body_exception_1.RequireBodyException();
     }
     return {
         title,
@@ -4021,7 +4230,7 @@ exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
 
 
 /***/ }),
-/* 70 */
+/* 75 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4079,7 +4288,7 @@ exports.DeleteMissionDto = DeleteMissionDto;
 
 
 /***/ }),
-/* 71 */
+/* 76 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4127,7 +4336,7 @@ exports.InsufficientRefreshCount = InsufficientRefreshCount;
 
 
 /***/ }),
-/* 72 */
+/* 77 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4182,7 +4391,7 @@ exports.MissionBodyDto = MissionBodyDto;
 
 
 /***/ }),
-/* 73 */
+/* 78 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4245,7 +4454,7 @@ exports.MissionsDto = MissionsDto;
 
 
 /***/ }),
-/* 74 */
+/* 79 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4260,9 +4469,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QuestionsModule = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
-const Question_entity_1 = __webpack_require__(59);
-const questions_controller_1 = __webpack_require__(75);
-const questions_service_1 = __webpack_require__(80);
+const Question_entity_1 = __webpack_require__(63);
+const questions_controller_1 = __webpack_require__(80);
+const questions_service_1 = __webpack_require__(85);
 let QuestionsModule = class QuestionsModule {
 };
 QuestionsModule = __decorate([
@@ -4276,7 +4485,7 @@ exports.QuestionsModule = QuestionsModule;
 
 
 /***/ }),
-/* 75 */
+/* 80 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4298,12 +4507,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QuestionsController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
-const valid_body_1 = __webpack_require__(76);
-const question_dto_1 = __webpack_require__(77);
-const questions_dto_1 = __webpack_require__(78);
-const questions_post_request_dto_1 = __webpack_require__(79);
-const questions_service_1 = __webpack_require__(80);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
+const valid_body_1 = __webpack_require__(81);
+const question_dto_1 = __webpack_require__(82);
+const questions_dto_1 = __webpack_require__(83);
+const questions_post_request_dto_1 = __webpack_require__(84);
+const questions_service_1 = __webpack_require__(85);
 let QuestionsController = class QuestionsController {
     constructor(QuestionsService) {
         this.QuestionsService = QuestionsService;
@@ -4358,7 +4567,7 @@ exports.QuestionsController = QuestionsController;
 
 
 /***/ }),
-/* 76 */
+/* 81 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -4366,12 +4575,12 @@ exports.QuestionsController = QuestionsController;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidBody = void 0;
 const common_1 = __webpack_require__(8);
-const require_body_dto_1 = __webpack_require__(38);
+const require_body_exception_1 = __webpack_require__(39);
 exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const { content } = request.body;
     if (!content) {
-        throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_body_exception_1.RequireBodyException();
     }
     return {
         content,
@@ -4380,7 +4589,7 @@ exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
 
 
 /***/ }),
-/* 77 */
+/* 82 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4399,7 +4608,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QuestionDto = void 0;
 const swagger_1 = __webpack_require__(5);
 const response_dto_1 = __webpack_require__(19);
-const Question_entity_1 = __webpack_require__(59);
+const Question_entity_1 = __webpack_require__(63);
 class QuestionDto extends response_dto_1.ResponseDto {
 }
 __decorate([
@@ -4419,7 +4628,7 @@ exports.QuestionDto = QuestionDto;
 
 
 /***/ }),
-/* 78 */
+/* 83 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4461,7 +4670,7 @@ exports.QuestionsDto = QuestionsDto;
 
 
 /***/ }),
-/* 79 */
+/* 84 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4492,7 +4701,7 @@ exports.QuestionsPostRequestDto = QuestionsPostRequestDto;
 
 
 /***/ }),
-/* 80 */
+/* 85 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4514,7 +4723,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QuestionsService = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
-const Question_entity_1 = __webpack_require__(59);
+const Question_entity_1 = __webpack_require__(63);
 const typeorm_2 = __webpack_require__(13);
 let QuestionsService = class QuestionsService {
     constructor(questionRepository) {
@@ -4563,7 +4772,7 @@ exports.QuestionsService = QuestionsService;
 
 
 /***/ }),
-/* 81 */
+/* 86 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4580,8 +4789,8 @@ const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
 const User_entity_1 = __webpack_require__(16);
 const users_service_1 = __webpack_require__(24);
-const signin_controller_1 = __webpack_require__(82);
-const signin_service_1 = __webpack_require__(87);
+const signin_controller_1 = __webpack_require__(87);
+const signin_service_1 = __webpack_require__(92);
 let SigninModule = class SigninModule {
 };
 SigninModule = __decorate([
@@ -4595,7 +4804,7 @@ exports.SigninModule = SigninModule;
 
 
 /***/ }),
-/* 82 */
+/* 87 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4617,13 +4826,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SigninController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
-const require_token_dto_1 = __webpack_require__(37);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
-const token_decorator_1 = __webpack_require__(83);
-const valid_body_1 = __webpack_require__(84);
-const signin_request_dto_1 = __webpack_require__(85);
-const signin_response_dto_1 = __webpack_require__(86);
-const signin_service_1 = __webpack_require__(87);
+const require_token_dto_1 = __webpack_require__(36);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
+const token_decorator_1 = __webpack_require__(88);
+const valid_body_1 = __webpack_require__(89);
+const signin_request_dto_1 = __webpack_require__(90);
+const signin_response_dto_1 = __webpack_require__(91);
+const signin_service_1 = __webpack_require__(92);
 let SigninController = class SigninController {
     constructor(SigninService) {
         this.SigninService = SigninService;
@@ -4685,7 +4894,7 @@ exports.SigninController = SigninController;
 
 
 /***/ }),
-/* 83 */
+/* 88 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -4693,7 +4902,7 @@ exports.SigninController = SigninController;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Token = void 0;
 const common_1 = __webpack_require__(8);
-const require_token_dto_1 = __webpack_require__(37);
+const require_token_dto_1 = __webpack_require__(36);
 exports.Token = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization;
@@ -4708,7 +4917,7 @@ exports.Token = common_1.createParamDecorator(async (data, ctx) => {
 
 
 /***/ }),
-/* 84 */
+/* 89 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -4716,12 +4925,12 @@ exports.Token = common_1.createParamDecorator(async (data, ctx) => {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidBody = void 0;
 const common_1 = __webpack_require__(8);
-const require_body_dto_1 = __webpack_require__(38);
+const require_body_exception_1 = __webpack_require__(39);
 exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const { snsType } = request.body;
     if (!snsType) {
-        throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_body_exception_1.RequireBodyException();
     }
     return {
         snsType,
@@ -4730,7 +4939,7 @@ exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
 
 
 /***/ }),
-/* 85 */
+/* 90 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4761,7 +4970,7 @@ exports.SigninRequestDto = SigninRequestDto;
 
 
 /***/ }),
-/* 86 */
+/* 91 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4806,7 +5015,7 @@ exports.SigninResponseDto = SigninResponseDto;
 
 
 /***/ }),
-/* 87 */
+/* 92 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4827,9 +5036,9 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SigninService = void 0;
 const common_1 = __webpack_require__(8);
-const axios_1 = __importDefault(__webpack_require__(88));
+const axios_1 = __importDefault(__webpack_require__(93));
 const jsonwebtoken_1 = __importDefault(__webpack_require__(35));
-const invalid_token_dto_1 = __webpack_require__(36);
+const invalid_token_exception_1 = __webpack_require__(37);
 const invalid_user_id_dto_1 = __webpack_require__(25);
 const users_service_1 = __webpack_require__(24);
 let SigninService = class SigninService {
@@ -4896,7 +5105,7 @@ let SigninService = class SigninService {
         try {
             const result = jsonwebtoken_1.default.verify(token, process.env.privateKey);
             if (!(result === null || result === void 0 ? void 0 : result.snsType)) {
-                throw new common_1.HttpException(new invalid_token_dto_1.InvalidTokenDto(), common_1.HttpStatus.BAD_REQUEST);
+                throw new invalid_token_exception_1.InvalidTokenException();
             }
             const user = await this.usersService.getUserBySnsIdAndSnsType(result);
             if (!(user === null || user === void 0 ? void 0 : user.id)) {
@@ -4907,7 +5116,7 @@ let SigninService = class SigninService {
             return { accessToken, refreshToken, signUp };
         }
         catch (e) {
-            throw new common_1.HttpException(new invalid_token_dto_1.InvalidTokenDto(), common_1.HttpStatus.BAD_REQUEST);
+            throw new invalid_token_exception_1.InvalidTokenException();
         }
     }
     async createToken({ id, snsId, snsType, }) {
@@ -4931,14 +5140,14 @@ exports.SigninService = SigninService;
 
 
 /***/ }),
-/* 88 */
+/* 93 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("axios");;
 
 /***/ }),
-/* 89 */
+/* 94 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4954,7 +5163,7 @@ exports.UsersModule = void 0;
 const common_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(11);
 const User_entity_1 = __webpack_require__(16);
-const users_controller_1 = __webpack_require__(90);
+const users_controller_1 = __webpack_require__(95);
 const users_service_1 = __webpack_require__(24);
 let UsersModule = class UsersModule {
 };
@@ -4969,7 +5178,7 @@ exports.UsersModule = UsersModule;
 
 
 /***/ }),
-/* 90 */
+/* 95 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -4992,17 +5201,17 @@ exports.UsersController = void 0;
 const common_1 = __webpack_require__(8);
 const swagger_1 = __webpack_require__(5);
 const id_decorator_1 = __webpack_require__(27);
-const token_decorator_1 = __webpack_require__(34);
-const require_body_dto_1 = __webpack_require__(38);
-const require_token_dto_1 = __webpack_require__(37);
+const token_decorator_1 = __webpack_require__(73);
+const require_token_dto_1 = __webpack_require__(36);
 const User_entity_1 = __webpack_require__(16);
-const transformInterceptor_interceptor_1 = __webpack_require__(39);
-const valid_body_1 = __webpack_require__(91);
-const user_body_dto_1 = __webpack_require__(92);
-const delete_user_dto_1 = __webpack_require__(93);
+const require_body_exception_1 = __webpack_require__(39);
+const transformInterceptor_interceptor_1 = __webpack_require__(41);
+const valid_body_1 = __webpack_require__(96);
+const delete_user_dto_1 = __webpack_require__(97);
 const invalid_user_id_dto_1 = __webpack_require__(25);
-const user_dto_1 = __webpack_require__(94);
-const users_dto_1 = __webpack_require__(95);
+const user_body_dto_1 = __webpack_require__(98);
+const user_dto_1 = __webpack_require__(99);
+const users_dto_1 = __webpack_require__(100);
 const users_service_1 = __webpack_require__(24);
 let UsersController = class UsersController {
     constructor(usersService) {
@@ -5097,9 +5306,9 @@ __decorate([
         description: '유저가 없습니다.',
     }),
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.PRECONDITION_FAILED,
-        type: require_body_dto_1.RequireBodyDto,
-        description: '필수 파라이터가 없습니다.',
+        status: new require_body_exception_1.RequireBodyException().statusCode,
+        type: require_body_exception_1.RequireBodyException,
+        description: new require_body_exception_1.RequireBodyException().message,
     }),
     swagger_1.ApiBody({
         type: user_body_dto_1.UserBodyDto,
@@ -5166,7 +5375,7 @@ exports.UsersController = UsersController;
 
 
 /***/ }),
-/* 91 */
+/* 96 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -5174,12 +5383,12 @@ exports.UsersController = UsersController;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidBody = void 0;
 const common_1 = __webpack_require__(8);
-const require_body_dto_1 = __webpack_require__(38);
+const require_body_exception_1 = __webpack_require__(39);
 exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const { name, birthday, gender } = request.body;
     if (!name || !birthday || !gender) {
-        throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_body_exception_1.RequireBodyException();
     }
     return {
         name,
@@ -5190,54 +5399,7 @@ exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
 
 
 /***/ }),
-/* 92 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UserBodyDto = void 0;
-const swagger_1 = __webpack_require__(5);
-class UserBodyDto {
-}
-__decorate([
-    swagger_1.ApiProperty({
-        example: '모티',
-        description: '이름',
-        required: true,
-    }),
-    __metadata("design:type", String)
-], UserBodyDto.prototype, "name", void 0);
-__decorate([
-    swagger_1.ApiProperty({
-        example: '2020-03-18',
-        description: '생일',
-        required: true,
-    }),
-    __metadata("design:type", String)
-], UserBodyDto.prototype, "birthday", void 0);
-__decorate([
-    swagger_1.ApiProperty({
-        example: '남',
-        description: '성별',
-        required: true,
-    }),
-    __metadata("design:type", String)
-], UserBodyDto.prototype, "gender", void 0);
-exports.UserBodyDto = UserBodyDto;
-
-
-/***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5295,7 +5457,54 @@ exports.DeleteUserDto = DeleteUserDto;
 
 
 /***/ }),
-/* 94 */
+/* 98 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserBodyDto = void 0;
+const swagger_1 = __webpack_require__(5);
+class UserBodyDto {
+}
+__decorate([
+    swagger_1.ApiProperty({
+        example: '모티',
+        description: '이름',
+        required: true,
+    }),
+    __metadata("design:type", String)
+], UserBodyDto.prototype, "name", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: '2020-03-18',
+        description: '생일',
+        required: true,
+    }),
+    __metadata("design:type", String)
+], UserBodyDto.prototype, "birthday", void 0);
+__decorate([
+    swagger_1.ApiProperty({
+        example: '남',
+        description: '성별',
+        required: true,
+    }),
+    __metadata("design:type", String)
+], UserBodyDto.prototype, "gender", void 0);
+exports.UserBodyDto = UserBodyDto;
+
+
+/***/ }),
+/* 99 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5342,7 +5551,7 @@ exports.UserDto = UserDto;
 
 
 /***/ }),
-/* 95 */
+/* 100 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5443,7 +5652,7 @@ exports.UsersDto = UsersDto;
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => "7cc20f0df92db4b2bade"
+/******/ 		__webpack_require__.h = () => "42181b5b027056bfdfc8"
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

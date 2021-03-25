@@ -5,10 +5,8 @@ import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { Repository } from 'typeorm';
-import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
 import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
 import { MissionBodyDto } from './dto/mission.body.dto';
-import { MissionsDto } from './dto/missions.dto';
 
 @Injectable()
 export class MissionsService {
@@ -18,7 +16,7 @@ export class MissionsService {
   ) {}
   async destroy(id: number): Promise<null> {
     try {
-      const mission = await this.checkMission(id);
+      const mission = await this.checkMission({ id });
       await this.missionRepository.remove(mission);
       return null;
     } catch (error) {
@@ -34,7 +32,7 @@ export class MissionsService {
 
   async update(id: number, body: MissionBodyDto): Promise<Mission> {
     try {
-      const mission = await this.checkMission(id);
+      const mission = await this.checkMission({ id });
       const newMission = { ...mission, ...body };
       await this.missionRepository.save(newMission);
       const returnMission = await this.findOne(id);
@@ -50,7 +48,7 @@ export class MissionsService {
     }
   }
 
-  async checkMission(id: number): Promise<Mission> {
+  async checkMission({ id }: { id: number }): Promise<Mission> {
     try {
       const mission = await this.findOne(id);
       if (!mission) {
@@ -125,11 +123,10 @@ export class MissionsService {
 
   async hasMissionInAnswer({ answer, date }: { answer: Answer; date: string }) {
     return (
-      !!answer &&
-      !!answer.date &&
-      answer.mission &&
-      answer.mission.cycle &&
-      answer.mission.id &&
+      !!answer?.date &&
+      !!answer?.mission &&
+      !!answer?.mission.cycle &&
+      !!answer?.mission.id &&
       getDateString({ date: answer.date, day: answer.mission.cycle }) >= date
     );
   }

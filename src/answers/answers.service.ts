@@ -1,14 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NumberAttributeValue } from 'aws-sdk/clients/dynamodb';
 import { Answer } from 'src/common/entity/Answer.entity';
-import { getDateString, getMonthDate, getNow } from 'src/common/util/date';
+import { getDateString } from 'src/common/util/date';
 import { Between, LessThan, MoreThan, Repository } from 'typeorm';
-import { ExistAnswerDto } from './dto/exist.answer.dto';
-import { InvalidAnswerIdDto } from './dto/invalid.answer.id.dto';
-import { ListAnswersDto } from './dto/list.answers.dto';
-import { MonthAnswersDto } from './dto/month.answers.dto';
-import { WeekAnswerDto } from './dto/week.answer.dto';
+import { InvalidAnswerIdException } from './exception/invalid.answer.id.exception';
 
 const relations = ['file', 'mission', 'user'];
 
@@ -18,6 +14,16 @@ export class AnswersService {
     @InjectRepository(Answer)
     private answersRepository: Repository<Answer>,
   ) {}
+
+  async getAnswerByIdAndUserId({ id, userId }: { id: number; userId: number }) {
+    return this.answersRepository.findOne({
+      where: {
+        id,
+        userId,
+      },
+      order: { id: -1 },
+    });
+  }
 
   async getAnswersByUserIdAndSetDate({
     userId,
@@ -101,17 +107,7 @@ export class AnswersService {
   }
 
   async destroy(answer: Answer) {
-    try {
-      await this.answersRepository.remove(answer);
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.answersRepository.remove(answer);
   }
 
   async updateAnswer(body): Promise<Answer> {
@@ -119,36 +115,29 @@ export class AnswersService {
     return answer;
   }
 
-  async checkAnswerId(id: number, userId: number): Promise<Answer> {
+  async checkAnswerId({
+    id,
+    userId,
+  }: {
+    id: number;
+    userId: number;
+  }): Promise<Answer> {
     const answer = await this.answersRepository.findOne({
       where: { id, userId },
       relations,
     });
     if (!answer) {
-      throw new HttpException(
-        new InvalidAnswerIdDto(),
-        new InvalidAnswerIdDto().status,
-      );
+      throw new InvalidAnswerIdException();
     }
     return answer;
   }
 
-  async create(userId: number, body: Answer): Promise<Answer> {
-    try {
-      const answer = await this.answersRepository.create({
-        ...body,
-      });
-      const returnAnswer = await this.answersRepository.save(answer);
-      return returnAnswer;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async create(body: Answer): Promise<Answer> {
+    const answer = await this.answersRepository.create({
+      ...body,
+    });
+    const returnAnswer = await this.answersRepository.save(answer);
+    return returnAnswer;
   }
 
   getPartNumber(answers: Answer[]) {
@@ -159,9 +148,9 @@ export class AnswersService {
     if (answers.length === 0) {
       return 1;
     } else if (answers.length === 6) {
-      return answers[0].no! + 1;
+      return answers[0].no + 1;
     }
-    return answers[0].no!;
+    return answers[0].no;
   }
 
   getSetDate(answers: Answer[]) {
@@ -170,49 +159,6 @@ export class AnswersService {
     } else {
       return answers[0].setDate;
     }
-  }
-
-  hasSetDate(answer: Answer) {
-    return !!answer && !!answer.setDate;
-  }
-
-  async existAnswerByDateAndUserId(userId: number) {
-    const date = getDateString({});
-    const answer = await this.getAnswerByDateAndUserId({ userId, date });
-    if (!!answer) {
-      throw new HttpException(
-        new ExistAnswerDto(),
-        new ExistAnswerDto().status,
-      );
-    }
-  }
-
-  async get(id: number, userId: number) {
-    const answer = await this.answersRepository.findOne({
-      where: { id, userId },
-      relations,
-    });
-    return answer;
-  }
-
-  async month(userId: number, date?: string): Promise<MonthAnswersDto['data']> {
-    const now = getNow(date);
-    const { firstDate, lastDate } = getMonthDate(now);
-    console.log(firstDate, lastDate);
-    const notGroupAnswers = await this.getMonthAnswers({
-      firstDate,
-      lastDate,
-      userId,
-    });
-    const answers = notGroupAnswers.reduce(
-      (acc: any, it: Answer) => ({
-        ...acc,
-        [it.setDate]: [...(acc[it.setDate] || []), it],
-      }),
-      {},
-    );
-    const monthAnswer = Object.values(answers) as Answer[][];
-    return { date, monthAnswer };
   }
 
   async getMonthAnswers({
@@ -234,28 +180,6 @@ export class AnswersService {
       },
       relations,
     });
-  }
-
-  async listId(id: number, userId: number): Promise<Answer[]> {
-    const answer = await this.answersRepository.findOne({
-      where: {
-        userId,
-        id,
-      },
-      order: { id: -1 },
-    });
-    if (!answer || !answer.setDate) {
-      return [] as Answer[];
-    }
-    const answers = await this.answersRepository.find({
-      where: {
-        userId,
-        setDate: answer.setDate,
-      },
-      order: { id: -1 },
-      relations,
-    });
-    return answers;
   }
 
   async getRecentAnswers({
@@ -298,6 +222,7 @@ export class AnswersService {
       relations,
     });
   }
+
   async getAnswerByUserId({ userId }: { userId: number }): Promise<Answer> {
     return this.answersRepository.findOne({
       where: {

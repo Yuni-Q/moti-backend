@@ -18,9 +18,9 @@ import {
 import { AnswersService } from 'src/answers/answers.service';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { RequireBodyDto } from 'src/common/dto/require.body.dto';
 import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { Answer } from 'src/common/entity/Answer.entity';
+import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
@@ -160,9 +160,9 @@ export class MissionsController {
     description: '성공',
   })
   @ApiResponse({
-    status: new RequireBodyDto().status,
-    type: RequireBodyDto,
-    description: new RequireBodyDto().message,
+    status: new RequireBodyException().statusCode,
+    type: RequireBodyException,
+    description: new RequireBodyException().message,
   })
   @ApiBody({
     type: MissionBodyDto,

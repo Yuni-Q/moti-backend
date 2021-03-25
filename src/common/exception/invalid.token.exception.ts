@@ -1,17 +1,17 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseDto } from './response.dto';
 
-const status = 1100;
+const status = HttpStatus.BAD_REQUEST;
+const statusCode = 1100;
 const message = '올바르지 못한 토큰 입니다.';
 
-export class InvalidTokenDto extends ResponseDto {
+export class InvalidTokenException extends HttpException {
   @ApiProperty({
     example: status,
     description: '상태 코드',
     required: true,
   })
-  public status = status;
+  public statusCode = statusCode;
 
   @ApiProperty({
     example: message,
@@ -19,4 +19,9 @@ export class InvalidTokenDto extends ResponseDto {
     required: true,
   })
   public message = message;
+
+  constructor() {
+    // TODO : status 제거
+    super({ status, statusCode, message }, status);
+  }
 }

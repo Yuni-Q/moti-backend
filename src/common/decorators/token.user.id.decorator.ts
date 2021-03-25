@@ -5,12 +5,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
-import { User } from 'src/common/entity/User.entity';
 import { RequireTokenDto } from '../dto/require.token.dto';
 import { InvalidTokenException } from '../exception/invalid.token.exception';
 
-// TODO : 제거해야함
-export const Token = createParamDecorator(
+export const TokenUserId = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization as string;
@@ -36,8 +34,6 @@ export const Token = createParamDecorator(
     ) {
       throw new InvalidTokenException();
     }
-    return result.user as User;
+    return result.user.id as number;
   },
 );
-
-// @Token() token
