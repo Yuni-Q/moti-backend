@@ -15,6 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { ImageUploaderLiveName } from 'src/common/decorators/image.uploade.live.name.decorator';
+import { CustomInternalServerErrorException } from 'src/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { DeleteFileDto } from './dto/delete.file.dto';
@@ -57,15 +58,27 @@ export class FilesController {
   })
   @Put(':id/svg')
   async updateSvg(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
-    const { file: cardSvgUrl, part: partString } = body;
-    if (!cardSvgUrl || !partString) {
-      throw new RequireBodyException();
+    try {
+      const { file: cardSvgUrl, part: partString } = body;
+      if (!cardSvgUrl || !partString) {
+        throw new RequireBodyException();
+      }
+      const part = partString
+        ? parseInt(partString, 10)
+        : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
+      if (isNaN(part)) {
+        throw new RequireBodyException();
+      }
+      const file = await this.filesService.checkFile({ id });
+      const returnFile = await this.filesService.update({
+        ...file,
+        cardSvgUrl,
+        part,
+      });
+      return { data: returnFile };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
     }
-    const part = partString
-      ? parseInt(partString, 10)
-      : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
-    const result = await this.filesService.update(id, { cardSvgUrl, part });
-    return { data: result };
   }
 
   @ApiResponse({
@@ -97,22 +110,34 @@ export class FilesController {
     description: 'id',
   })
   @Put(':id')
-  async update(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
-    const { file: cardUrl, part: partString } = body;
-    if (!cardUrl || !partString) {
-      throw new RequireBodyException();
+  async updatePdf(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
+    try {
+      const { file: cardUrl, part: partString } = body;
+      if (!cardUrl || !partString) {
+        throw new RequireBodyException();
+      }
+      const part = partString
+        ? parseInt(partString, 10)
+        : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+      if (isNaN(part)) {
+        throw new RequireBodyException();
+      }
+      const file = await this.filesService.checkFile({ id });
+      const returnFile = await this.filesService.update({
+        ...file,
+        cardUrl,
+        part,
+      });
+      return { data: returnFile };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
     }
-    const part = partString
-      ? parseInt(partString, 10)
-      : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
-    const result = await this.filesService.update(id, { cardUrl, part });
-    return { data: result };
   }
 
   @ApiResponse({
     status: new DeleteFileDto().status,
     type: DeleteFileDto,
-    description: '성공',
+    description: new DeleteFileDto().message,
   })
   @ApiParam({
     name: 'id',
@@ -121,8 +146,13 @@ export class FilesController {
   })
   @Delete(':id')
   async destroy(@Id() id): Promise<DeleteFileDto> {
-    const result = await this.filesService.destroy(id);
-    return { data: result };
+    try {
+      const file = await this.filesService.checkFile({ id });
+      await this.filesService.destroy(file);
+      return { data: null, message: new DeleteFileDto().message };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -149,16 +179,23 @@ export class FilesController {
     },
   })
   @Post()
-  async missions(@ImageUploaderLiveName() body): Promise<FileDto> {
-    // TODO svg와 png도 함께 올리기
-    const { file: cardUrl, part: partString } = body;
-    if (!cardUrl || !partString) {
-      throw new RequireBodyException();
+  async createFile(@ImageUploaderLiveName() body): Promise<FileDto> {
+    try {
+      // TODO svg와 png도 함께 올리기
+      const { file: cardUrl, part: partString } = body;
+      if (!cardUrl || !partString) {
+        throw new RequireBodyException();
+      }
+      const part = partString
+        ? parseInt(partString, 10)
+        : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+      if (isNaN(part)) {
+        throw new RequireBodyException();
+      }
+      const result = await this.filesService.create({ cardUrl, part });
+      return { statusCode: HttpStatus.CREATED, data: result };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
     }
-    const part = partString
-      ? parseInt(partString, 10)
-      : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
-    const result = await this.filesService.create({ cardUrl, part });
-    return { status: HttpStatus.CREATED, data: result };
   }
 }

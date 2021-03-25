@@ -7,7 +7,6 @@ export const ImageUploaderLiveName = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const form = new formidable.IncomingForm();
-    console.log(request.body);
     const file = await new Promise(function (resolve, reject) {
       form.parse(request, async (err, fields, files) => {
         try {

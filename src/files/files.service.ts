@@ -1,14 +1,8 @@
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import e from 'express';
 import { File } from 'src/common/entity/File.entity';
 import { Repository } from 'typeorm';
-import { InvalidFileIdDto } from './dto/invalid.file.id.dto';
+import { InvalidFileIdException } from './exception/invalid.file.id.exception';
 
 @Injectable()
 export class FilesService {
@@ -25,61 +19,25 @@ export class FilesService {
       .getOne();
   }
 
-  async destroy(id): Promise<null> {
-    try {
-      const file = await this.checkFile(id);
-      await this.fileRepository.remove(file);
-      return null;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async destroy(file: File) {
+    return this.fileRepository.remove(file);
   }
 
-  async update(id, body): Promise<File> {
-    try {
-      const file = await this.checkFile(id);
-      const newFile = { ...file, ...body };
-      const returnFile = await this.fileRepository.save(newFile);
-      return returnFile;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async update(body): Promise<File> {
+    const file = await this.fileRepository.save(body);
+    return file;
   }
+
   async create(body): Promise<File> {
-    try {
-      const file = await this.fileRepository.create(body as File);
-      const newFile = await this.fileRepository.save(file);
-      return newFile;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const file = await this.fileRepository.create(body as File);
+    const newFile = await this.fileRepository.save(file);
+    return newFile;
   }
 
-  async checkFile(id: number) {
+  async checkFile({ id }: { id: number }) {
     const file = await this.fileRepository.findOne({ where: { id } });
     if (!file) {
-      throw new HttpException(
-        new InvalidFileIdDto(),
-        new InvalidFileIdDto().status,
-      );
+      throw new InvalidFileIdException();
     }
     return file;
   }
