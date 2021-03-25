@@ -70,7 +70,7 @@ export class UsersController {
   @ApiOperation({ summary: '내 정보 조회' })
   @Get('my')
   async getMyInfo(@TokenUserId() userId): Promise<UserDto> {
-    const my = await this.usersService.get(userId);
+    const my = await this.usersService.getUserById({ id: userId });
     return { data: my };
   }
 
@@ -90,7 +90,7 @@ export class UsersController {
     @TokenUserId() userId: User,
     @Id() id: number,
   ): Promise<UserDto> {
-    const my = await this.usersService.get(id);
+    const my = await this.usersService.getUserById({ id });
     return { data: my };
   }
 

@@ -5,8 +5,8 @@ import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
 import { getDateString } from 'src/common/util/date';
 import { Repository } from 'typeorm';
-import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
 import { MissionBodyDto } from './dto/mission.body.dto';
+import { InvalidMissionIdException } from './exception/invalid.mission.id.exception';
 
 @Injectable()
 export class MissionsService {
@@ -14,119 +14,66 @@ export class MissionsService {
     @InjectRepository(Mission)
     private missionRepository: Repository<Mission>,
   ) {}
-  async destroy(id: number): Promise<null> {
-    try {
-      const mission = await this.checkMission({ id });
-      await this.missionRepository.remove(mission);
-      return null;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async destroy(body) {
+    await this.missionRepository.remove(body);
   }
 
-  async update(id: number, body: MissionBodyDto): Promise<Mission> {
-    try {
-      const mission = await this.checkMission({ id });
-      const newMission = { ...mission, ...body };
-      await this.missionRepository.save(newMission);
-      const returnMission = await this.findOne(id);
-      return returnMission;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async updateMission(body): Promise<Mission> {
+    return this.missionRepository.save(body);
   }
 
   async checkMission({ id }: { id: number }): Promise<Mission> {
-    try {
-      const mission = await this.findOne(id);
-      if (!mission) {
-        throw new HttpException(
-          new InvalidMissionIdDto(),
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      return mission;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    const mission = await this.getMissionById({ id });
+    if (!mission) {
+      throw new InvalidMissionIdException();
     }
+    return mission;
   }
 
-  async create(body: MissionBodyDto): Promise<Mission> {
-    try {
-      const mission = await this.missionRepository.create({ ...body });
-      const newMission = this.missionRepository.save(mission);
-      return newMission;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async createMission(body: MissionBodyDto): Promise<Mission> {
+    const mission = await this.missionRepository.create({ ...body });
+    const newMission = await this.missionRepository.save(mission);
+    return newMission;
   }
 
-  async findOne(id: number): Promise<Mission> {
-    try {
-      const mission = this.missionRepository.findOne({ where: { id } });
-      return mission;
-    } catch (error) {
-      const mission = this.missionRepository.findOne({ where: { id } });
-      return mission;
-    }
+  async getMissionById({ id }: { id: number }): Promise<Mission> {
+    return this.missionRepository.findOne({ where: { id } });
   }
 
-  hasRefresh(user: User) {
-    const date = getDateString({});
-    return !!user.refreshDate && user.refreshDate === date;
+  hasRefresh({ user, date }: { user: User; date: string }) {
+    return user?.refreshDate === date;
   }
 
-  getOldMission(
-    user: User,
-  ): {
+  getOldMission({
+    mission,
+  }: {
+    mission: string;
+  }): {
+    date: string;
     missions: Mission[];
   } {
-    const { mission } = user;
     return mission && JSON.parse(mission);
   }
 
-  isRefresh(user: User) {
-    const date = getDateString({});
+  isRefresh({ user, date }: { user: User; date: string }) {
     return !user.refreshDate || (!!user.refreshDate && user.refreshDate < date);
   }
 
-  hasOldMissions(oldMission: any) {
-    const date = getDateString({});
-    return (
-      !!oldMission && oldMission.date === date && oldMission.missions.length > 0
-    );
+  hasOldMissions({
+    mission,
+    date,
+  }: {
+    mission: { date: string; missions: Mission[] };
+    date: string;
+  }) {
+    return mission?.date === date && mission?.missions?.length > 0;
   }
 
   async hasMissionInAnswer({ answer, date }: { answer: Answer; date: string }) {
     return (
       !!answer?.date &&
-      !!answer?.mission &&
-      !!answer?.mission.cycle &&
-      !!answer?.mission.id &&
+      !!answer?.mission?.cycle &&
+      !!answer?.mission?.id &&
       getDateString({ date: answer.date, day: answer.mission.cycle }) >= date
     );
   }

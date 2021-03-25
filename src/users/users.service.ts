@@ -30,7 +30,7 @@ export class UsersService {
     return users;
   }
 
-  async get(id: number): Promise<User> {
+  async getUserById({ id }: { id: number }): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
@@ -56,56 +56,28 @@ export class UsersService {
     id: number,
     body: UserBodyDto | { refreshDate: null },
   ): Promise<User> {
-    const user = await this.checkUser(id);
+    const user = await this.checkUser({ id });
     const newUser = { ...user, ...body };
     await this.userRepository.save(newUser);
-    const returnUser = await this.get(id);
+    const returnUser = await this.getUserById({ id });
     return returnUser;
   }
 
   async deleteUser(id: number): Promise<null> {
-    const user = await this.checkUser(id);
+    const user = await this.checkUser({ id });
     await this.userRepository.remove(user);
     return null;
   }
 
-  async checkUser(id: number): Promise<User> {
-    const user = await this.get(id);
+  async checkUser({ id }: { id: number }): Promise<User> {
+    const user = await this.getUserById({ id });
     if (!user) {
       throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
     }
     return user;
   }
 
-  async setMissionsInUser({
-    missions,
-    id,
-  }: {
-    id: number;
-    missions: Mission[];
-  }) {
-    const date = getDateString({});
-    const user = await this.checkUser(id);
-    const newUser = { ...user, mission: JSON.stringify({ date, missions }) };
-    const returnUser = await this.userRepository.save(newUser);
-    return returnUser;
-  }
-
-  async setMissionsAndRefreshDateInUser({
-    id,
-    missions,
-  }: {
-    id: number;
-    missions: Mission[];
-  }) {
-    const date = getDateString({});
-    const user = await this.checkUser(id);
-    const newUser = {
-      ...user,
-      refreshDate: date,
-      mission: JSON.stringify({ date, missions }),
-    };
-    const returnUser = await this.userRepository.save(newUser);
-    return returnUser;
+  async updateUser(body): Promise<User> {
+    return this.userRepository.save(body);
   }
 }

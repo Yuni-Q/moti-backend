@@ -111,8 +111,7 @@ export class AnswersService {
   }
 
   async updateAnswer(body): Promise<Answer> {
-    const answer = await this.answersRepository.save(body);
-    return answer;
+    return this.answersRepository.save(body);
   }
 
   async checkAnswerId({

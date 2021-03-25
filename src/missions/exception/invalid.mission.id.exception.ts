@@ -1,17 +1,16 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseDto } from 'src/common/dto/response.dto';
 
 const status = HttpStatus.BAD_REQUEST;
 const message = '유효하지 않은 mission id 입니다.';
 
-export class InvalidMissionIdDto extends ResponseDto {
+export class InvalidMissionIdException extends HttpException {
   @ApiProperty({
     example: status,
     description: '상태 코드',
     required: true,
   })
-  public status = status;
+  public statusCode = status;
 
   @ApiProperty({
     example: message,
@@ -19,4 +18,12 @@ export class InvalidMissionIdDto extends ResponseDto {
     required: true,
   })
   public message = message;
+
+  constructor() {
+    super(
+      // TODO : status 제거
+      { status, statusCode: status, message },
+      status,
+    );
+  }
 }

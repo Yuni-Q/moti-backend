@@ -70,7 +70,7 @@ export class FilesController {
         throw new RequireBodyException();
       }
       const file = await this.filesService.checkFile({ id });
-      const returnFile = await this.filesService.update({
+      const returnFile = await this.filesService.updateFile({
         ...file,
         cardSvgUrl,
         part,
@@ -123,7 +123,7 @@ export class FilesController {
         throw new RequireBodyException();
       }
       const file = await this.filesService.checkFile({ id });
-      const returnFile = await this.filesService.update({
+      const returnFile = await this.filesService.updateFile({
         ...file,
         cardUrl,
         part,

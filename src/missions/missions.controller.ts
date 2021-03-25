@@ -2,7 +2,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   HttpStatus,
   Post,
   Put,
@@ -19,6 +18,7 @@ import { AnswersService } from 'src/answers/answers.service';
 import { Id } from 'src/common/decorators/id.decorator';
 import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
 import { Answer } from 'src/common/entity/Answer.entity';
+import { CustomInternalServerErrorException } from 'src/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
@@ -26,11 +26,11 @@ import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
 import { ValidBody } from './decorators/valid.body';
 import { DeleteMissionDto } from './dto/delete.mission.dto';
-import { InsufficientRefreshCount } from './dto/insufficient.refresh.count.dto';
-import { InvalidMissionIdDto } from './dto/invalid.mission.id.dto';
 import { MissionBodyDto } from './dto/mission.body.dto';
 import { MissionDto } from './dto/mission.dto';
 import { MissionsDto } from './dto/missions.dto';
+import { InsufficientRefreshCountException } from './exception/insufficient.refresh.count.exception';
+import { InvalidMissionIdException } from './exception/invalid.mission.id.exception';
 import { MissionsService } from './missions.service';
 
 @ApiResponse({
@@ -57,27 +57,24 @@ export class MissionsController {
   @Get()
   async missions(@TokenUserId() userId): Promise<MissionsDto> {
     try {
-      const id = userId;
-      const user = await this.usersService.checkUser(id);
-      const oldMission = this.missionsService.getOldMission(user);
-      const refresh = this.missionsService.isRefresh(user);
-      if (this.missionsService.hasOldMissions(oldMission)) {
+      const date = getDateString({});
+      const user = await this.usersService.checkUser({ id: userId });
+      const mission = this.missionsService.getOldMission({
+        mission: user.mission,
+      });
+      const refresh = this.missionsService.isRefresh({ user, date });
+      if (this.missionsService.hasOldMissions({ mission, date })) {
         return {
-          status: HttpStatus.OK,
-          data: { refresh, missions: oldMission.missions },
+          data: { refresh, missions: mission.missions },
         };
       }
-      const missions = await this.getNewMission(id);
-      await this.usersService.setMissionsInUser({ missions, id: id });
-      return { status: HttpStatus.OK, data: { refresh, missions } };
+      const oneYearAgo = getDateString({ date, years: -1 });
+      const missions = await this.getNewMission({ date, userId, oneYearAgo });
+      const newUser = { ...user, mission: JSON.stringify({ date, missions }) };
+      await this.usersService.updateUser(newUser);
+      return { data: { refresh, missions } };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
@@ -87,35 +84,29 @@ export class MissionsController {
     description: '성공',
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: InsufficientRefreshCount,
-    description: '갱신 횟수가 모자랍니다.',
+    status: new InsufficientRefreshCountException().statusCode,
+    type: InsufficientRefreshCountException,
+    description: new InsufficientRefreshCountException().message,
   })
   @Get('refresh')
   async refresh(@TokenUserId() userId): Promise<MissionsDto> {
     try {
-      const id = userId;
-      const user = await this.usersService.checkUser(id);
-      if (this.missionsService.hasRefresh(user)) {
-        throw new HttpException(
-          new InsufficientRefreshCount(),
-          HttpStatus.BAD_REQUEST,
-        );
+      const user = await this.usersService.checkUser({ id: userId });
+      const date = getDateString({});
+      if (this.missionsService.hasRefresh({ user, date })) {
+        throw new InsufficientRefreshCountException();
       }
-      const missions = await this.getNewMission(id);
-      await this.usersService.setMissionsAndRefreshDateInUser({
-        missions,
-        id: id,
-      });
+      const oneYearAgo = getDateString({ date, years: -1 });
+      const missions = await this.getNewMission({ date, userId, oneYearAgo });
+      const newUser = {
+        ...user,
+        refreshDate: date,
+        mission: JSON.stringify({ date, missions }),
+      };
+      await this.usersService.updateUser(newUser);
       return { status: HttpStatus.OK, data: { refresh: false, missions } };
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new CustomInternalServerErrorException(error.message);
     }
   }
 
@@ -131,8 +122,12 @@ export class MissionsController {
   })
   @Get(':id')
   async mission(@TokenUserId() userId, @Id() id): Promise<MissionDto> {
-    const result = await this.missionsService.findOne(id);
-    return { data: result };
+    try {
+      const mission = await this.missionsService.getMissionById({ id });
+      return { data: mission };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -147,8 +142,12 @@ export class MissionsController {
   })
   @Post()
   async create(@TokenUserId() userId, @ValidBody() body): Promise<MissionDto> {
-    const result = await this.missionsService.create(body);
-    return { status: 201, data: result };
+    try {
+      const mission = await this.missionsService.createMission(body);
+      return { status: HttpStatus.CREATED, data: mission };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -157,9 +156,9 @@ export class MissionsController {
     description: '성공',
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: InvalidMissionIdDto,
-    description: '성공',
+    status: new InvalidMissionIdException().statusCode,
+    type: InvalidMissionIdException,
+    description: new InvalidMissionIdException().message,
   })
   @ApiResponse({
     status: new RequireBodyException().statusCode,
@@ -182,14 +181,22 @@ export class MissionsController {
     @ValidBody() body,
     @Id() id,
   ): Promise<MissionDto> {
-    const result = await this.missionsService.update(id, body);
-    return { data: result };
+    try {
+      const mission = await this.missionsService.checkMission({ id });
+      const newMission = { ...mission, ...body };
+      const returnMission = await this.missionsService.updateMission(
+        newMission,
+      );
+      return { data: returnMission };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
-    status: new InvalidMissionIdDto().status,
-    type: InvalidMissionIdDto,
-    description: new InvalidMissionIdDto().message,
+    status: new InvalidMissionIdException().statusCode,
+    type: InvalidMissionIdException,
+    description: new InvalidMissionIdException().message,
   })
   @ApiResponse({
     status: new DeleteMissionDto().status,
@@ -203,13 +210,24 @@ export class MissionsController {
   })
   @Delete(':id')
   async destroy(@TokenUserId() userId, @Id() id): Promise<DeleteMissionDto> {
-    const result = await this.missionsService.destroy(id);
-    return { data: result };
+    try {
+      const mission = await this.missionsService.checkMission({ id });
+      await this.missionsService.destroy(mission);
+      return { data: null };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
-  async getNewMission(userId: number) {
-    const date = getDateString({});
-    const oneYearAgo = getDateString({ years: -1 });
+  async getNewMission({
+    oneYearAgo,
+    date,
+    userId,
+  }: {
+    oneYearAgo: string;
+    date: string;
+    userId: number;
+  }) {
     const oneYearData = await this.answersService.getAnswersByUserIdAndDateRange(
       {
         userId,

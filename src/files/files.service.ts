@@ -23,9 +23,8 @@ export class FilesService {
     return this.fileRepository.remove(file);
   }
 
-  async update(body): Promise<File> {
-    const file = await this.fileRepository.save(body);
-    return file;
+  async updateFile(body): Promise<File> {
+    return this.fileRepository.save(body);
   }
 
   async create(body): Promise<File> {
