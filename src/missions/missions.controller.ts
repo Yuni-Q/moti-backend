@@ -18,9 +18,9 @@ import {
 import { AnswersService } from 'src/answers/answers.service';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { Answer } from 'src/common/entity/Answer.entity';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
+import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { getDateString } from 'src/common/util/date';
 import { UsersService } from 'src/users/users.service';
@@ -34,9 +34,9 @@ import { MissionsDto } from './dto/missions.dto';
 import { MissionsService } from './missions.service';
 
 @ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  type: RequireTokenDto,
-  description: '토큰이 필요합니다.',
+  status: new RequireTokenException().statusCode,
+  type: RequireTokenException,
+  description: new RequireTokenException().message,
 })
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')

@@ -18,9 +18,9 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { RequireTokenDto } from 'src/common/dto/require.token.dto';
 import { User } from 'src/common/entity/User.entity';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
+import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { DeleteUserDto } from './dto/delete.user.dto';
@@ -33,9 +33,9 @@ import { UsersService } from './users.service';
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')
 @ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  type: RequireTokenDto,
-  description: '토큰이 필요합니다.',
+  status: new RequireTokenException().statusCode,
+  type: RequireTokenException,
+  description: new RequireTokenException().message,
 })
 @ApiTags('users')
 @Controller('api/v1/users')

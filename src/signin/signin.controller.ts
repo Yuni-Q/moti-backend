@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RequireTokenDto } from 'src/common/dto/require.token.dto';
+import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { Token } from './decorators/token.decorator';
 import { ValidBody } from './decorators/valid.body';
@@ -17,9 +17,9 @@ import { SigninService } from './signin.service';
 @UseInterceptors(TransformInterceptor)
 @ApiBearerAuth('authorization')
 @ApiResponse({
-  status: HttpStatus.BAD_REQUEST,
-  type: RequireTokenDto,
-  description: '토큰이 없습니다.',
+  status: new RequireTokenException().statusCode,
+  type: RequireTokenException,
+  description: new RequireTokenException().message,
 })
 @ApiTags('signin')
 @Controller('api/v1/signin')

@@ -1,19 +1,14 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
-import { RequireTokenDto } from '../dto/require.token.dto';
 import { InvalidTokenException } from '../exception/invalid.token.exception';
+import { RequireTokenException } from '../exception/require.token.exception';
 
 export const TokenUserId = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization as string;
     if (!token) {
-      throw new HttpException(new RequireTokenDto(), HttpStatus.BAD_REQUEST);
+      throw new RequireTokenException();
     }
     if ((token as string).startsWith('Bearer ')) {
       token = token.slice(7);
