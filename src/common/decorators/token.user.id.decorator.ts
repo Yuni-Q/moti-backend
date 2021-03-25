@@ -4,7 +4,7 @@ import { InvalidTokenException } from '../exception/invalid.token.exception';
 import { RequireTokenException } from '../exception/require.token.exception';
 
 export const TokenUserId = createParamDecorator(
-  async (data: unknown, ctx: ExecutionContext) => {
+  async (data: unknown, ctx: ExecutionContext): Promise<number> => {
     const request = ctx.switchToHttp().getRequest();
     let token = request.headers.authorization as string;
     if (!token) {

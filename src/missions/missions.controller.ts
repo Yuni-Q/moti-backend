@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { AnswersService } from 'src/answers/answers.service';
 import { Id } from 'src/common/decorators/id.decorator';
-import { Token } from 'src/common/decorators/token.decorator';
+import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
 import { Answer } from 'src/common/entity/Answer.entity';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/common/exception/require.token.exception';
@@ -55,8 +55,9 @@ export class MissionsController {
     description: '성공',
   })
   @Get()
-  async missions(@Token() { id }): Promise<MissionsDto> {
+  async missions(@TokenUserId() userId): Promise<MissionsDto> {
     try {
+      const id = userId;
       const user = await this.usersService.checkUser(id);
       const oldMission = this.missionsService.getOldMission(user);
       const refresh = this.missionsService.isRefresh(user);
@@ -91,8 +92,9 @@ export class MissionsController {
     description: '갱신 횟수가 모자랍니다.',
   })
   @Get('refresh')
-  async refresh(@Token() { id }): Promise<MissionsDto> {
+  async refresh(@TokenUserId() userId): Promise<MissionsDto> {
     try {
+      const id = userId;
       const user = await this.usersService.checkUser(id);
       if (this.missionsService.hasRefresh(user)) {
         throw new HttpException(
@@ -128,7 +130,7 @@ export class MissionsController {
     description: 'path',
   })
   @Get(':id')
-  async mission(@Token() user, @Id() id): Promise<MissionDto> {
+  async mission(@TokenUserId() userId, @Id() id): Promise<MissionDto> {
     const result = await this.missionsService.findOne(id);
     return { data: result };
   }
@@ -144,7 +146,7 @@ export class MissionsController {
     description: 'body',
   })
   @Post()
-  async create(@Token() user, @ValidBody() body): Promise<MissionDto> {
+  async create(@TokenUserId() userId, @ValidBody() body): Promise<MissionDto> {
     const result = await this.missionsService.create(body);
     return { status: 201, data: result };
   }
@@ -176,7 +178,7 @@ export class MissionsController {
   })
   @Put(':id')
   async update(
-    @Token() user,
+    @TokenUserId() userId,
     @ValidBody() body,
     @Id() id,
   ): Promise<MissionDto> {
@@ -200,7 +202,7 @@ export class MissionsController {
     description: 'path',
   })
   @Delete(':id')
-  async destroy(@Token() user, @Id() id): Promise<DeleteMissionDto> {
+  async destroy(@TokenUserId() userId, @Id() id): Promise<DeleteMissionDto> {
     const result = await this.missionsService.destroy(id);
     return { data: result };
   }

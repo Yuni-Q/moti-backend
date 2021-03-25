@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
-import { Token } from 'src/common/decorators/token.decorator';
+import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
 import { User } from 'src/common/entity/User.entity';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/common/exception/require.token.exception';
@@ -55,7 +55,7 @@ export class UsersController {
   })
   @Get()
   async getAll(
-    @Token() user: User,
+    @TokenUserId() userId: User,
     @Query('id') id: string,
   ): Promise<UsersDto> {
     const users = await this.usersService.getAll(id);
@@ -69,8 +69,8 @@ export class UsersController {
   })
   @ApiOperation({ summary: '내 정보 조회' })
   @Get('my')
-  async getMyInfo(@Token() user: User): Promise<UserDto> {
-    const my = await this.usersService.get(user.id);
+  async getMyInfo(@TokenUserId() userId): Promise<UserDto> {
+    const my = await this.usersService.get(userId);
     return { data: my };
   }
 
@@ -86,7 +86,10 @@ export class UsersController {
   })
   @ApiOperation({ summary: '특정 정보 조회' })
   @Get(':id')
-  async getUserInfo(@Token() user: User, @Id() id: number): Promise<UserDto> {
+  async getUserInfo(
+    @TokenUserId() userId: User,
+    @Id() id: number,
+  ): Promise<UserDto> {
     const my = await this.usersService.get(id);
     return { data: my };
   }
@@ -114,10 +117,10 @@ export class UsersController {
   @ApiOperation({ summary: '내 정보 수정' })
   @Put('')
   async updateUser(
-    @Token() user: User,
+    @TokenUserId() userId,
     @ValidBody() body: UserBodyDto,
   ): Promise<UserDto> {
-    const my = await this.usersService.updateMyInfo(user.id, body);
+    const my = await this.usersService.updateMyInfo(userId, body);
     return { data: my };
   }
 
@@ -133,8 +136,8 @@ export class UsersController {
   })
   @ApiOperation({ summary: 'refreshDate 초기화' })
   @Put('refresh')
-  async resetRefreshDate(@Token() user: User): Promise<UserDto> {
-    const my = await this.usersService.updateMyInfo(user.id, {
+  async resetRefreshDate(@TokenUserId() userId): Promise<UserDto> {
+    const my = await this.usersService.updateMyInfo(userId, {
       refreshDate: null,
     });
     return { data: my };
@@ -152,8 +155,8 @@ export class UsersController {
   })
   @ApiOperation({ summary: '유저 삭제' })
   @Delete('')
-  async deleteUser(@Token() user: User): Promise<DeleteUserDto> {
-    const result = await this.usersService.deleteUser(user.id);
+  async deleteUser(@TokenUserId() userId): Promise<DeleteUserDto> {
+    const result = await this.usersService.deleteUser(userId);
     return { data: result };
   }
 }
