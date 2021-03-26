@@ -9,20 +9,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const answers_module_1 = require("./answers/answers.module");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const database_module_1 = require("./common/database/database.module");
 const env_module_1 = require("./common/env/env.module");
 const logger_middleware_1 = require("./common/middlewares/logger.middleware");
-const users_module_1 = require("./users/users.module");
-const signin_module_1 = require("./signin/signin.module");
-const questions_module_1 = require("./questions/questions.module");
-const missions_module_1 = require("./missions/missions.module");
-const answers_module_1 = require("./answers/answers.module");
+const version_middleware_1 = require("./common/middlewares/version.middleware");
 const files_module_1 = require("./files/files.module");
+const missions_module_1 = require("./missions/missions.module");
+const questions_module_1 = require("./questions/questions.module");
+const signin_module_1 = require("./signin/signin.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
+        consumer.apply(version_middleware_1.VersionMiddleware).forRoutes('api/v1');
     }
 };
 AppModule = __decorate([

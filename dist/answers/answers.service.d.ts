@@ -1,11 +1,21 @@
+import { NumberAttributeValue } from 'aws-sdk/clients/dynamodb';
 import { Answer } from 'src/common/entity/Answer.entity';
 import { Repository } from 'typeorm';
-import { WeekAnswerDto } from './dto/week.answer.dto';
-import { ListAnswersDto } from './dto/list.answers.dto';
-import { MonthAnswersDto } from './dto/month.answers.dto';
 export declare class AnswersService {
     private answersRepository;
     constructor(answersRepository: Repository<Answer>);
+    getAnswerByIdAndUserId({ id, userId }: {
+        id: number;
+        userId: number;
+    }): Promise<Answer>;
+    getAnswersByUserIdAndSetDate({ userId, setDate, }: {
+        userId: NumberAttributeValue;
+        setDate: string;
+    }): Promise<Answer[]>;
+    getAnswerByUserIdAndLessThanId({ userId, answerId, }: {
+        userId: number;
+        answerId: number;
+    }): Promise<Answer>;
     getAnswersDiary({ userId, limit, }: {
         userId: number;
         limit: number;
@@ -16,31 +26,26 @@ export declare class AnswersService {
         limit: number;
         direction: number;
     }): Promise<Answer[]>;
-    destroy(answer: Answer): Promise<void>;
+    deleteAnswer(answer: Answer): Promise<Answer>;
     updateAnswer(body: any): Promise<Answer>;
-    checkAnswerId(id: number, userId: number): Promise<Answer>;
-    create(userId: number, body: Answer): Promise<Answer>;
+    checkAnswerId({ id, userId, }: {
+        id: number;
+        userId: number;
+    }): Promise<Answer>;
+    create(body: Answer): Promise<Answer>;
     getPartNumber(answers: Answer[]): number;
     getNo(answers: Answer[]): number;
     getSetDate(answers: Answer[]): string;
-    hasSetDate(answer: Answer): boolean;
-    existAnswerByDateAndUserId(userId: number): Promise<void>;
-    get(id: number, userId: number): Promise<Answer>;
-    month(userId: number, date?: string): Promise<MonthAnswersDto['data']>;
     getMonthAnswers({ firstDate, lastDate, userId, }: {
         firstDate: string;
         lastDate: string;
         userId: number;
     }): Promise<Answer[]>;
-    listId(id: number, userId: number): Promise<Answer[]>;
-    list(userId: number, answerId?: string): Promise<ListAnswersDto['data']>;
-    week(userId: number): Promise<WeekAnswerDto['data']>;
     getRecentAnswers({ userId, setDate, }: {
         userId: number;
         setDate: string;
     }): Promise<Answer[]>;
     hasSixParsAndNotToday(answers: Answer[]): boolean;
-    date(userId: number, date?: string): Promise<Answer>;
     getAnswerByDateAndUserId({ userId, date, }: {
         userId: number;
         date: string;

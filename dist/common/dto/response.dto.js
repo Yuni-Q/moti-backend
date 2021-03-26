@@ -13,22 +13,33 @@ exports.ResponseDto = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 class ResponseDto {
+    constructor() {
+        this.message = '';
+    }
 }
 __decorate([
     swagger_1.ApiProperty({
         example: common_1.HttpStatus.OK,
-        description: '상태 코드',
+        description: 'http 상태 코드',
         required: true,
     }),
     __metadata("design:type", Number)
 ], ResponseDto.prototype, "status", void 0);
 __decorate([
     swagger_1.ApiProperty({
+        example: common_1.HttpStatus.OK,
+        description: 'custom 상태 코드',
+        required: true,
+    }),
+    __metadata("design:type", Number)
+], ResponseDto.prototype, "statusCode", void 0);
+__decorate([
+    swagger_1.ApiProperty({
         example: '',
         description: '에러 메시지',
         required: true,
     }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ResponseDto.prototype, "message", void 0);
 exports.ResponseDto = ResponseDto;
 //# sourceMappingURL=response.dto.js.map

@@ -20,99 +20,50 @@ const Mission_entity_1 = require("../common/entity/Mission.entity");
 const User_entity_1 = require("../common/entity/User.entity");
 const date_1 = require("../common/util/date");
 const typeorm_2 = require("typeorm");
-const invalid_mission_id_dto_1 = require("./dto/invalid.mission.id.dto");
+const invalid_mission_id_exception_1 = require("./exception/invalid.mission.id.exception");
 let MissionsService = class MissionsService {
     constructor(missionRepository) {
         this.missionRepository = missionRepository;
     }
-    async destroy(id) {
-        try {
-            const mission = await this.checkMission(id);
-            await this.missionRepository.remove(mission);
-            return null;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async deleteMission(body) {
+        await this.missionRepository.remove(body);
     }
-    async update(id, body) {
-        try {
-            const mission = await this.checkMission(id);
-            const newMission = Object.assign(Object.assign({}, mission), body);
-            await this.missionRepository.save(newMission);
-            const returnMission = await this.findOne(id);
-            return returnMission;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async updateMission(body) {
+        return this.missionRepository.save(body);
     }
-    async checkMission(id) {
-        try {
-            const mission = await this.findOne(id);
-            if (!mission) {
-                throw new common_1.HttpException(new invalid_mission_id_dto_1.InvalidMissionIdDto(), common_1.HttpStatus.BAD_REQUEST);
-            }
-            return mission;
+    async checkMission({ id }) {
+        const mission = await this.getMissionById({ id });
+        if (!mission) {
+            throw new invalid_mission_id_exception_1.InvalidMissionIdException();
         }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return mission;
     }
-    async create(body) {
-        try {
-            const mission = await this.missionRepository.create(Object.assign({}, body));
-            const newMission = this.missionRepository.save(mission);
-            return newMission;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async createMission(body) {
+        const mission = await this.missionRepository.create(Object.assign({}, body));
+        const newMission = await this.missionRepository.save(mission);
+        return newMission;
     }
-    async findOne(id) {
-        try {
-            const mission = this.missionRepository.findOne({ where: { id } });
-            return mission;
-        }
-        catch (error) {
-            const mission = this.missionRepository.findOne({ where: { id } });
-            return mission;
-        }
+    async getMissionById({ id }) {
+        return this.missionRepository.findOne({ where: { id } });
     }
-    hasRefresh(user) {
-        const date = date_1.getDateString({});
-        return !!user.refreshDate && user.refreshDate === date;
+    hasRefresh({ user, date }) {
+        return (user === null || user === void 0 ? void 0 : user.refreshDate) === date;
     }
-    getOldMission(user) {
-        const { mission } = user;
+    getOldMission({ mission, }) {
         return mission && JSON.parse(mission);
     }
-    isRefresh(user) {
-        const date = date_1.getDateString({});
+    isRefresh({ user, date }) {
         return !user.refreshDate || (!!user.refreshDate && user.refreshDate < date);
     }
-    hasOldMissions(oldMission) {
-        const date = date_1.getDateString({});
-        return (!!oldMission && oldMission.date === date && oldMission.missions.length > 0);
+    hasOldMissions({ mission, date, }) {
+        var _a;
+        return (mission === null || mission === void 0 ? void 0 : mission.date) === date && ((_a = mission === null || mission === void 0 ? void 0 : mission.missions) === null || _a === void 0 ? void 0 : _a.length) > 0;
     }
     async hasMissionInAnswer({ answer, date }) {
-        return (!!answer &&
-            !!answer.date &&
-            answer.mission &&
-            answer.mission.cycle &&
-            answer.mission.id &&
+        var _a, _b;
+        return (!!(answer === null || answer === void 0 ? void 0 : answer.date) &&
+            !!((_a = answer === null || answer === void 0 ? void 0 : answer.mission) === null || _a === void 0 ? void 0 : _a.cycle) &&
+            !!((_b = answer === null || answer === void 0 ? void 0 : answer.mission) === null || _b === void 0 ? void 0 : _b.id) &&
             date_1.getDateString({ date: answer.date, day: answer.mission.cycle }) >= date);
     }
     async getMissionsByNotInIdAndLimit({ ids, limit = 3, }) {

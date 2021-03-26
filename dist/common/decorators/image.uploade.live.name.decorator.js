@@ -11,7 +11,6 @@ const fs_1 = __importDefault(require("fs"));
 exports.ImageUploaderLiveName = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const form = new formidable_1.default.IncomingForm();
-    console.log(request.body);
     const file = await new Promise(function (resolve, reject) {
         form.parse(request, async (err, fields, files) => {
             try {

@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const File_entity_1 = require("../common/entity/File.entity");
 const typeorm_2 = require("typeorm");
-const invalid_file_id_dto_1 = require("./dto/invalid.file.id.dto");
+const invalid_file_id_exception_1 = require("./exception/invalid.file.id.exception");
 let FilesService = class FilesService {
     constructor(fileRepository) {
         this.fileRepository = fileRepository;
@@ -29,50 +29,21 @@ let FilesService = class FilesService {
             .orderBy('RAND()')
             .getOne();
     }
-    async destroy(id) {
-        try {
-            const file = await this.checkFile(id);
-            await this.fileRepository.remove(file);
-            return null;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async deleteFile(file) {
+        return this.fileRepository.remove(file);
     }
-    async update(id, body) {
-        try {
-            const file = await this.checkFile(id);
-            const newFile = Object.assign(Object.assign({}, file), body);
-            const returnFile = await this.fileRepository.save(newFile);
-            return returnFile;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async updateFile(body) {
+        return this.fileRepository.save(body);
     }
     async create(body) {
-        try {
-            const file = await this.fileRepository.create(body);
-            const newFile = await this.fileRepository.save(file);
-            return newFile;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        const file = await this.fileRepository.create(body);
+        const newFile = await this.fileRepository.save(file);
+        return newFile;
     }
-    async checkFile(id) {
+    async checkFile({ id }) {
         const file = await this.fileRepository.findOne({ where: { id } });
         if (!file) {
-            throw new common_1.HttpException(new invalid_file_id_dto_1.InvalidFileIdDto(), new invalid_file_id_dto_1.InvalidFileIdDto().status);
+            throw new invalid_file_id_exception_1.InvalidFileIdException();
         }
         return file;
     }

@@ -9,15 +9,15 @@ export declare class MissionsController {
     private readonly answersService;
     private readonly usersService;
     constructor(missionsService: MissionsService, answersService: AnswersService, usersService: UsersService);
-    missions({ id }: {
-        id: any;
-    }): Promise<MissionsDto>;
-    refresh({ id }: {
-        id: any;
-    }): Promise<MissionsDto>;
-    mission(user: any, id: any): Promise<MissionDto>;
-    create(user: any, body: any): Promise<MissionDto>;
-    update(user: any, body: any, id: any): Promise<MissionDto>;
-    destroy(user: any, id: any): Promise<DeleteMissionDto>;
-    getNewMission(userId: number): Promise<import("../common/entity/Mission.entity").Mission[]>;
+    missions(userId: any): Promise<MissionsDto>;
+    refresh(userId: any): Promise<MissionsDto>;
+    mission(userId: any, id: any): Promise<MissionDto>;
+    create(userId: any, body: any): Promise<MissionDto>;
+    update(userId: any, body: any, id: any): Promise<MissionDto>;
+    destroy(userId: any, id: any): Promise<DeleteMissionDto>;
+    getNewMission({ oneYearAgo, date, userId, }: {
+        oneYearAgo: string;
+        date: string;
+        userId: number;
+    }): Promise<import("../common/entity/Mission.entity").Mission[]>;
 }

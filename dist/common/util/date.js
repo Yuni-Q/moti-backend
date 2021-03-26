@@ -33,7 +33,6 @@ const getNow = (date) => {
 };
 exports.getNow = getNow;
 const getMonthDate = (now) => {
-    console.log(1331, now.format('YYYY-MM-DD'));
     const firstDate = exports.getFirstDate(now);
     const lastDate = exports.getLastDate(now);
     return { firstDate, lastDate };

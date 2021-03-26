@@ -16,18 +16,45 @@ exports.AnswersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const Answer_entity_1 = require("../common/entity/Answer.entity");
-const Mission_entity_1 = require("../common/entity/Mission.entity");
-const File_entity_1 = require("../common/entity/File.entity");
-const typeorm_2 = require("typeorm");
-const User_entity_1 = require("../common/entity/User.entity");
 const date_1 = require("../common/util/date");
-const exist_answer_dto_1 = require("./dto/exist.answer.dto");
-const missions_service_1 = require("../missions/missions.service");
-const files_service_1 = require("../files/files.service");
-const invalid_answer_id_dto_1 = require("./dto/invalid.answer.id.dto");
+const typeorm_2 = require("typeorm");
+const invalid_answer_id_exception_1 = require("./exception/invalid.answer.id.exception");
+const relations = ['file', 'mission', 'user'];
 let AnswersService = class AnswersService {
     constructor(answersRepository) {
         this.answersRepository = answersRepository;
+    }
+    async getAnswerByIdAndUserId({ id, userId }) {
+        return this.answersRepository.findOne({
+            where: {
+                id,
+                userId,
+            },
+            order: { id: -1 },
+        });
+    }
+    async getAnswersByUserIdAndSetDate({ userId, setDate, }) {
+        return this.answersRepository.find({
+            where: {
+                userId,
+                setDate,
+            },
+            order: {
+                id: -1,
+            },
+            relations,
+        });
+    }
+    async getAnswerByUserIdAndLessThanId({ userId, answerId, }) {
+        return this.answersRepository.findOne({
+            where: {
+                userId,
+                id: typeorm_2.LessThan(answerId),
+            },
+            order: {
+                id: -1,
+            },
+        });
     }
     async getAnswersDiary({ userId, limit, }) {
         return this.answersRepository.find({
@@ -38,7 +65,7 @@ let AnswersService = class AnswersService {
             order: {
                 id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswersDiaryByLastId({ userId, lastId, limit, direction, }) {
@@ -52,46 +79,29 @@ let AnswersService = class AnswersService {
             order: {
                 id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
-    async destroy(answer) {
-        try {
-            await this.answersRepository.remove(answer);
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async deleteAnswer(answer) {
+        return this.answersRepository.remove(answer);
     }
     async updateAnswer(body) {
-        const answer = await this.answersRepository.save(body);
-        return answer;
+        return this.answersRepository.save(body);
     }
-    async checkAnswerId(id, userId) {
+    async checkAnswerId({ id, userId, }) {
         const answer = await this.answersRepository.findOne({
             where: { id, userId },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
         if (!answer) {
-            throw new common_1.HttpException(new invalid_answer_id_dto_1.InvalidAnswerIdDto(), new invalid_answer_id_dto_1.InvalidAnswerIdDto().status);
+            throw new invalid_answer_id_exception_1.InvalidAnswerIdException();
         }
         return answer;
     }
-    async create(userId, body) {
-        try {
-            const answer = await this.answersRepository.create(Object.assign({}, body));
-            const returnAnswer = await this.answersRepository.save(answer);
-            return returnAnswer;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async create(body) {
+        const answer = await this.answersRepository.create(Object.assign({}, body));
+        const returnAnswer = await this.answersRepository.save(answer);
+        return returnAnswer;
     }
     getPartNumber(answers) {
         return answers.length >= 6 ? 1 : answers.length + 1;
@@ -113,36 +123,6 @@ let AnswersService = class AnswersService {
             return answers[0].setDate;
         }
     }
-    hasSetDate(answer) {
-        return !!answer && !!answer.setDate;
-    }
-    async existAnswerByDateAndUserId(userId) {
-        const date = date_1.getDateString({});
-        const answer = await this.getAnswerByDateAndUserId({ userId, date });
-        if (!!answer) {
-            throw new common_1.HttpException(new exist_answer_dto_1.ExistAnswerDto(), new exist_answer_dto_1.ExistAnswerDto().status);
-        }
-    }
-    async get(id, userId) {
-        const answer = await this.answersRepository.findOne({
-            where: { id, userId },
-            relations: ['file', 'mission', 'user'],
-        });
-        return answer;
-    }
-    async month(userId, date) {
-        const now = date_1.getNow(date);
-        const { firstDate, lastDate } = date_1.getMonthDate(now);
-        console.log(firstDate, lastDate);
-        const notGroupAnswers = await this.getMonthAnswers({
-            firstDate,
-            lastDate,
-            userId,
-        });
-        const answers = notGroupAnswers.reduce((acc, it) => (Object.assign(Object.assign({}, acc), { [it.setDate]: [...(acc[it.setDate] || []), it] })), {});
-        const monthAnswer = Object.values(answers);
-        return { date, monthAnswer };
-    }
     async getMonthAnswers({ firstDate, lastDate, userId, }) {
         return this.answersRepository.find({
             where: {
@@ -152,98 +132,8 @@ let AnswersService = class AnswersService {
             order: {
                 no: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
-    }
-    async listId(id, userId) {
-        const answer = await this.answersRepository.findOne({
-            where: {
-                userId,
-                id,
-            },
-            order: { id: -1 },
-        });
-        if (!answer || !answer.setDate) {
-            return [];
-        }
-        const answers = await this.answersRepository.find({
-            where: {
-                userId,
-                setDate: answer.setDate,
-            },
-            order: { id: -1 },
-            relations: ['file', 'mission', 'user'],
-        });
-        return answers;
-    }
-    async list(userId, answerId) {
-        try {
-            let answer;
-            const answers = [];
-            for (let i = 0; i < 4; i++) {
-                if (answerId) {
-                    answer = await this.answersRepository.findOne({
-                        where: {
-                            userId,
-                            id: typeorm_2.LessThan(answerId),
-                        },
-                        order: {
-                            id: -1,
-                        },
-                    });
-                }
-                else {
-                    answer = await this.answersRepository.findOne({
-                        where: {
-                            userId,
-                        },
-                        order: {
-                            id: -1,
-                        },
-                    });
-                }
-                if (!answer) {
-                    break;
-                }
-                answers[i] = await this.answersRepository.find({
-                    where: {
-                        userId,
-                        setDate: answer.setDate,
-                    },
-                    order: {
-                        id: -1,
-                    },
-                    relations: ['file', 'mission', 'user'],
-                });
-                answerId = answers[i][answers[i].length - 1].id;
-            }
-            return answers;
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    async week(userId) {
-        try {
-            const answers = await this.getAnswerByUserId({ userId });
-            const recentAnswers = answers && answers.setDate
-                ? await this.getRecentAnswers({ userId, setDate: answers.setDate })
-                : [];
-            const newAnswers = !!recentAnswers && !this.hasSixParsAndNotToday(recentAnswers)
-                ? recentAnswers
-                : [];
-            const today = date_1.getDateString({});
-            return { today, answers: newAnswers };
-        }
-        catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
     async getRecentAnswers({ userId, setDate, }) {
         const answers = await this.answersRepository.find({
@@ -251,7 +141,7 @@ let AnswersService = class AnswersService {
                 userId,
                 setDate,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
         return answers;
     }
@@ -260,19 +150,13 @@ let AnswersService = class AnswersService {
             answers[5] &&
             answers[5].date !== date_1.getDateString({}));
     }
-    async date(userId, date) {
-        const answer = date
-            ? await this.getAnswerByDateAndUserId({ userId, date })
-            : await this.getAnswerByUserId({ userId });
-        return answer;
-    }
     async getAnswerByDateAndUserId({ userId, date, }) {
         return this.answersRepository.findOne({
             where: {
                 userId,
                 date,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswerByUserId({ userId }) {
@@ -281,14 +165,14 @@ let AnswersService = class AnswersService {
                 userId,
             },
             order: {
-                setDate: -1,
+                id: -1,
             },
-            relations: ['file', 'mission', 'user'],
+            relations,
         });
     }
     async getAnswersByUserIdAndDateRange({ userId, dateGt, }) {
         return this.answersRepository.find({
-            relations: ['file', 'mission', 'user'],
+            relations,
             where: {
                 userId,
                 date: typeorm_2.MoreThan(dateGt),

@@ -12,9 +12,6 @@ let AppService = class AppService {
     getHello() {
         return 'Hello World!';
     }
-    getHi() {
-        return process.env.SECRET;
-    }
 };
 AppService = __decorate([
     common_1.Injectable()

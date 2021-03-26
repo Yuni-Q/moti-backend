@@ -15,11 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const Mission_entity_1 = require("../common/entity/Mission.entity");
 const User_entity_1 = require("../common/entity/User.entity");
-const date_1 = require("../common/util/date");
 const typeorm_2 = require("typeorm");
-const invalid_user_id_dto_1 = require("./dto/invalid.user.id.dto");
+const invalid_user_id_dto_1 = require("./exception/invalid.user.id.dto");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -30,21 +28,19 @@ let UsersService = class UsersService {
         return newUser;
     }
     async getAll(id) {
-        const users = await this.userRepository.find({
+        return this.userRepository.find({
             where: {
-                id: typeorm_2.MoreThan(parseInt(id, 10) || 0),
+                id: typeorm_2.MoreThan(id),
             },
             take: 10,
         });
-        return users;
     }
-    async get(id) {
-        const user = await this.userRepository.findOne({
+    async getUserById({ id }) {
+        return this.userRepository.findOne({
             where: {
                 id: id,
             },
         });
-        return user;
     }
     async getUserBySnsIdAndSnsType({ snsId, snsType, }) {
         const user = await this.userRepository.findOne({
@@ -52,38 +48,21 @@ let UsersService = class UsersService {
         });
         return user;
     }
-    async updateMyInfo(id, body) {
-        const user = await this.checkUser(id);
-        const newUser = Object.assign(Object.assign({}, user), body);
-        await this.userRepository.save(newUser);
-        const returnUser = await this.get(id);
-        return returnUser;
+    async updateMyInfo(body) {
+        return this.userRepository.save(body);
     }
-    async deleteUser(id) {
-        const user = await this.checkUser(id);
-        await this.userRepository.remove(user);
-        return null;
+    async deleteUser(user) {
+        return this.userRepository.remove(user);
     }
-    async checkUser(id) {
-        const user = await this.get(id);
+    async checkUser({ id }) {
+        const user = await this.getUserById({ id });
         if (!user) {
-            throw new common_1.HttpException(new invalid_user_id_dto_1.InvalidUserIdDto(), common_1.HttpStatus.BAD_REQUEST);
+            throw new invalid_user_id_dto_1.InvalidUserIdException();
         }
         return user;
     }
-    async setMissionsInUser({ missions, id, }) {
-        const date = date_1.getDateString({});
-        const user = await this.checkUser(id);
-        const newUser = Object.assign(Object.assign({}, user), { mission: JSON.stringify({ date, missions }) });
-        const returnUser = await this.userRepository.save(newUser);
-        return returnUser;
-    }
-    async setMissionsAndRefreshDateInUser({ id, missions, }) {
-        const date = date_1.getDateString({});
-        const user = await this.checkUser(id);
-        const newUser = Object.assign(Object.assign({}, user), { refreshDate: date, mission: JSON.stringify({ date, missions }) });
-        const returnUser = await this.userRepository.save(newUser);
-        return returnUser;
+    async updateUser(body) {
+        return this.userRepository.save(body);
     }
 };
 UsersService = __decorate([

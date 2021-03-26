@@ -11,28 +11,91 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SigninController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
-const require_token_dto_1 = require("../common/dto/require.token.dto");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const User_entity_1 = require("../common/entity/User.entity");
+const custom_interval_server_error_exception_1 = require("../common/exception/custom.interval.server.error.exception");
+const invalid_token_exception_1 = require("../common/exception/invalid.token.exception");
+const require_body_exception_1 = require("../common/exception/require.body.exception");
+const require_token_exception_1 = require("../common/exception/require.token.exception");
 const transformInterceptor_interceptor_1 = require("../common/interceptors/transformInterceptor.interceptor");
+const invalid_user_id_dto_1 = require("../users/exception/invalid.user.id.dto");
+const users_service_1 = require("../users/users.service");
 const token_decorator_1 = require("./decorators/token.decorator");
 const valid_body_1 = require("./decorators/valid.body");
 const signin_request_dto_1 = require("./dto/signin.request.dto");
 const signin_response_dto_1 = require("./dto/signin.response.dto");
+const valid_token_exception_1 = require("./exception/valid.token.exception");
 const signin_service_1 = require("./signin.service");
 let SigninController = class SigninController {
-    constructor(SigninService) {
+    constructor(SigninService, usersService) {
         this.SigninService = SigninService;
+        this.usersService = usersService;
     }
     async refresh(token) {
-        const result = await this.SigninService.refresh(token);
-        return { status: common_1.HttpStatus.CREATED, data: result };
+        try {
+            const result = jsonwebtoken_1.default.verify(token, process.env.privateKey);
+            if (!(result === null || result === void 0 ? void 0 : result.snsType)) {
+                throw new invalid_token_exception_1.InvalidTokenException();
+            }
+            const user = await this.usersService.getUserBySnsIdAndSnsType(result);
+            if (!(user === null || user === void 0 ? void 0 : user.id)) {
+                throw new invalid_user_id_dto_1.InvalidUserIdException();
+            }
+            const { accessToken, refreshToken, } = await this.SigninService.createToken(user);
+            const signUp = !!user.name && !!user.birthday && !!user.email && !!user.gender;
+            return {
+                status: common_1.HttpStatus.CREATED,
+                data: { accessToken, refreshToken, signUp },
+            };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
     async signin(token, body) {
-        const result = await this.SigninService.signin(token, body.snsType);
-        return { status: common_1.HttpStatus.CREATED, data: result };
+        try {
+            const { snsType } = body;
+            let snsId, email;
+            if (snsType === 'apple' || snsType === 'google') {
+                const snsData = await this.SigninService.jwtDecode(token);
+                snsId = snsData.sub;
+                email = snsData.email;
+            }
+            else if (snsType === 'web') {
+                const snsData = await this.SigninService.jwtOauth2(token);
+                snsId = snsData.id;
+                email = snsData.email;
+            }
+            else {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            if (!email || !snsId) {
+                throw new valid_token_exception_1.ValidTokenException();
+            }
+            const user = await this.usersService.getUserBySnsIdAndSnsType({
+                snsId,
+                snsType,
+            });
+            const signUp = !user ? false : !!user.name ? true : false;
+            const newUser = user
+                ? user
+                : await this.usersService.createUser({ snsId, snsType, email });
+            const { accessToken, refreshToken, } = await this.SigninService.createToken(newUser);
+            return {
+                status: common_1.HttpStatus.CREATED,
+                data: { accessToken, refreshToken, signUp },
+            };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
 };
 __decorate([
@@ -71,13 +134,14 @@ SigninController = __decorate([
     common_1.UseInterceptors(transformInterceptor_interceptor_1.TransformInterceptor),
     swagger_1.ApiBearerAuth('authorization'),
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: require_token_dto_1.RequireTokenDto,
-        description: '토큰이 없습니다.',
+        status: new require_token_exception_1.RequireTokenException().statusCode,
+        type: require_token_exception_1.RequireTokenException,
+        description: new require_token_exception_1.RequireTokenException().message,
     }),
     swagger_1.ApiTags('signin'),
     common_1.Controller('api/v1/signin'),
-    __metadata("design:paramtypes", [signin_service_1.SigninService])
+    __metadata("design:paramtypes", [signin_service_1.SigninService,
+        users_service_1.UsersService])
 ], SigninController);
 exports.SigninController = SigninController;
 //# sourceMappingURL=signin.controller.js.map

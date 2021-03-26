@@ -17,7 +17,8 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const id_decorator_1 = require("../common/decorators/id.decorator");
 const image_uploade_live_name_decorator_1 = require("../common/decorators/image.uploade.live.name.decorator");
-const require_body_dto_1 = require("../common/dto/require.body.dto");
+const custom_interval_server_error_exception_1 = require("../common/exception/custom.interval.server.error.exception");
+const require_body_exception_1 = require("../common/exception/require.body.exception");
 const transformInterceptor_interceptor_1 = require("../common/interceptors/transformInterceptor.interceptor");
 const delete_file_dto_1 = require("./dto/delete.file.dto");
 const file_dto_1 = require("./dto/file.dto");
@@ -27,41 +28,75 @@ let FilesController = class FilesController {
         this.filesService = filesService;
     }
     async updateSvg(body, id) {
-        const { file: cardSvgUrl, part: partString } = body;
-        if (!cardSvgUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        try {
+            const { file: cardSvgUrl, part: partString } = body;
+            if (!cardSvgUrl || !partString) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const part = partString
+                ? parseInt(partString, 10)
+                : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
+            if (isNaN(part)) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const file = await this.filesService.checkFile({ id });
+            const returnFile = await this.filesService.updateFile(Object.assign(Object.assign({}, file), { cardSvgUrl,
+                part }));
+            return { data: returnFile };
         }
-        const part = partString
-            ? parseInt(partString, 10)
-            : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
-        const result = await this.filesService.update(id, { cardSvgUrl, part });
-        return { data: result };
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
-    async update(body, id) {
-        const { file: cardUrl, part: partString } = body;
-        if (!cardUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+    async updatePdf(body, id) {
+        try {
+            const { file: cardUrl, part: partString } = body;
+            if (!cardUrl || !partString) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const part = partString
+                ? parseInt(partString, 10)
+                : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+            if (isNaN(part)) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const file = await this.filesService.checkFile({ id });
+            const returnFile = await this.filesService.updateFile(Object.assign(Object.assign({}, file), { cardUrl,
+                part }));
+            return { data: returnFile };
         }
-        const part = partString
-            ? parseInt(partString, 10)
-            : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
-        const result = await this.filesService.update(id, { cardUrl, part });
-        return { data: result };
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
     async destroy(id) {
-        const result = await this.filesService.destroy(id);
-        return { data: result };
-    }
-    async missions(body) {
-        const { file: cardUrl, part: partString } = body;
-        if (!cardUrl || !partString) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        try {
+            const file = await this.filesService.checkFile({ id });
+            await this.filesService.deleteFile(file);
+            return { data: null, message: new delete_file_dto_1.DeleteFileDto().message };
         }
-        const part = partString
-            ? parseInt(partString, 10)
-            : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
-        const result = await this.filesService.create({ cardUrl, part });
-        return { status: common_1.HttpStatus.CREATED, data: result };
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async createFile(body) {
+        try {
+            const { file: cardUrl, part: partString } = body;
+            if (!cardUrl || !partString) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const part = partString
+                ? parseInt(partString, 10)
+                : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+            if (isNaN(part)) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const result = await this.filesService.create({ cardUrl, part });
+            return { statusCode: common_1.HttpStatus.CREATED, data: result };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
 };
 __decorate([
@@ -133,12 +168,12 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], FilesController.prototype, "update", null);
+], FilesController.prototype, "updatePdf", null);
 __decorate([
     swagger_1.ApiResponse({
         status: new delete_file_dto_1.DeleteFileDto().status,
         type: delete_file_dto_1.DeleteFileDto,
-        description: '성공',
+        description: new delete_file_dto_1.DeleteFileDto().message,
     }),
     swagger_1.ApiParam({
         name: 'id',
@@ -180,7 +215,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FilesController.prototype, "missions", null);
+], FilesController.prototype, "createFile", null);
 FilesController = __decorate([
     common_1.UseInterceptors(transformInterceptor_interceptor_1.TransformInterceptor),
     swagger_1.ApiTags('files'),

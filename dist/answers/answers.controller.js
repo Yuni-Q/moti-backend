@@ -17,14 +17,16 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const id_decorator_1 = require("../common/decorators/id.decorator");
 const image_uploader_decorator_1 = require("../common/decorators/image.uploader.decorator");
-const token_decorator_1 = require("../common/decorators/token.decorator");
-const require_body_dto_1 = require("../common/dto/require.body.dto");
-const require_token_dto_1 = require("../common/dto/require.token.dto");
+const token_user_id_decorator_1 = require("../common/decorators/token.user.id.decorator");
 const Answer_entity_1 = require("../common/entity/Answer.entity");
+const custom_interval_server_error_exception_1 = require("../common/exception/custom.interval.server.error.exception");
+const require_body_exception_1 = require("../common/exception/require.body.exception");
+const require_token_exception_1 = require("../common/exception/require.token.exception");
 const transformInterceptor_interceptor_1 = require("../common/interceptors/transformInterceptor.interceptor");
 const date_1 = require("../common/util/date");
 const files_service_1 = require("../files/files.service");
 const missions_service_1 = require("../missions/missions.service");
+const invalid_query_exception_1 = require("../common/exception/invalid.query.exception");
 const answers_service_1 = require("./answers.service");
 const answer_dto_1 = require("./dto/answer.dto");
 const answers_dto_1 = require("./dto/answers.dto");
@@ -33,26 +35,55 @@ const diary_answers_dto_1 = require("./dto/diary.answers.dto");
 const list_answers_dto_1 = require("./dto/list.answers.dto");
 const month_answers_dto_1 = require("./dto/month.answers.dto");
 const week_answer_dto_1 = require("./dto/week.answer.dto");
+const exist_answer_exception_1 = require("./exception/exist.answer.exception");
+const requrie_content_exception_1 = require("./exception/requrie.content.exception");
+const requrie_file_exception_1 = require("./exception/requrie.file.exception");
 let AnswersController = class AnswersController {
     constructor(answersService, missionsService, filesService) {
         this.answersService = answersService;
         this.missionsService = missionsService;
         this.filesService = filesService;
     }
-    async date(user, date) {
-        const result = await this.answersService.date(user.id, date);
-        return { data: result };
-    }
-    async week(user) {
-        const result = await this.answersService.week(user.id);
-        return { data: result };
-    }
-    async diary(user, lastIdString, limitString, directionString) {
+    async date(userId, dateString) {
         try {
-            const lastId = parseInt(lastIdString, 10);
+            const date = dateString ? date_1.getDateString({ date: dateString }) : null;
+            const answer = date
+                ? await this.answersService.getAnswerByDateAndUserId({ userId, date })
+                : await this.answersService.getAnswerByUserId({ userId });
+            return { data: answer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async week(userId) {
+        try {
+            const answer = await this.answersService.getAnswerByUserId({ userId });
+            const recentAnswers = !!(answer === null || answer === void 0 ? void 0 : answer.setDate)
+                ? await this.answersService.getRecentAnswers({
+                    userId,
+                    setDate: answer.setDate,
+                })
+                : [];
+            const answers = !!recentAnswers &&
+                !this.answersService.hasSixParsAndNotToday(recentAnswers)
+                ? recentAnswers
+                : [];
+            const today = date_1.getDateString({});
+            return { data: { today, answers } };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async diary(userId, lastIdString, limitString, directionString) {
+        try {
+            const lastId = parseInt(lastIdString || 0, 10);
             const limit = parseInt(limitString || 100, 10);
             const direction = parseInt(directionString || 0, 10);
-            const userId = user.id;
+            if (isNaN(lastId) || isNaN(limit) || isNaN(direction)) {
+                throw new invalid_query_exception_1.InvalidQueryException();
+            }
             const answers = lastId
                 ? await this.answersService.getAnswersDiaryByLastId({
                     userId,
@@ -64,132 +95,207 @@ let AnswersController = class AnswersController {
             return { data: { lastId, limit, direction, answers } };
         }
         catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
-    async list(user, answerId) {
-        const result = await this.answersService.list(user.id, answerId);
-        return { data: result };
-    }
-    async listId(user, id) {
-        const result = await this.answersService.listId(id, user.id);
-        return { data: result };
-    }
-    async month(user, date) {
-        const result = await this.answersService.month(user.id, date);
-        return { data: result };
-    }
-    async get(user, id) {
-        const result = await this.answersService.get(id, user.id);
-        return { data: result };
-    }
-    async post(user, body) {
-        const userId = user.id;
-        const { file: imageUrl, content, missionId } = body;
-        if ((!imageUrl && !content) || !missionId) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), new require_body_dto_1.RequireBodyDto().status);
+    async list(userId, answerId) {
+        try {
+            let answer;
+            const answers = [];
+            for (let i = 0; i < 4; i++) {
+                answer = answerId
+                    ? await this.answersService.getAnswerByUserIdAndLessThanId({
+                        userId,
+                        answerId,
+                    })
+                    : await this.answersService.getAnswerByUserId({ userId });
+                if (!answer) {
+                    break;
+                }
+                answers[i] = await this.answersService.getAnswersByUserIdAndSetDate({
+                    userId,
+                    setDate: answer.setDate,
+                });
+                answerId = answers[i][answers[i].length - 1].id;
+            }
+            return { data: answers };
         }
-        await this.answersService.existAnswerByDateAndUserId(userId);
-        const lastAnswer = await this.answersService.getAnswerByUserId({ userId });
-        const recentAnswers = this.answersService.hasSetDate(lastAnswer)
-            ? await this.answersService.getRecentAnswers({
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async listId(userId, id) {
+        try {
+            const answer = await this.answersService.getAnswerByIdAndUserId({
+                id,
                 userId,
-                setDate: lastAnswer === null || lastAnswer === void 0 ? void 0 : lastAnswer.setDate,
-            })
-            : [];
-        const setDate = this.answersService.getSetDate(recentAnswers);
-        const no = this.answersService.getNo(recentAnswers);
-        const partNumber = this.answersService.getPartNumber(recentAnswers);
-        const cardFile = await this.filesService.getFileByPart(partNumber);
-        const { id: fileId = 1 } = cardFile;
-        const mission = await this.missionsService.checkMission(missionId);
-        if (!!(mission === null || mission === void 0 ? void 0 : mission.isImage) && !imageUrl) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'file이 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+            });
+            if (!answer || !answer.setDate) {
+                return { data: [] };
+            }
+            const setDate = answer.setDate;
+            const answers = await this.answersService.getAnswersByUserIdAndSetDate({
+                userId,
+                setDate,
+            });
+            return { data: answers };
         }
-        if (!!(mission === null || mission === void 0 ? void 0 : mission.isContent) && !content) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'content가 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
-        const date = date_1.getDateString({});
-        const result = await this.answersService.create(user.id, {
-            userId,
-            missionId,
-            imageUrl,
-            fileId,
-            content,
-            date,
-            setDate,
-            no,
-        });
-        const answer = await this.answersService.checkAnswerId(result.id, userId);
-        return { status: common_1.HttpStatus.CREATED, data: answer };
     }
-    async put(user, body, id) {
-        const userId = user.id;
-        const { file, content, missionId } = body;
-        if (!file && !content) {
-            throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), new require_body_dto_1.RequireBodyDto().status);
+    async month(userId, dateString) {
+        try {
+            const date = dateString ? date_1.getDateString({ date: dateString }) : null;
+            const now = date_1.getNow(date);
+            const { firstDate, lastDate } = date_1.getMonthDate(now);
+            const notGroupAnswers = await this.answersService.getMonthAnswers({
+                firstDate,
+                lastDate,
+                userId,
+            });
+            const answers = notGroupAnswers.reduce((acc, it) => (Object.assign(Object.assign({}, acc), { [it.setDate]: [...(acc[it.setDate] || []), it] })), {});
+            const monthAnswer = Object.values(answers);
+            return { data: { date, monthAnswer } };
         }
-        const answer = await this.answersService.checkAnswerId(id, userId);
-        const imageUrl = file ? file : answer.imageUrl;
-        if (!!answer.mission.isImage && !imageUrl) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'file이 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
-        if (!!answer.mission.isContent && !content) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.BAD_REQUEST,
-                message: 'content가 필요한 미션 입니다.',
-            }, common_1.HttpStatus.BAD_REQUEST);
-        }
-        const result = await this.answersService.updateAnswer(Object.assign(Object.assign({}, answer), { userId,
-            missionId,
-            imageUrl,
-            content }));
-        const returnAnswer = await this.answersService.get(result.id, userId);
-        return { data: returnAnswer };
     }
-    async delete(user, id) {
-        const answer = await this.answersService.checkAnswerId(id, user.id);
-        await this.answersService.destroy(answer);
-        return { data: null, message: new delete_answer_dto_1.DeleteAnswerDto().message };
+    async get(userId, id) {
+        try {
+            const result = await this.answersService.getAnswerByIdAndUserId({
+                id,
+                userId,
+            });
+            return { data: result };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async post(userId, body) {
+        try {
+            const { file: imageUrl, content, missionId } = body;
+            if ((!imageUrl && !content) || !missionId) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const date = date_1.getDateString({});
+            const answer = await this.answersService.getAnswerByDateAndUserId({
+                userId,
+                date,
+            });
+            if (!!answer) {
+                throw new exist_answer_exception_1.ExistAnswerException();
+            }
+            const lastAnswer = await this.answersService.getAnswerByUserId({
+                userId,
+            });
+            const recentAnswers = !!(lastAnswer === null || lastAnswer === void 0 ? void 0 : lastAnswer.setDate)
+                ? await this.answersService.getRecentAnswers({
+                    userId,
+                    setDate: lastAnswer.setDate,
+                })
+                : [];
+            const setDate = this.answersService.getSetDate(recentAnswers);
+            const no = this.answersService.getNo(recentAnswers);
+            const partNumber = this.answersService.getPartNumber(recentAnswers);
+            const cardFile = await this.filesService.getFileByPart(partNumber);
+            const { id: fileId = 1 } = cardFile;
+            const mission = await this.missionsService.checkMission({
+                id: missionId,
+            });
+            if (!!(mission === null || mission === void 0 ? void 0 : mission.isImage) && !imageUrl) {
+                throw new requrie_file_exception_1.RequireFileException();
+            }
+            if (!!(mission === null || mission === void 0 ? void 0 : mission.isContent) && !content) {
+                throw new requrie_content_exception_1.RequireContentException();
+            }
+            const result = await this.answersService.create({
+                userId,
+                missionId,
+                imageUrl,
+                fileId,
+                content,
+                date,
+                setDate,
+                no,
+            });
+            const returnAnswer = await this.answersService.checkAnswerId({
+                id: result.id,
+                userId,
+            });
+            return { status: common_1.HttpStatus.CREATED, data: returnAnswer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async put(userId, body, id) {
+        try {
+            const { file, content, missionId } = body;
+            if (!file && !content) {
+                throw new require_body_exception_1.RequireBodyException();
+            }
+            const answer = await this.answersService.checkAnswerId({ id, userId });
+            const imageUrl = file ? file : answer.imageUrl;
+            if (!!answer.mission.isImage && !imageUrl) {
+                throw new requrie_file_exception_1.RequireFileException();
+            }
+            if (!!answer.mission.isContent && !content) {
+                throw new requrie_content_exception_1.RequireContentException();
+            }
+            const result = await this.answersService.updateAnswer(Object.assign(Object.assign({}, answer), { userId,
+                missionId,
+                imageUrl,
+                content }));
+            const returnAnswer = await this.answersService.getAnswerByIdAndUserId({
+                id: result.id,
+                userId,
+            });
+            return { data: returnAnswer };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
+    }
+    async delete(userId, id) {
+        try {
+            const answer = await this.answersService.checkAnswerId({ id, userId });
+            await this.answersService.deleteAnswer(answer);
+            return { data: null, message: new delete_answer_dto_1.DeleteAnswerDto().message };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
 };
 __decorate([
     swagger_1.ApiResponse({
         status: common_1.HttpStatus.OK,
         type: answer_dto_1.AnswerDto,
-        description: '성공',
+        description: '특정 날짜의 답변',
     }),
     swagger_1.ApiQuery({
         name: 'date',
-        required: true,
-        description: '특정 날짜의 답변',
+        required: false,
+        description: '답변을 원하는 날짜',
     }),
     common_1.Get(),
-    __param(0, token_decorator_1.Token()), __param(1, common_1.Query('date')),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
+    __param(1, common_1.Query('date')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AnswersController.prototype, "date", null);
 __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.OK,
+        status: new week_answer_dto_1.WeekAnswerDto().statusCode,
         type: week_answer_dto_1.WeekAnswerDto,
         description: '최근 답변 리스트',
     }),
     common_1.Get('week'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
@@ -216,7 +322,7 @@ __decorate([
         description: 'direction',
     }),
     common_1.Get('diary'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, common_1.Query('lastId')),
     __param(2, common_1.Query('limit')),
     __param(3, common_1.Query('direction')),
@@ -236,7 +342,7 @@ __decorate([
         description: '특정 날짜의 답변',
     }),
     common_1.Get('list'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, common_1.Query('answerId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
@@ -254,7 +360,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Get('list/:id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -271,7 +377,8 @@ __decorate([
         description: '특정 날짜의 답변',
     }),
     common_1.Get('month'),
-    __param(0, token_decorator_1.Token()), __param(1, common_1.Query('date')),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
+    __param(1, common_1.Query('date')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -288,7 +395,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Get(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -322,7 +429,7 @@ __decorate([
         },
     }),
     common_1.Post(''),
-    __param(0, token_decorator_1.Token()), __param(1, image_uploader_decorator_1.ImageUploader()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, image_uploader_decorator_1.ImageUploader()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -361,7 +468,7 @@ __decorate([
         description: 'id',
     }),
     common_1.Put(':id'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, image_uploader_decorator_1.ImageUploader()),
     __param(2, id_decorator_1.Id()),
     __metadata("design:type", Function),
@@ -380,16 +487,16 @@ __decorate([
         description: 'id',
     }),
     common_1.Delete(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AnswersController.prototype, "delete", null);
 AnswersController = __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: require_token_dto_1.RequireTokenDto,
-        description: '토큰이 필요합니다.',
+        status: new require_token_exception_1.RequireTokenException().getStatus(),
+        type: require_token_exception_1.RequireTokenException,
+        description: new require_token_exception_1.RequireTokenException().message,
     }),
     common_1.UseInterceptors(transformInterceptor_interceptor_1.TransformInterceptor),
     swagger_1.ApiBearerAuth('authorization'),

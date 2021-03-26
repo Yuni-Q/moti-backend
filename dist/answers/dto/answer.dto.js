@@ -13,7 +13,6 @@ exports.AnswerDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const response_dto_1 = require("../../common/dto/response.dto");
 const Answer_entity_1 = require("../../common/entity/Answer.entity");
-const Mission_entity_1 = require("../../common/entity/Mission.entity");
 class AnswerDto extends response_dto_1.ResponseDto {
 }
 __decorate([

@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuestionsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const custom_interval_server_error_exception_1 = require("../common/exception/custom.interval.server.error.exception");
+const invalid_query_exception_1 = require("../common/exception/invalid.query.exception");
 const transformInterceptor_interceptor_1 = require("../common/interceptors/transformInterceptor.interceptor");
 const valid_body_1 = require("./decorators/valid.body");
 const question_dto_1 = require("./dto/question.dto");
@@ -26,19 +28,39 @@ let QuestionsController = class QuestionsController {
         this.QuestionsService = QuestionsService;
     }
     async post(body) {
-        const result = await this.QuestionsService.post(body.content);
-        return { status: 201, data: result };
+        try {
+            const result = await this.QuestionsService.createQuestion(body.content);
+            return { status: common_1.HttpStatus.CREATED, data: result };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
     async get(pageString, limitString) {
-        const page = parseInt(pageString || 1, 10);
-        const limit = parseInt(limitString || 1, 20);
-        const result = await this.QuestionsService.get(page, limit);
-        return { data: result };
+        try {
+            const page = parseInt(pageString || 1, 10);
+            const limit = parseInt(limitString || 1, 10);
+            if (isNaN(page) || isNaN(limit)) {
+                throw new invalid_query_exception_1.InvalidQueryException();
+            }
+            let skip = 0;
+            if (page > 1) {
+                skip = limit * (page - 1);
+            }
+            const result = await this.QuestionsService.getQuestions({
+                skip,
+                take: limit,
+            });
+            return { data: result };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
 };
 __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.OK,
+        status: common_1.HttpStatus.CREATED,
         type: question_dto_1.QuestionDto,
         description: '성공',
     }),

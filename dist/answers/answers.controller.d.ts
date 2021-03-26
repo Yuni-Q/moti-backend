@@ -13,14 +13,14 @@ export declare class AnswersController {
     private readonly missionsService;
     private readonly filesService;
     constructor(answersService: AnswersService, missionsService: MissionsService, filesService: FilesService);
-    date(user: any, date: any): Promise<AnswerDto>;
-    week(user: any): Promise<WeekAnswerDto>;
-    diary(user: any, lastIdString: any, limitString: any, directionString: any): Promise<DiaryAnswersDto>;
-    list(user: any, answerId: any): Promise<ListAnswersDto>;
-    listId(user: any, id: any): Promise<AnswersDto>;
-    month(user: any, date: any): Promise<MonthAnswersDto>;
-    get(user: any, id: any): Promise<AnswerDto>;
-    post(user: any, body: any): Promise<AnswerDto>;
-    put(user: any, body: any, id: any): Promise<AnswerDto>;
-    delete(user: any, id: any): Promise<DeleteAnswerDto>;
+    date(userId: any, dateString: any): Promise<AnswerDto>;
+    week(userId: any): Promise<WeekAnswerDto>;
+    diary(userId: any, lastIdString: any, limitString: any, directionString: any): Promise<DiaryAnswersDto>;
+    list(userId: any, answerId: any): Promise<ListAnswersDto>;
+    listId(userId: any, id: any): Promise<AnswersDto>;
+    month(userId: any, dateString: any): Promise<MonthAnswersDto>;
+    get(userId: any, id: any): Promise<AnswerDto>;
+    post(userId: any, body: any): Promise<AnswerDto>;
+    put(userId: any, body: any, id: any): Promise<AnswerDto>;
+    delete(userId: any, id: any): Promise<DeleteAnswerDto>;
 }

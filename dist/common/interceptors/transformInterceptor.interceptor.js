@@ -12,10 +12,12 @@ const operators_1 = require("rxjs/operators");
 let TransformInterceptor = class TransformInterceptor {
     intercept(context, next) {
         return next.handle().pipe(operators_1.map((data) => {
-            const status = data.status || common_1.HttpStatus.OK;
+            const statusCode = data.statusCode;
+            const status = data.status || statusCode || common_1.HttpStatus.OK;
             context.switchToHttp().getResponse().status(status);
             return {
-                status: data.statusCode || status,
+                status: statusCode || status,
+                statusCode: statusCode || status,
                 message: data.message || '',
                 data: data.data,
             };

@@ -1,16 +1,16 @@
 import { User } from 'src/common/entity/User.entity';
-import { UserBodyDto } from './dto/user.body.dto';
 import { DeleteUserDto } from './dto/delete.user.dto';
+import { UserBodyDto } from './dto/user.body.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    getAll(user: User, id: string): Promise<UsersDto>;
-    getMyInfo(user: User): Promise<UserDto>;
-    getUserInfo(user: User, id: number): Promise<UserDto>;
-    updateUser(user: User, body: UserBodyDto): Promise<UserDto>;
-    resetRefreshDate(user: User): Promise<UserDto>;
-    deleteUser(user: User): Promise<DeleteUserDto>;
+    getAll(userId: User, idString: string): Promise<UsersDto>;
+    getMyInfo(userId: any): Promise<UserDto>;
+    getUserInfo(userId: User, id: number): Promise<UserDto>;
+    updateUser(userId: any, body: UserBodyDto): Promise<UserDto>;
+    resetRefreshDate(userId: any): Promise<UserDto>;
+    deleteUser(userId: any): Promise<DeleteUserDto>;
 }

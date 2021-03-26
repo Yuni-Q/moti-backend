@@ -17,19 +17,20 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const answers_service_1 = require("../answers/answers.service");
 const id_decorator_1 = require("../common/decorators/id.decorator");
-const token_decorator_1 = require("../common/decorators/token.decorator");
-const require_body_dto_1 = require("../common/dto/require.body.dto");
-const require_token_dto_1 = require("../common/dto/require.token.dto");
+const token_user_id_decorator_1 = require("../common/decorators/token.user.id.decorator");
 const Answer_entity_1 = require("../common/entity/Answer.entity");
+const custom_interval_server_error_exception_1 = require("../common/exception/custom.interval.server.error.exception");
+const require_body_exception_1 = require("../common/exception/require.body.exception");
+const require_token_exception_1 = require("../common/exception/require.token.exception");
 const transformInterceptor_interceptor_1 = require("../common/interceptors/transformInterceptor.interceptor");
 const date_1 = require("../common/util/date");
 const users_service_1 = require("../users/users.service");
 const valid_body_1 = require("./decorators/valid.body");
 const delete_mission_dto_1 = require("./dto/delete.mission.dto");
-const insufficient_refresh_count_dto_1 = require("./dto/insufficient.refresh.count.dto");
-const invalid_mission_id_dto_1 = require("./dto/invalid.mission.id.dto");
 const mission_body_dto_1 = require("./dto/mission.body.dto");
 const missions_dto_1 = require("./dto/missions.dto");
+const insufficient_refresh_count_exception_1 = require("./exception/insufficient.refresh.count.exception");
+const invalid_mission_id_exception_1 = require("./exception/invalid.mission.id.exception");
 const missions_service_1 = require("./missions.service");
 let MissionsController = class MissionsController {
     constructor(missionsService, answersService, usersService) {
@@ -37,67 +38,86 @@ let MissionsController = class MissionsController {
         this.answersService = answersService;
         this.usersService = usersService;
     }
-    async missions({ id }) {
+    async missions(userId) {
         try {
-            const user = await this.usersService.checkUser(id);
-            const oldMission = this.missionsService.getOldMission(user);
-            const refresh = this.missionsService.isRefresh(user);
-            if (this.missionsService.hasOldMissions(oldMission)) {
+            const date = date_1.getDateString({});
+            const user = await this.usersService.checkUser({ id: userId });
+            const mission = this.missionsService.getOldMission({
+                mission: user.mission,
+            });
+            const refresh = this.missionsService.isRefresh({ user, date });
+            if (this.missionsService.hasOldMissions({ mission, date })) {
                 return {
-                    status: common_1.HttpStatus.OK,
-                    data: { refresh, missions: oldMission.missions },
+                    data: { refresh, missions: mission.missions },
                 };
             }
-            const missions = await this.getNewMission(id);
-            await this.usersService.setMissionsInUser({ missions, id: id });
-            return { status: common_1.HttpStatus.OK, data: { refresh, missions } };
+            const oneYearAgo = date_1.getDateString({ date, years: -1 });
+            const missions = await this.getNewMission({ date, userId, oneYearAgo });
+            const newUser = Object.assign(Object.assign({}, user), { mission: JSON.stringify({ date, missions }) });
+            await this.usersService.updateUser(newUser);
+            return { data: { refresh, missions } };
         }
         catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
-    async refresh({ id }) {
+    async refresh(userId) {
         try {
-            const user = await this.usersService.checkUser(id);
-            if (this.missionsService.hasRefresh(user)) {
-                throw new common_1.HttpException(new insufficient_refresh_count_dto_1.InsufficientRefreshCount(), common_1.HttpStatus.BAD_REQUEST);
+            const user = await this.usersService.checkUser({ id: userId });
+            const date = date_1.getDateString({});
+            if (this.missionsService.hasRefresh({ user, date })) {
+                throw new insufficient_refresh_count_exception_1.InsufficientRefreshCountException();
             }
-            const missions = await this.getNewMission(id);
-            await this.usersService.setMissionsAndRefreshDateInUser({
-                missions,
-                id: id,
-            });
+            const oneYearAgo = date_1.getDateString({ date, years: -1 });
+            const missions = await this.getNewMission({ date, userId, oneYearAgo });
+            const newUser = Object.assign(Object.assign({}, user), { refreshDate: date, mission: JSON.stringify({ date, missions }) });
+            await this.usersService.updateUser(newUser);
             return { status: common_1.HttpStatus.OK, data: { refresh: false, missions } };
         }
         catch (error) {
-            throw new common_1.HttpException({
-                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
-                message: error.message,
-            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
-    async mission(user, id) {
-        const result = await this.missionsService.findOne(id);
-        return { data: result };
+    async mission(userId, id) {
+        try {
+            const mission = await this.missionsService.getMissionById({ id });
+            return { data: mission };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
-    async create(user, body) {
-        const result = await this.missionsService.create(body);
-        return { status: 201, data: result };
+    async create(userId, body) {
+        try {
+            const mission = await this.missionsService.createMission(body);
+            return { status: common_1.HttpStatus.CREATED, data: mission };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
-    async update(user, body, id) {
-        const result = await this.missionsService.update(id, body);
-        return { data: result };
+    async update(userId, body, id) {
+        try {
+            const mission = await this.missionsService.checkMission({ id });
+            const newMission = Object.assign(Object.assign({}, mission), body);
+            const returnMission = await this.missionsService.updateMission(newMission);
+            return { data: returnMission };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
-    async destroy(user, id) {
-        const result = await this.missionsService.destroy(id);
-        return { data: result };
+    async destroy(userId, id) {
+        try {
+            const mission = await this.missionsService.checkMission({ id });
+            await this.missionsService.deleteMission(mission);
+            return { data: null };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
-    async getNewMission(userId) {
-        const date = date_1.getDateString({});
-        const oneYearAgo = date_1.getDateString({ years: -1 });
+    async getNewMission({ oneYearAgo, date, userId, }) {
         const oneYearData = await this.answersService.getAnswersByUserIdAndDateRange({
             userId,
             dateGt: oneYearAgo,
@@ -119,7 +139,7 @@ __decorate([
         description: '성공',
     }),
     common_1.Get(),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
@@ -131,12 +151,12 @@ __decorate([
         description: '성공',
     }),
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: insufficient_refresh_count_dto_1.InsufficientRefreshCount,
-        description: '갱신 횟수가 모자랍니다.',
+        status: new insufficient_refresh_count_exception_1.InsufficientRefreshCountException().statusCode,
+        type: insufficient_refresh_count_exception_1.InsufficientRefreshCountException,
+        description: new insufficient_refresh_count_exception_1.InsufficientRefreshCountException().message,
     }),
     common_1.Get('refresh'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
@@ -153,7 +173,7 @@ __decorate([
         description: 'path',
     }),
     common_1.Get(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -170,7 +190,7 @@ __decorate([
         description: 'body',
     }),
     common_1.Post(),
-    __param(0, token_decorator_1.Token()), __param(1, valid_body_1.ValidBody()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, valid_body_1.ValidBody()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -182,14 +202,14 @@ __decorate([
         description: '성공',
     }),
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: invalid_mission_id_dto_1.InvalidMissionIdDto,
-        description: '성공',
+        status: new invalid_mission_id_exception_1.InvalidMissionIdException().statusCode,
+        type: invalid_mission_id_exception_1.InvalidMissionIdException,
+        description: new invalid_mission_id_exception_1.InvalidMissionIdException().message,
     }),
     swagger_1.ApiResponse({
-        status: new require_body_dto_1.RequireBodyDto().status,
-        type: require_body_dto_1.RequireBodyDto,
-        description: new require_body_dto_1.RequireBodyDto().message,
+        status: new require_body_exception_1.RequireBodyException().statusCode,
+        type: require_body_exception_1.RequireBodyException,
+        description: new require_body_exception_1.RequireBodyException().message,
     }),
     swagger_1.ApiBody({
         type: mission_body_dto_1.MissionBodyDto,
@@ -202,7 +222,7 @@ __decorate([
         description: 'path',
     }),
     common_1.Put(':id'),
-    __param(0, token_decorator_1.Token()),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
     __param(1, valid_body_1.ValidBody()),
     __param(2, id_decorator_1.Id()),
     __metadata("design:type", Function),
@@ -211,9 +231,9 @@ __decorate([
 ], MissionsController.prototype, "update", null);
 __decorate([
     swagger_1.ApiResponse({
-        status: new invalid_mission_id_dto_1.InvalidMissionIdDto().status,
-        type: invalid_mission_id_dto_1.InvalidMissionIdDto,
-        description: new invalid_mission_id_dto_1.InvalidMissionIdDto().message,
+        status: new invalid_mission_id_exception_1.InvalidMissionIdException().statusCode,
+        type: invalid_mission_id_exception_1.InvalidMissionIdException,
+        description: new invalid_mission_id_exception_1.InvalidMissionIdException().message,
     }),
     swagger_1.ApiResponse({
         status: new delete_mission_dto_1.DeleteMissionDto().status,
@@ -226,16 +246,16 @@ __decorate([
         description: 'path',
     }),
     common_1.Delete(':id'),
-    __param(0, token_decorator_1.Token()), __param(1, id_decorator_1.Id()),
+    __param(0, token_user_id_decorator_1.TokenUserId()), __param(1, id_decorator_1.Id()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "destroy", null);
 MissionsController = __decorate([
     swagger_1.ApiResponse({
-        status: common_1.HttpStatus.BAD_REQUEST,
-        type: require_token_dto_1.RequireTokenDto,
-        description: '토큰이 필요합니다.',
+        status: new require_token_exception_1.RequireTokenException().statusCode,
+        type: require_token_exception_1.RequireTokenException,
+        description: new require_token_exception_1.RequireTokenException().message,
     }),
     common_1.UseInterceptors(transformInterceptor_interceptor_1.TransformInterceptor),
     swagger_1.ApiBearerAuth('authorization'),

@@ -1,10 +1,12 @@
-import { UsersService } from 'src/users/users.service';
-import { SigninResponseDto } from './dto/signin.response.dto';
 export declare class SigninService {
-    private readonly usersService;
-    constructor(usersService: UsersService);
-    signin(token: string, snsType: string): Promise<SigninResponseDto['data']>;
-    refresh(token: string): Promise<SigninResponseDto['data']>;
+    jwtOauth2(token: string): Promise<{
+        id: string;
+        email: string;
+    }>;
+    jwtDecode(token: string): Promise<{
+        sub: string;
+        email: string;
+    }>;
     createToken({ id, snsId, snsType, }: {
         id: number;
         snsId: string;

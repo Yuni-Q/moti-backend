@@ -21,29 +21,7 @@ let QuestionsService = class QuestionsService {
     constructor(questionRepository) {
         this.questionRepository = questionRepository;
     }
-    async post(content) {
-        try {
-            const question = await this.createQuestion(content);
-            return question;
-        }
-        catch (e) {
-            throw new common_1.HttpException({ status: common_1.HttpStatus.INTERNAL_SERVER_ERROR, message: e.message }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    async get(page, limit) {
-        try {
-            let skip = 0;
-            if (page > 1) {
-                skip = limit * (page - 1);
-            }
-            const result = await this.getQuestions(skip, limit);
-            return result;
-        }
-        catch (e) {
-            throw new common_1.HttpException({ status: common_1.HttpStatus.INTERNAL_SERVER_ERROR, message: e.message }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    async getQuestions(skip, take) {
+    async getQuestions({ skip, take, }) {
         const [questions, questionTotalCount,] = await this.questionRepository.findAndCount({ skip, take });
         return { questions, questionTotalCount };
     }

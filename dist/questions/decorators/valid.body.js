@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidBody = void 0;
 const common_1 = require("@nestjs/common");
-const require_body_dto_1 = require("../../common/dto/require.body.dto");
+const require_body_exception_1 = require("../../common/exception/require.body.exception");
 exports.ValidBody = common_1.createParamDecorator(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const { content } = request.body;
     if (!content) {
-        throw new common_1.HttpException(new require_body_dto_1.RequireBodyDto(), common_1.HttpStatus.PRECONDITION_FAILED);
+        throw new require_body_exception_1.RequireBodyException();
     }
     return {
         content,

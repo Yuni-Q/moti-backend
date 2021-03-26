@@ -26,7 +26,7 @@ function DatabaseOrmModule() {
         username: config.DB_USERNAME,
         password: config.DB_PASSWORD,
         database: config.DATABASE,
-        synchronize: true,
+        synchronize: false,
         logging: true,
         timezone: '+09:00',
         entities: [User_entity_1.User, Answer_entity_1.Answer, File_entity_1.File, Mission_entity_1.Mission, Question_entity_1.Question],
