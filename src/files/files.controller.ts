@@ -148,7 +148,7 @@ export class FilesController {
   async destroy(@Id() id): Promise<DeleteFileDto> {
     try {
       const file = await this.filesService.checkFile({ id });
-      await this.filesService.destroy(file);
+      await this.filesService.deleteFile(file);
       return { data: null, message: new DeleteFileDto().message };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);

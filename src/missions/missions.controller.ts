@@ -212,7 +212,7 @@ export class MissionsController {
   async destroy(@TokenUserId() userId, @Id() id): Promise<DeleteMissionDto> {
     try {
       const mission = await this.missionsService.checkMission({ id });
-      await this.missionsService.destroy(mission);
+      await this.missionsService.deleteMission(mission);
       return { data: null };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);

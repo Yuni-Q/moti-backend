@@ -106,7 +106,7 @@ export class AnswersService {
     });
   }
 
-  async destroy(answer: Answer) {
+  async deleteAnswer(answer: Answer) {
     return this.answersRepository.remove(answer);
   }
 

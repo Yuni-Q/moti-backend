@@ -1,11 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Mission } from 'src/common/entity/Mission.entity';
 import { User } from 'src/common/entity/User.entity';
-import { getDateString } from 'src/common/util/date';
 import { MoreThan, Repository } from 'typeorm';
-import { UserBodyDto } from './dto/user.body.dto';
-import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
+import { InvalidUserIdException } from './exception/invalid.user.id.dto';
 
 @Injectable()
 export class UsersService {
@@ -20,23 +17,21 @@ export class UsersService {
     return newUser;
   }
 
-  async getAll(id?: string): Promise<User[]> {
-    const users = await this.userRepository.find({
+  async getAll(id: number): Promise<User[]> {
+    return this.userRepository.find({
       where: {
-        id: MoreThan(parseInt(id, 10) || 0),
+        id: MoreThan(id),
       },
       take: 10,
     });
-    return users;
   }
 
   async getUserById({ id }: { id: number }): Promise<User> {
-    const user = await this.userRepository.findOne({
+    return this.userRepository.findOne({
       where: {
         id: id,
       },
     });
-    return user;
   }
 
   async getUserBySnsIdAndSnsType({
@@ -52,27 +47,18 @@ export class UsersService {
     return user;
   }
 
-  async updateMyInfo(
-    id: number,
-    body: UserBodyDto | { refreshDate: null },
-  ): Promise<User> {
-    const user = await this.checkUser({ id });
-    const newUser = { ...user, ...body };
-    await this.userRepository.save(newUser);
-    const returnUser = await this.getUserById({ id });
-    return returnUser;
+  async updateMyInfo(body): Promise<User> {
+    return this.userRepository.save(body);
   }
 
-  async deleteUser(id: number): Promise<null> {
-    const user = await this.checkUser({ id });
-    await this.userRepository.remove(user);
-    return null;
+  async deleteUser(user: User) {
+    return this.userRepository.remove(user);
   }
 
   async checkUser({ id }: { id: number }): Promise<User> {
     const user = await this.getUserById({ id });
     if (!user) {
-      throw new HttpException(new InvalidUserIdDto(), HttpStatus.BAD_REQUEST);
+      throw new InvalidUserIdException();
     }
     return user;
   }

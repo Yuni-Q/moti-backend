@@ -19,7 +19,7 @@ export class FilesService {
       .getOne();
   }
 
-  async destroy(file: File) {
+  async deleteFile(file: File) {
     return this.fileRepository.remove(file);
   }
 

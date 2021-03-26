@@ -19,15 +19,17 @@ import {
 import { Id } from 'src/common/decorators/id.decorator';
 import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
 import { User } from 'src/common/entity/User.entity';
+import { CustomInternalServerErrorException } from 'src/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
+import { RequireIdException } from 'src/common/exception/require.id.exception';
 import { RequireTokenException } from 'src/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/common/interceptors/transformInterceptor.interceptor';
 import { ValidBody } from './decorators/valid.body';
 import { DeleteUserDto } from './dto/delete.user.dto';
-import { InvalidUserIdDto } from './dto/invalid.user.id.dto';
 import { UserBodyDto } from './dto/user.body.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
+import { InvalidUserIdException } from './exception/invalid.user.id.dto';
 import { UsersService } from './users.service';
 
 @UseInterceptors(TransformInterceptor)
@@ -56,10 +58,18 @@ export class UsersController {
   @Get()
   async getAll(
     @TokenUserId() userId: User,
-    @Query('id') id: string,
+    @Query('id') idString: string,
   ): Promise<UsersDto> {
-    const users = await this.usersService.getAll(id);
-    return { data: users };
+    try {
+      const id = parseInt(idString, 10);
+      if (isNaN(id)) {
+        throw new RequireIdException();
+      }
+      const users = await this.usersService.getAll(id);
+      return { data: users };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -70,8 +80,12 @@ export class UsersController {
   @ApiOperation({ summary: '내 정보 조회' })
   @Get('my')
   async getMyInfo(@TokenUserId() userId): Promise<UserDto> {
-    const my = await this.usersService.getUserById({ id: userId });
-    return { data: my };
+    try {
+      const user = await this.usersService.getUserById({ id: userId });
+      return { data: user };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -90,8 +104,12 @@ export class UsersController {
     @TokenUserId() userId: User,
     @Id() id: number,
   ): Promise<UserDto> {
-    const my = await this.usersService.getUserById({ id });
-    return { data: my };
+    try {
+      const user = await this.usersService.getUserById({ id });
+      return { data: user };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -100,9 +118,9 @@ export class UsersController {
     description: '성공',
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: InvalidUserIdDto,
-    description: '유저가 없습니다.',
+    status: new InvalidUserIdException().statusCode,
+    type: InvalidUserIdException,
+    description: new InvalidUserIdException().message,
   })
   @ApiResponse({
     status: new RequireBodyException().statusCode,
@@ -120,8 +138,14 @@ export class UsersController {
     @TokenUserId() userId,
     @ValidBody() body: UserBodyDto,
   ): Promise<UserDto> {
-    const my = await this.usersService.updateMyInfo(userId, body);
-    return { data: my };
+    try {
+      const user = await this.usersService.checkUser({ id: userId });
+      const newUser = { ...user, ...body };
+      const returnUser = await this.usersService.updateMyInfo(newUser);
+      return { data: returnUser };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -130,17 +154,21 @@ export class UsersController {
     description: '성공',
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: InvalidUserIdDto,
-    description: '유저가 없습니다.',
+    status: new InvalidUserIdException().statusCode,
+    type: InvalidUserIdException,
+    description: new InvalidUserIdException().message,
   })
   @ApiOperation({ summary: 'refreshDate 초기화' })
   @Put('refresh')
   async resetRefreshDate(@TokenUserId() userId): Promise<UserDto> {
-    const my = await this.usersService.updateMyInfo(userId, {
-      refreshDate: null,
-    });
-    return { data: my };
+    try {
+      const user = await this.usersService.checkUser({ id: userId });
+      const newUser = { ...user, refreshDate: null };
+      const returnUser = await this.usersService.updateMyInfo(newUser);
+      return { data: returnUser };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 
   @ApiResponse({
@@ -149,14 +177,19 @@ export class UsersController {
     description: '성공',
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: InvalidUserIdDto,
-    description: '유저가 없습니다.',
+    status: new InvalidUserIdException().statusCode,
+    type: InvalidUserIdException,
+    description: new InvalidUserIdException().message,
   })
   @ApiOperation({ summary: '유저 삭제' })
   @Delete('')
   async deleteUser(@TokenUserId() userId): Promise<DeleteUserDto> {
-    const result = await this.usersService.deleteUser(userId);
-    return { data: result };
+    try {
+      const user = await this.usersService.checkUser({ id: userId });
+      await this.usersService.deleteUser(user);
+      return { data: null };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
   }
 }

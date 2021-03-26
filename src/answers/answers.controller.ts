@@ -28,6 +28,7 @@ import { TransformInterceptor } from 'src/common/interceptors/transformIntercept
 import { getDateString, getMonthDate, getNow } from 'src/common/util/date';
 import { FilesService } from 'src/files/files.service';
 import { MissionsService } from 'src/missions/missions.service';
+import { InvalidQueryException } from '../common/exception/invalid.query.exception';
 import { AnswersService } from './answers.service';
 import { AnswerDto } from './dto/answer.dto';
 import { AnswersDto } from './dto/answers.dto';
@@ -37,7 +38,6 @@ import { ListAnswersDto } from './dto/list.answers.dto';
 import { MonthAnswersDto } from './dto/month.answers.dto';
 import { WeekAnswerDto } from './dto/week.answer.dto';
 import { ExistAnswerException } from './exception/exist.answer.exception';
-import { InvalidQueryException } from './exception/invalid.query.exception';
 import { RequireContentException } from './exception/requrie.content.exception';
 import { RequireFileException } from './exception/requrie.file.exception';
 
@@ -462,7 +462,7 @@ export class AnswersController {
   async delete(@TokenUserId() userId, @Id() id): Promise<DeleteAnswerDto> {
     try {
       const answer = await this.answersService.checkAnswerId({ id, userId });
-      await this.answersService.destroy(answer);
+      await this.answersService.deleteAnswer(answer);
       return { data: null, message: new DeleteAnswerDto().message };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);

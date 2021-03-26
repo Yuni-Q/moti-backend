@@ -14,7 +14,7 @@ export class MissionsService {
     @InjectRepository(Mission)
     private missionRepository: Repository<Mission>,
   ) {}
-  async destroy(body) {
+  async deleteMission(body) {
     await this.missionRepository.remove(body);
   }
 
