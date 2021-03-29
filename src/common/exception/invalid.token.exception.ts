@@ -22,6 +22,6 @@ export class InvalidTokenException extends HttpException {
 
   constructor() {
     // TODO : status 제거
-    super({ status, statusCode, message }, status);
+    super({ status: statusCode, statusCode, message }, status);
   }
 }

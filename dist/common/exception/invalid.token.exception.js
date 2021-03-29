@@ -17,7 +17,7 @@ const statusCode = 1100;
 const message = '올바르지 못한 토큰 입니다.';
 class InvalidTokenException extends common_1.HttpException {
     constructor() {
-        super({ status, statusCode, message }, status);
+        super({ status: statusCode, statusCode, message }, status);
         this.statusCode = statusCode;
         this.message = message;
     }

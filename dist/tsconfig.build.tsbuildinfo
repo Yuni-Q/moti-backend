@@ -5242,7 +5242,7 @@
         "affectsGlobalScope": false
       },
       "../src/common/exception/invalid.token.exception.ts": {
-        "version": "6273bc0a7f94ae1483904135beac26c72fd09ac01924952a87dd5ba662d1244f",
+        "version": "67bffdfc031d14e38275ee69ee67dc9b2f7b0efae20396a7929a7dfe861af1e0",
         "signature": "287eb0a136cc7118f62af9e2224dbf830cf8df11fc67817c01242cb08ec9eec5",
         "affectsGlobalScope": false
       },
