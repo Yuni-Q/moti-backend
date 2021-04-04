@@ -85,11 +85,14 @@ export class MissionsService {
     limit?: number;
   }) {
     // TODO : .orderBy('RAND()')가 아직 지원하지 않아서 createQueryBuilder 사용
-    return this.missionRepository
-      .createQueryBuilder('missions')
-      .where(`id NOT IN (${ids.join(', ')})`)
-      .orderBy('RAND()')
-      .limit(limit)
-      .getMany();
+    return (
+      this.missionRepository
+        .createQueryBuilder('missions')
+        // 과거 데이터가 없으면 에러...
+        .where(`id NOT IN (${ids.length > 0 ? ids.join(', ') : 0})`)
+        .orderBy('RAND()')
+        .limit(limit)
+        .getMany()
+    );
   }
 }
