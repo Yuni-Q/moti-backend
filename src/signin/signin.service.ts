@@ -4,7 +4,9 @@ import jwt from 'jsonwebtoken';
 
 @Injectable()
 export class SigninService {
-  async jwtOauth2(token: string): Promise<{ id: string; email: string }> {
+  async jwtOauth2(
+    token: string,
+  ): Promise<{ data: { id: string; email: string } }> {
     return axios.get(
       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
     );

@@ -97,8 +97,8 @@ export class SigninController {
         email = snsData.email;
       } else if (snsType === 'web') {
         const snsData = await this.SigninService.jwtOauth2(token);
-        snsId = snsData.id;
-        email = snsData.email;
+        snsId = snsData.data.id;
+        email = snsData.data.email;
       } else {
         throw new RequireBodyException();
       }
