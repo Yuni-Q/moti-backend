@@ -1,7 +1,9 @@
 export declare class SigninService {
     jwtOauth2(token: string): Promise<{
-        id: string;
-        email: string;
+        data: {
+            id: string;
+            email: string;
+        };
     }>;
     jwtDecode(token: string): Promise<{
         sub: string;
