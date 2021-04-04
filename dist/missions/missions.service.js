@@ -67,12 +67,12 @@ let MissionsService = class MissionsService {
             date_1.getDateString({ date: answer.date, day: answer.mission.cycle }) >= date);
     }
     async getMissionsByNotInIdAndLimit({ ids, limit = 3, }) {
-        return this.missionRepository
+        return (this.missionRepository
             .createQueryBuilder('missions')
-            .where(`id NOT IN (${ids.join(', ')})`)
+            .where(`id NOT IN (${ids.length > 0 ? ids.join(', ') : 0})`)
             .orderBy('RAND()')
             .limit(limit)
-            .getMany();
+            .getMany());
     }
 };
 MissionsService = __decorate([
