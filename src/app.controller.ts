@@ -15,4 +15,9 @@ export class AppController {
   getHello(): any {
     return { data: this.appService.getHello() };
   }
+
+  @Get('error')
+  error(): any {
+    throw new Error('error');
+  }
 }
