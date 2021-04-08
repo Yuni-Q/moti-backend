@@ -1897,8 +1897,8 @@
         "affectsGlobalScope": false
       },
       "../src/app.controller.ts": {
-        "version": "f9f9585e967772b39f052603a75838208669e30ca42aa2d850a745f8ef36d0aa",
-        "signature": "7960e876cc08e297f61b195a56aa72a86fcd0e32ef9a1cf5689b5c0703d85f2d",
+        "version": "72c10ad87944c1f71d92d84877624b21aaafb5b06439274be02cebb13557bbf2",
+        "signature": "c9aa41fe48c29aff8f32fe54a51100d255c00a08263599cb04b5db7f0b68056d",
         "affectsGlobalScope": false
       },
       "../node_modules/@nestjs/config/dist/interfaces/config-factory.interface.d.ts": {
@@ -6006,8 +6006,458 @@
         "signature": "7b5ed961a0e03965299591d73de8b8c41e8a68105ff4fc07a240b0dfb94a5a3d",
         "affectsGlobalScope": false
       },
+      "../node_modules/@sentry/types/dist/severity.d.ts": {
+        "version": "b7c852bc30fb66ca52bf1e90a868fe4b3c42b39be189882c06435f9717fb9a68",
+        "signature": "b7c852bc30fb66ca52bf1e90a868fe4b3c42b39be189882c06435f9717fb9a68",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/breadcrumb.d.ts": {
+        "version": "a1db89b5fe3fab9010ec50870ddce62fd1031dd4aeb299c09b6b859b8505edeb",
+        "signature": "a1db89b5fe3fab9010ec50870ddce62fd1031dd4aeb299c09b6b859b8505edeb",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/dsn.d.ts": {
+        "version": "03daaabcee90bfb812e98a7934e2660ba2f8392d1e7461f8274881f82b5a77c3",
+        "signature": "03daaabcee90bfb812e98a7934e2660ba2f8392d1e7461f8274881f82b5a77c3",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/context.d.ts": {
+        "version": "0357facbb1fdf3414176591b0e4f37d6f7bd857975d98bb9a3a6168faf5bd03d",
+        "signature": "0357facbb1fdf3414176591b0e4f37d6f7bd857975d98bb9a3a6168faf5bd03d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/debugmeta.d.ts": {
+        "version": "cdc3ce2037c711f56349a1db3353cf293df1ac3a3adfb6940bc3a6cc6fa249fe",
+        "signature": "cdc3ce2037c711f56349a1db3353cf293df1ac3a3adfb6940bc3a6cc6fa249fe",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/mechanism.d.ts": {
+        "version": "fa0ade40501fbdfff23f7b7fe2da8f1dc5ef3f63fdf8d682ab17ad1f42f56982",
+        "signature": "fa0ade40501fbdfff23f7b7fe2da8f1dc5ef3f63fdf8d682ab17ad1f42f56982",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/stackframe.d.ts": {
+        "version": "edbd2a3174d152f2d0647436337abb8649baaa9bb1ca1dd6c7f17fc4b4d98ea0",
+        "signature": "edbd2a3174d152f2d0647436337abb8649baaa9bb1ca1dd6c7f17fc4b4d98ea0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/stacktrace.d.ts": {
+        "version": "02d67c6b473857d85ed64ed8c4fb864e82247a3e77a6f94e6f4b15d59e3f37d5",
+        "signature": "02d67c6b473857d85ed64ed8c4fb864e82247a3e77a6f94e6f4b15d59e3f37d5",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/exception.d.ts": {
+        "version": "4a29b4634e1ba5edb19225bdbf6f24dc935df26629182112bb2449a4437b76db",
+        "signature": "4a29b4634e1ba5edb19225bdbf6f24dc935df26629182112bb2449a4437b76db",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/extra.d.ts": {
+        "version": "7ffc7b4e7fe731d786caa126f20f451c0d86419486bf03faca2c91adebe89bfd",
+        "signature": "7ffc7b4e7fe731d786caa126f20f451c0d86419486bf03faca2c91adebe89bfd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/misc.d.ts": {
+        "version": "aa0d980bb38f0c151b0c592be10feb6f51c85cf9236623429a783a6b2284ead7",
+        "signature": "aa0d980bb38f0c151b0c592be10feb6f51c85cf9236623429a783a6b2284ead7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/request.d.ts": {
+        "version": "0487e5f294c04205c1e5a1b25c74f4ebfe8978518bd7d10bdeac2121f4c5ffe7",
+        "signature": "0487e5f294c04205c1e5a1b25c74f4ebfe8978518bd7d10bdeac2121f4c5ffe7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/eventprocessor.d.ts": {
+        "version": "94f77dc982a5ccdccfb5ef3a54277dcf3af1b5a3e9f6ee7baddb2a5b88e7f873",
+        "signature": "94f77dc982a5ccdccfb5ef3a54277dcf3af1b5a3e9f6ee7baddb2a5b88e7f873",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/user.d.ts": {
+        "version": "e5ddb85f176923ed5c5fd8c9516154b15dc7274796d57faeac4ceee8c3f24195",
+        "signature": "e5ddb85f176923ed5c5fd8c9516154b15dc7274796d57faeac4ceee8c3f24195",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/session.d.ts": {
+        "version": "e863938c4fc320e14c35dc9289f712a7c64d27dc44f464fd90dca8dcd6bdf663",
+        "signature": "e863938c4fc320e14c35dc9289f712a7c64d27dc44f464fd90dca8dcd6bdf663",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/transaction.d.ts": {
+        "version": "f7231fda67b3a926da2d152911028703973d94f022c249afd6cfe117558240dc",
+        "signature": "f7231fda67b3a926da2d152911028703973d94f022c249afd6cfe117558240dc",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/span.d.ts": {
+        "version": "ee6befc704d649fd7f380f44c7ea4d43a7cf302063936e5d3f56464b6d6a1af5",
+        "signature": "ee6befc704d649fd7f380f44c7ea4d43a7cf302063936e5d3f56464b6d6a1af5",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/scope.d.ts": {
+        "version": "046c3bb4261aebd31ee83f04d2ea090757dba9f1a3a9082b2dfad6f0c52c6297",
+        "signature": "046c3bb4261aebd31ee83f04d2ea090757dba9f1a3a9082b2dfad6f0c52c6297",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/package.d.ts": {
+        "version": "051710cbb4924bc139b8a3cd675a2ad7f3c407ca241e00c5919c285ae71eb31a",
+        "signature": "051710cbb4924bc139b8a3cd675a2ad7f3c407ca241e00c5919c285ae71eb31a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/sdkinfo.d.ts": {
+        "version": "f4e42a94f92044ff01a695630107c229b3e44689ec73e30a2705556db421e0ae",
+        "signature": "f4e42a94f92044ff01a695630107c229b3e44689ec73e30a2705556db421e0ae",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/event.d.ts": {
+        "version": "f090b0d1e6a3181e91e7c18930c8b4c55eac6861ab8f4dcaf01650fa01223575",
+        "signature": "f090b0d1e6a3181e91e7c18930c8b4c55eac6861ab8f4dcaf01650fa01223575",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/hub.d.ts": {
+        "version": "c11bcceb485695169d72988b808a095b927e30fe1b7d5d94a8ccd1db144f41be",
+        "signature": "c11bcceb485695169d72988b808a095b927e30fe1b7d5d94a8ccd1db144f41be",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/integration.d.ts": {
+        "version": "2b0eb45a8e4fb5ecc74c0ceb320cc6c7b34abc0f45e53ab7278256d6cabdb950",
+        "signature": "2b0eb45a8e4fb5ecc74c0ceb320cc6c7b34abc0f45e53ab7278256d6cabdb950",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/loglevel.d.ts": {
+        "version": "78093912cedc547d9464f765a4cf931faf346cfcf123ad93469ded0e1e229f14",
+        "signature": "78093912cedc547d9464f765a4cf931faf346cfcf123ad93469ded0e1e229f14",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/sdkmetadata.d.ts": {
+        "version": "460ee1ca9928a729c0241f496919cbe907896094ad88be61f5259dbb2dd8dbd0",
+        "signature": "460ee1ca9928a729c0241f496919cbe907896094ad88be61f5259dbb2dd8dbd0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/status.d.ts": {
+        "version": "cb81f0464eea61884df3496c756f58b17ab36563904f6959293863d886d39dbe",
+        "signature": "cb81f0464eea61884df3496c756f58b17ab36563904f6959293863d886d39dbe",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/response.d.ts": {
+        "version": "3dd3291a75d53d05fd76255334bf74f107a843f5de5d32b36fe0208ba0402ad3",
+        "signature": "3dd3291a75d53d05fd76255334bf74f107a843f5de5d32b36fe0208ba0402ad3",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/transport.d.ts": {
+        "version": "29102f625f682b5773e582eb5359a65e2a480dc9746199b342a327fe73684a3b",
+        "signature": "29102f625f682b5773e582eb5359a65e2a480dc9746199b342a327fe73684a3b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/options.d.ts": {
+        "version": "204946da601db56147561275e090f4ff614cace3d1915adcd1db1d96ed3eb845",
+        "signature": "204946da601db56147561275e090f4ff614cace3d1915adcd1db1d96ed3eb845",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/client.d.ts": {
+        "version": "b5e2d19c34fc3049760862cfd2a79afc143bf2be4f7fb85dd07baa8857f4e31b",
+        "signature": "b5e2d19c34fc3049760862cfd2a79afc143bf2be4f7fb85dd07baa8857f4e31b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/error.d.ts": {
+        "version": "a5e77da482bdf0bfdf89787aaa109f99e8b4be7d09caa40ce54da5148abbccfd",
+        "signature": "a5e77da482bdf0bfdf89787aaa109f99e8b4be7d09caa40ce54da5148abbccfd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/runtime.d.ts": {
+        "version": "4321a253772df67751278fbb89d6ef8248206e279b82c75cabd7f1a33f6ae156",
+        "signature": "4321a253772df67751278fbb89d6ef8248206e279b82c75cabd7f1a33f6ae156",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/thread.d.ts": {
+        "version": "59669c0eb6543f5abb87d8d1aaf3c6acaf7e7f05aaaa93218a97924a79f5b7a7",
+        "signature": "59669c0eb6543f5abb87d8d1aaf3c6acaf7e7f05aaaa93218a97924a79f5b7a7",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/wrappedfunction.d.ts": {
+        "version": "9767d10d0b89a2bf6cbdd868ae2689212441297be5200e92216818816abac6c4",
+        "signature": "9767d10d0b89a2bf6cbdd868ae2689212441297be5200e92216818816abac6c4",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/types/dist/index.d.ts": {
+        "version": "67429e784a93c4ac2a49f9314538dfdedf107e818c6caad84bfc6d69065f3b9f",
+        "signature": "67429e784a93c4ac2a49f9314538dfdedf107e818c6caad84bfc6d69065f3b9f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/hub/dist/session.d.ts": {
+        "version": "fc078c817b22437183002f2c0c846c92efe490540420f179f35d5f6cc6657694",
+        "signature": "fc078c817b22437183002f2c0c846c92efe490540420f179f35d5f6cc6657694",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/hub/dist/scope.d.ts": {
+        "version": "524731ecaed0203db95c15386c2b43e9ef93d9ce7f059062925deab6e6be876f",
+        "signature": "524731ecaed0203db95c15386c2b43e9ef93d9ce7f059062925deab6e6be876f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/hub/dist/hub.d.ts": {
+        "version": "123a344d04070dfe27d2e21a842fc4e7dd6750ca1791f77e21fd65025a494cf2",
+        "signature": "123a344d04070dfe27d2e21a842fc4e7dd6750ca1791f77e21fd65025a494cf2",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/hub/dist/interfaces.d.ts": {
+        "version": "1618afda71a16781ecf9622138968e5bc173eef01e03c2cb7b9b8e9edb868f9e",
+        "signature": "1618afda71a16781ecf9622138968e5bc173eef01e03c2cb7b9b8e9edb868f9e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/hub/dist/index.d.ts": {
+        "version": "cf4d667ff4e83000934b29ccaaef6be77575428d96ac8bb006ad7520c5b6f4bb",
+        "signature": "cf4d667ff4e83000934b29ccaaef6be77575428d96ac8bb006ad7520c5b6f4bb",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/minimal/dist/index.d.ts": {
+        "version": "f50aa7a67212b0e9de241636c9a3c81d82c9e8301e010d8ba03c7bd031b34480",
+        "signature": "f50aa7a67212b0e9de241636c9a3c81d82c9e8301e010d8ba03c7bd031b34480",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/async.d.ts": {
+        "version": "d511a179777ff407e48d54d07c2da8780ba1dab19460ab61e29c6df0a5347ada",
+        "signature": "d511a179777ff407e48d54d07c2da8780ba1dab19460ab61e29c6df0a5347ada",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/browser.d.ts": {
+        "version": "6e381d755dd7718a1b73a0834675ff6c6dc2ec652bc432908e061684b804060a",
+        "signature": "6e381d755dd7718a1b73a0834675ff6c6dc2ec652bc432908e061684b804060a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/dsn.d.ts": {
+        "version": "28289971b0612484e819c54a123f786c93d1907a000406615c03c49313ec3a7b",
+        "signature": "28289971b0612484e819c54a123f786c93d1907a000406615c03c49313ec3a7b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/error.d.ts": {
+        "version": "c9769ddda6d73697a8e8883471df74862dd09e799627ce788ed3629fe0e9d880",
+        "signature": "c9769ddda6d73697a8e8883471df74862dd09e799627ce788ed3629fe0e9d880",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/instrument.d.ts": {
+        "version": "1006491d1d72b693e7536ead6eb2e5112e6121c1ad5efac4ba4874aaf6055bb0",
+        "signature": "1006491d1d72b693e7536ead6eb2e5112e6121c1ad5efac4ba4874aaf6055bb0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/is.d.ts": {
+        "version": "596a682ad809526a3da7e7c264ad3ef0684c250a30c2042a963fbf2c1b072b0b",
+        "signature": "596a682ad809526a3da7e7c264ad3ef0684c250a30c2042a963fbf2c1b072b0b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/logger.d.ts": {
+        "version": "428633ec8988e68c6a7d62765627db221ce31ec08b9360e7b8cd3951ee1ce877",
+        "signature": "428633ec8988e68c6a7d62765627db221ce31ec08b9360e7b8cd3951ee1ce877",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/memo.d.ts": {
+        "version": "e3d6bb13178307cfcd4e53982b2309580c9c89c24ff0cfcc9bfdffd06de628cf",
+        "signature": "e3d6bb13178307cfcd4e53982b2309580c9c89c24ff0cfcc9bfdffd06de628cf",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/misc.d.ts": {
+        "version": "a2de57724bd18766da4d4c48244d29c064d8ab3285ec870887bff1a06cfb3219",
+        "signature": "a2de57724bd18766da4d4c48244d29c064d8ab3285ec870887bff1a06cfb3219",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/node.d.ts": {
+        "version": "aff386014ea9adc2b53ec1585cceb499278e28ee6e3fba06c85c7e646169f513",
+        "signature": "aff386014ea9adc2b53ec1585cceb499278e28ee6e3fba06c85c7e646169f513",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/object.d.ts": {
+        "version": "8c7733d6a321c21a156b835a92535ed15bd8233f096a736c1534a7e6f9371efc",
+        "signature": "8c7733d6a321c21a156b835a92535ed15bd8233f096a736c1534a7e6f9371efc",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/path.d.ts": {
+        "version": "97cc74443e4222646d2afb9efa9caebe0bd65d470c85563a0607bcc2843c852e",
+        "signature": "97cc74443e4222646d2afb9efa9caebe0bd65d470c85563a0607bcc2843c852e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/promisebuffer.d.ts": {
+        "version": "0cbe8d850d1b3441982ebdcbe8668d9e183b029a2bd2a1cd8db77f3e7614bae0",
+        "signature": "0cbe8d850d1b3441982ebdcbe8668d9e183b029a2bd2a1cd8db77f3e7614bae0",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/stacktrace.d.ts": {
+        "version": "b55790a661cd860946947a045e714b308eda349ec18962b38d058f04cfb29e80",
+        "signature": "b55790a661cd860946947a045e714b308eda349ec18962b38d058f04cfb29e80",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/string.d.ts": {
+        "version": "b68ff45cdd90e2e995f1e1e4108ad52ba3111e8afac4659b8fde26fadfea23d5",
+        "signature": "b68ff45cdd90e2e995f1e1e4108ad52ba3111e8afac4659b8fde26fadfea23d5",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/supports.d.ts": {
+        "version": "2b2d3a9403aeb04face6e5884ae0a54b9fd547a8ab632136279d7615f2762902",
+        "signature": "2b2d3a9403aeb04face6e5884ae0a54b9fd547a8ab632136279d7615f2762902",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/syncpromise.d.ts": {
+        "version": "c16d4a47a5adbd24e6ff631e12c125cb9832cec8e01ed3ea0e66f0ba8808ab40",
+        "signature": "c16d4a47a5adbd24e6ff631e12c125cb9832cec8e01ed3ea0e66f0ba8808ab40",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/time.d.ts": {
+        "version": "2f807b3e9a613ba1d50d1b02754730801bc879f0c6130ad5463abab0028eda32",
+        "signature": "2f807b3e9a613ba1d50d1b02754730801bc879f0c6130ad5463abab0028eda32",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/utils/dist/index.d.ts": {
+        "version": "c64d2be8d4ca4081a40cdd37de2dcc1c38f9c252da7ee94a0dac89d68e01c84e",
+        "signature": "c64d2be8d4ca4081a40cdd37de2dcc1c38f9c252da7ee94a0dac89d68e01c84e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/api.d.ts": {
+        "version": "548c0b843abb58c731d954a07c591238bbc4eff77e048b64e8c01fa0742fa28f",
+        "signature": "548c0b843abb58c731d954a07c591238bbc4eff77e048b64e8c01fa0742fa28f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/basebackend.d.ts": {
+        "version": "56302d88f093bb75bf6e63e35a4e7fe557af783c596a53ead7dd571f71db3387",
+        "signature": "56302d88f093bb75bf6e63e35a4e7fe557af783c596a53ead7dd571f71db3387",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/integration.d.ts": {
+        "version": "bee7d2267e9034dfbfacc3e5c9f6736747d36d285f64ca4f8d4322ffb35b411a",
+        "signature": "bee7d2267e9034dfbfacc3e5c9f6736747d36d285f64ca4f8d4322ffb35b411a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/baseclient.d.ts": {
+        "version": "d28cdc38a0ac6a8032f30fbe9384ba5be1a19079448438aa0fdbffad07f1c349",
+        "signature": "d28cdc38a0ac6a8032f30fbe9384ba5be1a19079448438aa0fdbffad07f1c349",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/request.d.ts": {
+        "version": "adc9790adb6685e6c90b55c5f32514d9292ef5224e545490bb5ba3d823bfab5d",
+        "signature": "adc9790adb6685e6c90b55c5f32514d9292ef5224e545490bb5ba3d823bfab5d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/sdk.d.ts": {
+        "version": "b9f468130d7dcc3a98f26cf10c79d77a7cedf9bf05798db3601c13eff8a8c82d",
+        "signature": "b9f468130d7dcc3a98f26cf10c79d77a7cedf9bf05798db3601c13eff8a8c82d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/transports/noop.d.ts": {
+        "version": "bb53c67b45a5548ef0e8ca793eb160956d557cd34a03ae19ddca51ebae459f7c",
+        "signature": "bb53c67b45a5548ef0e8ca793eb160956d557cd34a03ae19ddca51ebae459f7c",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/version.d.ts": {
+        "version": "da84b918fa2d2fe3ed85e1cc2b56ad135a458f0962167f7c3e7336fe36121d2f",
+        "signature": "da84b918fa2d2fe3ed85e1cc2b56ad135a458f0962167f7c3e7336fe36121d2f",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/integrations/functiontostring.d.ts": {
+        "version": "06659c9bc1cee936b483954600090e569afdf7734ae901eef90363d85c4ed4bd",
+        "signature": "06659c9bc1cee936b483954600090e569afdf7734ae901eef90363d85c4ed4bd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/integrations/inboundfilters.d.ts": {
+        "version": "166ffa76e43163afb9cd631803638845be38ca0de8be033b91217e7ecda817e3",
+        "signature": "166ffa76e43163afb9cd631803638845be38ca0de8be033b91217e7ecda817e3",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/integrations/index.d.ts": {
+        "version": "13377fde1643e43ea7983aa2dd11b9a429ad4af354d1f9ca2fafbb761ee86813",
+        "signature": "13377fde1643e43ea7983aa2dd11b9a429ad4af354d1f9ca2fafbb761ee86813",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/core/dist/index.d.ts": {
+        "version": "ec0370fb049c22cb7e601901c6118ca98d462e48b3103466a1c30da22a3b4edd",
+        "signature": "ec0370fb049c22cb7e601901c6118ca98d462e48b3103466a1c30da22a3b4edd",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/backend.d.ts": {
+        "version": "dec6874c6513ccb0fd1e023cd837ef7dd7bc9d6d88c11dba3c48db3d61c81004",
+        "signature": "dec6874c6513ccb0fd1e023cd837ef7dd7bc9d6d88c11dba3c48db3d61c81004",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/client.d.ts": {
+        "version": "144dd2da012a155a9e70ae15385357b5b35595f24b291fd0290f64b0015fbbcb",
+        "signature": "144dd2da012a155a9e70ae15385357b5b35595f24b291fd0290f64b0015fbbcb",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/console.d.ts": {
+        "version": "2db58da37ba48c54a63241b4b15f468727f3d0829b2aa0bbe53979f3444fa7b2",
+        "signature": "2db58da37ba48c54a63241b4b15f468727f3d0829b2aa0bbe53979f3444fa7b2",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/http.d.ts": {
+        "version": "56a976d21a186d41a045b9f6209782b1a458180dba6dbe1a893c1ace480bebfc",
+        "signature": "56a976d21a186d41a045b9f6209782b1a458180dba6dbe1a893c1ace480bebfc",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/onuncaughtexception.d.ts": {
+        "version": "0fd16e6cee770d2bb709e7c316cc626a1e8e3a59b9a0b7b6e562e12371f9b906",
+        "signature": "0fd16e6cee770d2bb709e7c316cc626a1e8e3a59b9a0b7b6e562e12371f9b906",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/onunhandledrejection.d.ts": {
+        "version": "ce4beba686230397906895527910a43a9de4654514dc691faa54272782a86ec9",
+        "signature": "ce4beba686230397906895527910a43a9de4654514dc691faa54272782a86ec9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/linkederrors.d.ts": {
+        "version": "df674173cf67ca30c5321777fec12aacd3c85298584d72c9801180a01531a826",
+        "signature": "df674173cf67ca30c5321777fec12aacd3c85298584d72c9801180a01531a826",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/modules.d.ts": {
+        "version": "380d60f26f2183ee92617a87160e9cd34a20307010f070f60d66228a805baeef",
+        "signature": "380d60f26f2183ee92617a87160e9cd34a20307010f070f60d66228a805baeef",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/integrations/index.d.ts": {
+        "version": "3a73df9b591da9f13fe94e77cf4ad493fca3c71c48056a2c6df3723dd2c1ce0a",
+        "signature": "3a73df9b591da9f13fe94e77cf4ad493fca3c71c48056a2c6df3723dd2c1ce0a",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/sdk.d.ts": {
+        "version": "1144c24d9dc3b58e7a0fc7012567f74eca2480d052d4b984839211eafde2b8ea",
+        "signature": "1144c24d9dc3b58e7a0fc7012567f74eca2480d052d4b984839211eafde2b8ea",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/version.d.ts": {
+        "version": "edcaa1d4acb597620eacd1f05a1a133269be84396388fd5929e399dca501001b",
+        "signature": "edcaa1d4acb597620eacd1f05a1a133269be84396388fd5929e399dca501001b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/handlers.d.ts": {
+        "version": "d49614bb58e3cb759cf38b960b9670718639036fff3cf95aec18162c0ea31838",
+        "signature": "d49614bb58e3cb759cf38b960b9670718639036fff3cf95aec18162c0ea31838",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/transports/base.d.ts": {
+        "version": "f37a6d119322585b4a3f7be658bbdf35dda6b9bd5bddde04dc989d99de6c1a6e",
+        "signature": "f37a6d119322585b4a3f7be658bbdf35dda6b9bd5bddde04dc989d99de6c1a6e",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/transports/http.d.ts": {
+        "version": "92820c97cf385c73015e54e0b7d1fc0aefc932a52bddd6673ca148165089e4c1",
+        "signature": "92820c97cf385c73015e54e0b7d1fc0aefc932a52bddd6673ca148165089e4c1",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/transports/https.d.ts": {
+        "version": "9d19302cf5e7eba6ac007434876f91ec7067af6c662f87e3b8239f638743adeb",
+        "signature": "9d19302cf5e7eba6ac007434876f91ec7067af6c662f87e3b8239f638743adeb",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/transports/index.d.ts": {
+        "version": "ac52813e9c0f2ff3dd4287fb8d35499c4b89b737c41884d4a5ba77d8a7afddf8",
+        "signature": "ac52813e9c0f2ff3dd4287fb8d35499c4b89b737c41884d4a5ba77d8a7afddf8",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@sentry/node/dist/index.d.ts": {
+        "version": "842b6296a3e84cd841c42b6fd2d7bb5dad337222c596ffb1b9ec340f91874fbb",
+        "signature": "842b6296a3e84cd841c42b6fd2d7bb5dad337222c596ffb1b9ec340f91874fbb",
+        "affectsGlobalScope": false
+      },
+      "../src/common/interceptors/sentry.interceptor.ts": {
+        "version": "ec42872d78b75ea57344b342548ff5ecfaa2b88d6adb95be881622fb36f4c6f8",
+        "signature": "e42b38e7af25f99dc74ca296f59e666b6617291f63abcbb598c14f9ee61cba86",
+        "affectsGlobalScope": false
+      },
       "../src/main.ts": {
-        "version": "00e23eb494beae3ab36743a4998695176777bfdd80b63d6e70419fc3ecb4ca67",
+        "version": "1e506accc38ffa3cdfda1fc7b69dcd862b838799217ff9d01afa8f2418ebcc58",
         "signature": "396a3607ca8288c7dd02dff9b04e6ffb057b3c6f3d12965421373c3da78b65cc",
         "affectsGlobalScope": false
       },
@@ -7126,6 +7576,338 @@
       ],
       "../node_modules/@nestjs/typeorm/index.d.ts": [
         "../node_modules/@nestjs/typeorm/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/api.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/basebackend.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/baseclient.d.ts": [
+        "../node_modules/@sentry/core/dist/basebackend.d.ts",
+        "../node_modules/@sentry/core/dist/integration.d.ts",
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/index.d.ts": [
+        "../node_modules/@sentry/core/dist/api.d.ts",
+        "../node_modules/@sentry/core/dist/basebackend.d.ts",
+        "../node_modules/@sentry/core/dist/baseclient.d.ts",
+        "../node_modules/@sentry/core/dist/integrations/index.d.ts",
+        "../node_modules/@sentry/core/dist/request.d.ts",
+        "../node_modules/@sentry/core/dist/sdk.d.ts",
+        "../node_modules/@sentry/core/dist/transports/noop.d.ts",
+        "../node_modules/@sentry/core/dist/version.d.ts",
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/minimal/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integration.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/functiontostring.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/inboundfilters.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/index.d.ts": [
+        "../node_modules/@sentry/core/dist/integrations/functiontostring.d.ts",
+        "../node_modules/@sentry/core/dist/integrations/inboundfilters.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/request.d.ts": [
+        "../node_modules/@sentry/core/dist/api.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/sdk.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/transports/noop.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/hub.d.ts": [
+        "../node_modules/@sentry/hub/dist/interfaces.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/hub/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/index.d.ts": [
+        "../node_modules/@sentry/hub/dist/hub.d.ts",
+        "../node_modules/@sentry/hub/dist/interfaces.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/hub/dist/session.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/interfaces.d.ts": [
+        "../node_modules/@sentry/hub/dist/hub.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/scope.d.ts": [
+        "../node_modules/@sentry/hub/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/session.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/minimal/dist/index.d.ts": [
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/backend.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/client.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/handlers.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/index.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/node/dist/client.d.ts",
+        "../node_modules/@sentry/node/dist/handlers.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/index.d.ts",
+        "../node_modules/@sentry/node/dist/sdk.d.ts",
+        "../node_modules/@sentry/node/dist/transports/index.d.ts",
+        "../node_modules/@sentry/node/dist/version.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/console.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/http.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/index.d.ts": [
+        "../node_modules/@sentry/node/dist/integrations/console.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/http.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/linkederrors.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/modules.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/onuncaughtexception.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/onunhandledrejection.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/linkederrors.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/modules.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/onuncaughtexception.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/onunhandledrejection.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/sdk.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/base.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/https.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/node/url.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/http.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/https.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/index.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/node/dist/transports/http.d.ts",
+        "../node_modules/@sentry/node/dist/transports/https.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/breadcrumb.d.ts": [
+        "../node_modules/@sentry/types/dist/severity.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/client.d.ts": [
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/options.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/event.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/debugmeta.d.ts",
+        "../node_modules/@sentry/types/dist/exception.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/request.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/eventprocessor.d.ts": [
+        "../node_modules/@sentry/types/dist/event.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/exception.d.ts": [
+        "../node_modules/@sentry/types/dist/mechanism.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/hub.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/client.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/index.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/client.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/debugmeta.d.ts",
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/error.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/exception.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/hub.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/loglevel.d.ts",
+        "../node_modules/@sentry/types/dist/mechanism.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/options.d.ts",
+        "../node_modules/@sentry/types/dist/package.d.ts",
+        "../node_modules/@sentry/types/dist/request.d.ts",
+        "../node_modules/@sentry/types/dist/response.d.ts",
+        "../node_modules/@sentry/types/dist/runtime.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/stackframe.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/types/dist/status.d.ts",
+        "../node_modules/@sentry/types/dist/thread.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/transport.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts",
+        "../node_modules/@sentry/types/dist/wrappedfunction.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/integration.d.ts": [
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/hub.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/options.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/loglevel.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/transport.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/response.d.ts": [
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/status.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/scope.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/sdkinfo.d.ts": [
+        "../node_modules/@sentry/types/dist/package.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/sdkmetadata.d.ts": [
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/session.d.ts": [
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/span.d.ts": [
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/stacktrace.d.ts": [
+        "../node_modules/@sentry/types/dist/stackframe.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/thread.d.ts": [
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/transaction.d.ts": [
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/transport.d.ts": [
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/response.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/dsn.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/index.d.ts": [
+        "../node_modules/@sentry/utils/dist/async.d.ts",
+        "../node_modules/@sentry/utils/dist/browser.d.ts",
+        "../node_modules/@sentry/utils/dist/dsn.d.ts",
+        "../node_modules/@sentry/utils/dist/error.d.ts",
+        "../node_modules/@sentry/utils/dist/instrument.d.ts",
+        "../node_modules/@sentry/utils/dist/is.d.ts",
+        "../node_modules/@sentry/utils/dist/logger.d.ts",
+        "../node_modules/@sentry/utils/dist/memo.d.ts",
+        "../node_modules/@sentry/utils/dist/misc.d.ts",
+        "../node_modules/@sentry/utils/dist/node.d.ts",
+        "../node_modules/@sentry/utils/dist/object.d.ts",
+        "../node_modules/@sentry/utils/dist/path.d.ts",
+        "../node_modules/@sentry/utils/dist/promisebuffer.d.ts",
+        "../node_modules/@sentry/utils/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/utils/dist/string.d.ts",
+        "../node_modules/@sentry/utils/dist/supports.d.ts",
+        "../node_modules/@sentry/utils/dist/syncpromise.d.ts",
+        "../node_modules/@sentry/utils/dist/time.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/is.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/misc.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/object.d.ts": [
+        "../node_modules/@sentry/utils/dist/memo.d.ts"
       ],
       "../node_modules/@types/babel__core/index.d.ts": [
         "../node_modules/@babel/parser/typings/babel-parser.d.ts",
@@ -12064,6 +12846,12 @@
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/swagger/index.d.ts"
       ],
+      "../src/common/interceptors/sentry.interceptor.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@sentry/node/dist/index.d.ts",
+        "../node_modules/rxjs/index.d.ts",
+        "../node_modules/rxjs/operators/index.d.ts"
+      ],
       "../src/common/interceptors/transforminterceptor.interceptor.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/rxjs/index.d.ts",
@@ -12129,8 +12917,10 @@
       "../src/main.ts": [
         "../node_modules/@nestjs/core/index.d.ts",
         "../node_modules/@nestjs/swagger/index.d.ts",
+        "../node_modules/@sentry/node/dist/index.d.ts",
         "../node_modules/reflect-metadata/index.d.ts",
-        "../src/app.module.ts"
+        "../src/app.module.ts",
+        "../src/common/interceptors/sentry.interceptor.ts"
       ],
       "../src/missions/decorators/valid.body.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
@@ -13170,6 +13960,338 @@
       ],
       "../node_modules/@nestjs/typeorm/index.d.ts": [
         "../node_modules/@nestjs/typeorm/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/api.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/basebackend.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/baseclient.d.ts": [
+        "../node_modules/@sentry/core/dist/basebackend.d.ts",
+        "../node_modules/@sentry/core/dist/integration.d.ts",
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/index.d.ts": [
+        "../node_modules/@sentry/core/dist/api.d.ts",
+        "../node_modules/@sentry/core/dist/basebackend.d.ts",
+        "../node_modules/@sentry/core/dist/baseclient.d.ts",
+        "../node_modules/@sentry/core/dist/integrations/index.d.ts",
+        "../node_modules/@sentry/core/dist/request.d.ts",
+        "../node_modules/@sentry/core/dist/sdk.d.ts",
+        "../node_modules/@sentry/core/dist/transports/noop.d.ts",
+        "../node_modules/@sentry/core/dist/version.d.ts",
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/minimal/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integration.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/functiontostring.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/inboundfilters.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/integrations/index.d.ts": [
+        "../node_modules/@sentry/core/dist/integrations/functiontostring.d.ts",
+        "../node_modules/@sentry/core/dist/integrations/inboundfilters.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/request.d.ts": [
+        "../node_modules/@sentry/core/dist/api.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/sdk.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/core/dist/transports/noop.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/hub.d.ts": [
+        "../node_modules/@sentry/hub/dist/interfaces.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/hub/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/index.d.ts": [
+        "../node_modules/@sentry/hub/dist/hub.d.ts",
+        "../node_modules/@sentry/hub/dist/interfaces.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/hub/dist/session.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/interfaces.d.ts": [
+        "../node_modules/@sentry/hub/dist/hub.d.ts",
+        "../node_modules/@sentry/hub/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/scope.d.ts": [
+        "../node_modules/@sentry/hub/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/hub/dist/session.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/minimal/dist/index.d.ts": [
+        "../node_modules/@sentry/hub/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/backend.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/client.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/handlers.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/index.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/node/dist/client.d.ts",
+        "../node_modules/@sentry/node/dist/handlers.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/index.d.ts",
+        "../node_modules/@sentry/node/dist/sdk.d.ts",
+        "../node_modules/@sentry/node/dist/transports/index.d.ts",
+        "../node_modules/@sentry/node/dist/version.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/console.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/http.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/index.d.ts": [
+        "../node_modules/@sentry/node/dist/integrations/console.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/http.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/linkederrors.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/modules.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/onuncaughtexception.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/onunhandledrejection.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/linkederrors.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/modules.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/onuncaughtexception.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/integrations/onunhandledrejection.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/sdk.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/node/dist/backend.d.ts",
+        "../node_modules/@sentry/node/dist/integrations/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/base.d.ts": [
+        "../node_modules/@sentry/core/dist/index.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts",
+        "../node_modules/@sentry/utils/dist/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/https.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/node/url.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/http.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/https.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/node/dist/transports/index.d.ts": [
+        "../node_modules/@sentry/node/dist/transports/base.d.ts",
+        "../node_modules/@sentry/node/dist/transports/http.d.ts",
+        "../node_modules/@sentry/node/dist/transports/https.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/breadcrumb.d.ts": [
+        "../node_modules/@sentry/types/dist/severity.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/client.d.ts": [
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/options.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/event.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/debugmeta.d.ts",
+        "../node_modules/@sentry/types/dist/exception.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/request.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/eventprocessor.d.ts": [
+        "../node_modules/@sentry/types/dist/event.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/exception.d.ts": [
+        "../node_modules/@sentry/types/dist/mechanism.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/hub.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/client.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/index.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/client.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/debugmeta.d.ts",
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/error.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/exception.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/hub.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/loglevel.d.ts",
+        "../node_modules/@sentry/types/dist/mechanism.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/options.d.ts",
+        "../node_modules/@sentry/types/dist/package.d.ts",
+        "../node_modules/@sentry/types/dist/request.d.ts",
+        "../node_modules/@sentry/types/dist/response.d.ts",
+        "../node_modules/@sentry/types/dist/runtime.d.ts",
+        "../node_modules/@sentry/types/dist/scope.d.ts",
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/stackframe.d.ts",
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/types/dist/status.d.ts",
+        "../node_modules/@sentry/types/dist/thread.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/transport.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts",
+        "../node_modules/@sentry/types/dist/wrappedfunction.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/integration.d.ts": [
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/hub.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/options.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/integration.d.ts",
+        "../node_modules/@sentry/types/dist/loglevel.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/transport.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/response.d.ts": [
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/status.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/scope.d.ts": [
+        "../node_modules/@sentry/types/dist/breadcrumb.d.ts",
+        "../node_modules/@sentry/types/dist/context.d.ts",
+        "../node_modules/@sentry/types/dist/eventprocessor.d.ts",
+        "../node_modules/@sentry/types/dist/extra.d.ts",
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts",
+        "../node_modules/@sentry/types/dist/severity.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts",
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/sdkinfo.d.ts": [
+        "../node_modules/@sentry/types/dist/package.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/sdkmetadata.d.ts": [
+        "../node_modules/@sentry/types/dist/sdkinfo.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/session.d.ts": [
+        "../node_modules/@sentry/types/dist/user.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/span.d.ts": [
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/transaction.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/stacktrace.d.ts": [
+        "../node_modules/@sentry/types/dist/stackframe.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/thread.d.ts": [
+        "../node_modules/@sentry/types/dist/stacktrace.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/transaction.d.ts": [
+        "../node_modules/@sentry/types/dist/misc.d.ts",
+        "../node_modules/@sentry/types/dist/span.d.ts"
+      ],
+      "../node_modules/@sentry/types/dist/transport.d.ts": [
+        "../node_modules/@sentry/types/dist/dsn.d.ts",
+        "../node_modules/@sentry/types/dist/event.d.ts",
+        "../node_modules/@sentry/types/dist/response.d.ts",
+        "../node_modules/@sentry/types/dist/sdkmetadata.d.ts",
+        "../node_modules/@sentry/types/dist/session.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/dsn.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/index.d.ts": [
+        "../node_modules/@sentry/utils/dist/async.d.ts",
+        "../node_modules/@sentry/utils/dist/browser.d.ts",
+        "../node_modules/@sentry/utils/dist/dsn.d.ts",
+        "../node_modules/@sentry/utils/dist/error.d.ts",
+        "../node_modules/@sentry/utils/dist/instrument.d.ts",
+        "../node_modules/@sentry/utils/dist/is.d.ts",
+        "../node_modules/@sentry/utils/dist/logger.d.ts",
+        "../node_modules/@sentry/utils/dist/memo.d.ts",
+        "../node_modules/@sentry/utils/dist/misc.d.ts",
+        "../node_modules/@sentry/utils/dist/node.d.ts",
+        "../node_modules/@sentry/utils/dist/object.d.ts",
+        "../node_modules/@sentry/utils/dist/path.d.ts",
+        "../node_modules/@sentry/utils/dist/promisebuffer.d.ts",
+        "../node_modules/@sentry/utils/dist/stacktrace.d.ts",
+        "../node_modules/@sentry/utils/dist/string.d.ts",
+        "../node_modules/@sentry/utils/dist/supports.d.ts",
+        "../node_modules/@sentry/utils/dist/syncpromise.d.ts",
+        "../node_modules/@sentry/utils/dist/time.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/is.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/misc.d.ts": [
+        "../node_modules/@sentry/types/dist/index.d.ts"
+      ],
+      "../node_modules/@sentry/utils/dist/object.d.ts": [
+        "../node_modules/@sentry/utils/dist/memo.d.ts"
       ],
       "../node_modules/@types/babel__core/index.d.ts": [
         "../node_modules/@babel/parser/typings/babel-parser.d.ts",
@@ -17985,6 +19107,10 @@
       ],
       "../src/common/exception/require.token.exception.ts": [
         "../node_modules/@nestjs/common/index.d.ts"
+      ],
+      "../src/common/interceptors/sentry.interceptor.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/rxjs/index.d.ts"
       ],
       "../src/common/interceptors/transforminterceptor.interceptor.ts": [
         "../node_modules/@nestjs/common/index.d.ts",

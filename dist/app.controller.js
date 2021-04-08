@@ -22,6 +22,9 @@ let AppController = class AppController {
     getHello() {
         return { data: this.appService.getHello() };
     }
+    error() {
+        throw new Error('error');
+    }
 };
 __decorate([
     common_1.Get(),
@@ -30,6 +33,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Object)
 ], AppController.prototype, "getHello", null);
+__decorate([
+    common_1.Get('error'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AppController.prototype, "error", null);
 AppController = __decorate([
     common_1.UseInterceptors(undefined_interceptor_1.UndefinedToNullInterceptor),
     swagger_1.ApiTags('참고'),
