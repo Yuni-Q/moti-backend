@@ -1,4 +1,10 @@
-import { Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  HttpStatus,
+  Logger,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -50,7 +56,7 @@ export class SigninController {
         snsId: string;
         snsType: string;
       };
-      if (!result?.snsType) {
+      if (!result?.snsType || !result?.snsId) {
         throw new InvalidTokenException();
       }
       const user = await this.usersService.getUserBySnsIdAndSnsType(result);
@@ -68,6 +74,7 @@ export class SigninController {
         data: { accessToken, refreshToken, signUp },
       };
     } catch (error) {
+      Logger.log('token', token, error);
       throw new CustomInternalServerErrorException(error.message);
     }
   }

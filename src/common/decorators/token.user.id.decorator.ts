@@ -1,4 +1,4 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext, Logger } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
 import { InvalidTokenException } from '../exception/invalid.token.exception';
 import { RequireTokenException } from '../exception/require.token.exception';
@@ -21,6 +21,7 @@ export const TokenUserId = createParamDecorator(
         };
       };
     } catch (e) {
+      Logger.log('token', token, e);
       throw new InvalidTokenException();
     }
     if (
