@@ -21,13 +21,14 @@ export const TokenUserId = createParamDecorator(
         };
       };
     } catch (e) {
-      Logger.log('token', token, e);
+      console.log('token.user.id.decorator token1', token, e);
       throw new InvalidTokenException();
     }
     if (
       typeof result === 'object' &&
       (!('user' in result) || !result.user.id)
     ) {
+      console.log('token.user.id.decorator token2', token);
       throw new InvalidTokenException();
     }
     return result.user.id as number;

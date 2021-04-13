@@ -74,7 +74,7 @@ export class SigninController {
         data: { accessToken, refreshToken, signUp },
       };
     } catch (error) {
-      Logger.log('token', token, error);
+      console.log('token', token, error);
       throw new CustomInternalServerErrorException(error.message);
     }
   }
