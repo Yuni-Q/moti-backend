@@ -22,11 +22,12 @@ exports.TokenUserId = common_1.createParamDecorator(async (data, ctx) => {
         result = (await jsonwebtoken_1.default.verify(token, process.env.privateKey));
     }
     catch (e) {
-        common_1.Logger.log('token', token, e);
+        console.log('token.user.id.decorator token1', token, e);
         throw new invalid_token_exception_1.InvalidTokenException();
     }
     if (typeof result === 'object' &&
         (!('user' in result) || !result.user.id)) {
+        console.log('token.user.id.decorator token2', token);
         throw new invalid_token_exception_1.InvalidTokenException();
     }
     return result.user.id;

@@ -56,7 +56,7 @@ let SigninController = class SigninController {
             };
         }
         catch (error) {
-            common_1.Logger.log('token', token, error);
+            console.log('token', token, error);
             throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
