@@ -22,6 +22,7 @@ exports.TokenUserId = common_1.createParamDecorator(async (data, ctx) => {
         result = (await jsonwebtoken_1.default.verify(token, process.env.privateKey));
     }
     catch (e) {
+        common_1.Logger.log('token', token, e);
         throw new invalid_token_exception_1.InvalidTokenException();
     }
     if (typeof result === 'object' &&

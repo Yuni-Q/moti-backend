@@ -41,7 +41,7 @@ let SigninController = class SigninController {
     async refresh(token) {
         try {
             const result = jsonwebtoken_1.default.verify(token, process.env.privateKey);
-            if (!(result === null || result === void 0 ? void 0 : result.snsType)) {
+            if (!(result === null || result === void 0 ? void 0 : result.snsType) || !(result === null || result === void 0 ? void 0 : result.snsId)) {
                 throw new invalid_token_exception_1.InvalidTokenException();
             }
             const user = await this.usersService.getUserBySnsIdAndSnsType(result);
@@ -56,6 +56,7 @@ let SigninController = class SigninController {
             };
         }
         catch (error) {
+            common_1.Logger.log('token', token, error);
             throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
