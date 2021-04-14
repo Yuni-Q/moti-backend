@@ -56,7 +56,8 @@ let SigninController = class SigninController {
             };
         }
         catch (error) {
-            console.log('token', token, error);
+            console.log('token', token);
+            console.log(error);
             throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
@@ -95,6 +96,8 @@ let SigninController = class SigninController {
             };
         }
         catch (error) {
+            console.log('token', token);
+            console.log(error);
             throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
         }
     }
