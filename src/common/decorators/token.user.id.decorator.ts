@@ -21,7 +21,8 @@ export const TokenUserId = createParamDecorator(
         };
       };
     } catch (e) {
-      console.log('token.user.id.decorator token1', token, e);
+      console.log('token.user.id.decorator token1', token);
+      console.log(e);
       throw new InvalidTokenException();
     }
     if (

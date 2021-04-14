@@ -74,7 +74,8 @@ export class SigninController {
         data: { accessToken, refreshToken, signUp },
       };
     } catch (error) {
-      console.log('token', token, error);
+      console.log('token', token);
+      console.log(error);
       throw new CustomInternalServerErrorException(error.message);
     }
   }
@@ -129,6 +130,8 @@ export class SigninController {
         data: { accessToken, refreshToken, signUp },
       };
     } catch (error) {
+      console.log('token', token);
+      console.log(error);
       throw new CustomInternalServerErrorException(error.message);
     }
   }
