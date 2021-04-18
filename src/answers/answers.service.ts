@@ -15,6 +15,19 @@ export class AnswersService {
     private answersRepository: Repository<Answer>,
   ) {}
 
+  async getDays({
+    userId,
+  }: {
+    userId: NumberAttributeValue;
+  }): Promise<Answer[]> {
+    return this.answersRepository.find({
+      select: ['date'],
+      where: {
+        userId,
+      },
+    });
+  }
+
   async getAnswerByIdAndUserId({ id, userId }: { id: number; userId: number }) {
     return this.answersRepository.findOne({
       where: {

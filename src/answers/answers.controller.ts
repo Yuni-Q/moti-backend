@@ -30,6 +30,7 @@ import { FilesService } from 'src/files/files.service';
 import { MissionsService } from 'src/missions/missions.service';
 import { InvalidQueryException } from '../common/exception/invalid.query.exception';
 import { AnswersService } from './answers.service';
+import { AnswerDaysDto } from './dto/answer.days.dto';
 import { AnswerDto } from './dto/answer.dto';
 import { AnswersDto } from './dto/answers.dto';
 import { DeleteAnswerDto } from './dto/delete.answer.dto';
@@ -56,6 +57,25 @@ export class AnswersController {
     private readonly missionsService: MissionsService,
     private readonly filesService: FilesService,
   ) {}
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: AnswerDaysDto,
+    description: '개인이 답변한 날짜 리스트',
+  })
+  @Get('/days')
+  async getDays(@TokenUserId() userId): Promise<AnswerDaysDto> {
+    try {
+      const answers = await this.answersService.getDays({ userId });
+      const dateList = answers.map((answer) => {
+        console.log(answer);
+        return answer.date;
+      });
+      return { data: dateList };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
+  }
 
   @ApiResponse({
     status: HttpStatus.OK,
