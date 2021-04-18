@@ -28,6 +28,7 @@ const files_service_1 = require("../files/files.service");
 const missions_service_1 = require("../missions/missions.service");
 const invalid_query_exception_1 = require("../common/exception/invalid.query.exception");
 const answers_service_1 = require("./answers.service");
+const answer_days_dto_1 = require("./dto/answer.days.dto");
 const answer_dto_1 = require("./dto/answer.dto");
 const answers_dto_1 = require("./dto/answers.dto");
 const delete_answer_dto_1 = require("./dto/delete.answer.dto");
@@ -43,6 +44,19 @@ let AnswersController = class AnswersController {
         this.answersService = answersService;
         this.missionsService = missionsService;
         this.filesService = filesService;
+    }
+    async getDays(userId) {
+        try {
+            const answers = await this.answersService.getDays({ userId });
+            const dateList = answers.map((answer) => {
+                console.log(answer);
+                return answer.date;
+            });
+            return { data: dateList };
+        }
+        catch (error) {
+            throw new custom_interval_server_error_exception_1.CustomInternalServerErrorException(error.message);
+        }
     }
     async date(userId, dateString) {
         try {
@@ -270,6 +284,18 @@ let AnswersController = class AnswersController {
         }
     }
 };
+__decorate([
+    swagger_1.ApiResponse({
+        status: common_1.HttpStatus.OK,
+        type: answer_days_dto_1.AnswerDaysDto,
+        description: '개인이 답변한 날짜 리스트',
+    }),
+    common_1.Get('/days'),
+    __param(0, token_user_id_decorator_1.TokenUserId()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AnswersController.prototype, "getDays", null);
 __decorate([
     swagger_1.ApiResponse({
         status: common_1.HttpStatus.OK,

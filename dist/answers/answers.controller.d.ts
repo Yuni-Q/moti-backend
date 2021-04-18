@@ -1,6 +1,7 @@
 import { FilesService } from 'src/files/files.service';
 import { MissionsService } from 'src/missions/missions.service';
 import { AnswersService } from './answers.service';
+import { AnswerDaysDto } from './dto/answer.days.dto';
 import { AnswerDto } from './dto/answer.dto';
 import { AnswersDto } from './dto/answers.dto';
 import { DeleteAnswerDto } from './dto/delete.answer.dto';
@@ -13,6 +14,7 @@ export declare class AnswersController {
     private readonly missionsService;
     private readonly filesService;
     constructor(answersService: AnswersService, missionsService: MissionsService, filesService: FilesService);
+    getDays(userId: any): Promise<AnswerDaysDto>;
     date(userId: any, dateString: any): Promise<AnswerDto>;
     week(userId: any): Promise<WeekAnswerDto>;
     diary(userId: any, lastIdString: any, limitString: any, directionString: any): Promise<DiaryAnswersDto>;

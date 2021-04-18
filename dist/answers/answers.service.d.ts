@@ -4,6 +4,9 @@ import { Repository } from 'typeorm';
 export declare class AnswersService {
     private answersRepository;
     constructor(answersRepository: Repository<Answer>);
+    getDays({ userId, }: {
+        userId: NumberAttributeValue;
+    }): Promise<Answer[]>;
     getAnswerByIdAndUserId({ id, userId }: {
         id: number;
         userId: number;

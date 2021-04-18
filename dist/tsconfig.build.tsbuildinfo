@@ -5277,13 +5277,18 @@
         "affectsGlobalScope": false
       },
       "../src/answers/answers.service.ts": {
-        "version": "f65e52c4466e52b62ecd1b9bb681450c7434e7d7af025bbc6ff4aa3ec7f44941",
-        "signature": "72f9dabd6cfe16f3526e416b0dfc23a1991b17f165585129637e0d7b79b65eaf",
+        "version": "67b282209e82724429f9baffa513c1ffd03ed977fd6e00ee8f35426098224094",
+        "signature": "0b97f50592b44d27447037d9be05dc5eab6796b5c056946cd86b14ef54ffb138",
         "affectsGlobalScope": false
       },
       "../src/common/dto/response.dto.ts": {
         "version": "a9ca3d443a8235814340a9454ad5469e4283ce0f370bd22a4f3bdff40b7c841f",
         "signature": "c556b771865aff121bf3596bb934c9cbbee08b21d6bbc126ae199ace18725f36",
+        "affectsGlobalScope": false
+      },
+      "../src/answers/dto/answer.days.dto.ts": {
+        "version": "0b18d3162bedb8c27f76af002aef3c93e804baaaf07c7fb03097e09cbc0b5d38",
+        "signature": "c4ffab0599d657cdb5a10288dbc38a2ebf164f9d8c38c180144c19117ea50b94",
         "affectsGlobalScope": false
       },
       "../src/answers/dto/answer.dto.ts": {
@@ -5337,8 +5342,8 @@
         "affectsGlobalScope": false
       },
       "../src/answers/answers.controller.ts": {
-        "version": "cd43f04ce189d1a76905a59497e4184c40852682f17e57032f34d1d7f2ebe85c",
-        "signature": "82deb53ef6447770a6bcee568402770a599da49a8289ba9f7084841526223de7",
+        "version": "d5efa092277f8737544b585673a30878b283d8585b8ea9e0d5f479b706404b66",
+        "signature": "c3caf91d8ea4be7fe1cc357bd56b720e9b7274fdfb580b940f9cf3261e67e1b3",
         "affectsGlobalScope": false
       },
       "../src/answers/answers.module.ts": {
@@ -5777,7 +5782,7 @@
         "affectsGlobalScope": false
       },
       "../src/signin/signin.controller.ts": {
-        "version": "2934f66454a71372acf4a5f9bb216acc24bd07c2d4e6343d09e0d1e927d09459",
+        "version": "b41c42a427a6d15ad5ef4a27855ded31c25e6dd825ac699e59638945e7a2ad35",
         "signature": "58956669739ff8bf90121877b6acb7177f7ab1b451af4ab69f5ff1ed7903e5c5",
         "affectsGlobalScope": false
       },
@@ -12622,6 +12627,7 @@
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/swagger/index.d.ts",
         "../src/answers/answers.service.ts",
+        "../src/answers/dto/answer.days.dto.ts",
         "../src/answers/dto/answer.dto.ts",
         "../src/answers/dto/answers.dto.ts",
         "../src/answers/dto/delete.answer.dto.ts",
@@ -12669,6 +12675,10 @@
       ],
       "../src/answers/dto/answer.body.dto.ts": [
         "../node_modules/@nestjs/swagger/index.d.ts"
+      ],
+      "../src/answers/dto/answer.days.dto.ts": [
+        "../node_modules/@nestjs/swagger/index.d.ts",
+        "../src/common/dto/response.dto.ts"
       ],
       "../src/answers/dto/answer.dto.ts": [
         "../node_modules/@nestjs/swagger/index.d.ts",
@@ -19004,6 +19014,7 @@
       ],
       "../src/answers/answers.controller.ts": [
         "../src/answers/answers.service.ts",
+        "../src/answers/dto/answer.days.dto.ts",
         "../src/answers/dto/answer.dto.ts",
         "../src/answers/dto/answers.dto.ts",
         "../src/answers/dto/delete.answer.dto.ts",
@@ -19018,6 +19029,9 @@
         "../node_modules/aws-sdk/clients/dynamodb.d.ts",
         "../node_modules/typeorm/index.d.ts",
         "../src/common/entity/answer.entity.ts"
+      ],
+      "../src/answers/dto/answer.days.dto.ts": [
+        "../src/common/dto/response.dto.ts"
       ],
       "../src/answers/dto/answer.dto.ts": [
         "../src/common/dto/response.dto.ts",

@@ -83,7 +83,7 @@ let SigninController = class SigninController {
             }
             const user = await this.usersService.getUserBySnsIdAndSnsType({
                 snsId,
-                snsType,
+                snsType: snsType === 'web' ? 'google' : snsType,
             });
             const signUp = !user ? false : !!user.name ? true : false;
             const newUser = user

@@ -24,6 +24,14 @@ let AnswersService = class AnswersService {
     constructor(answersRepository) {
         this.answersRepository = answersRepository;
     }
+    async getDays({ userId, }) {
+        return this.answersRepository.find({
+            select: ['date'],
+            where: {
+                userId,
+            },
+        });
+    }
     async getAnswerByIdAndUserId({ id, userId }) {
         return this.answersRepository.findOne({
             where: {
