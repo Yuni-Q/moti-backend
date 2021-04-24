@@ -63,6 +63,7 @@ export class UsersController {
     try {
       const id = parseInt(idString, 10);
       if (isNaN(id)) {
+        console.log(id);
         throw new RequireIdException();
       }
       const users = await this.usersService.getAll(id);

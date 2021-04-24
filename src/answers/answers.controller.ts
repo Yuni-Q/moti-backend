@@ -68,6 +68,7 @@ export class AnswersController {
     try {
       const answers = await this.answersService.getDays({ userId });
       const dateList = answers.map((answer) => {
+        console.log(answers);
         console.log(answer);
         return answer.date;
       });

@@ -6,6 +6,7 @@ export const Id = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
     const id = parseInt(request.params.id, 10);
     if (isNaN(id)) {
+      console.log(id);
       throw new RequireIdException();
     }
     return id;
