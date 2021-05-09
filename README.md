@@ -1,78 +1,162 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```
+📦 moti-backend
+├─ .env_default
+├─ .eslintrc.js
+├─ .github
+│  └─ workflows
+│    └─ node.js.yml
+├─ .gitignore
+├─ .prettierrc
+├─ README.md
+├─ appspec.yml
+├─ nest-cli.json
+├─ package-lock.json
+├─ package.json
+├─ scripts
+│  ├─ install_dependencies.sh
+│  ├─ restart_server.sh
+│  └─ validate_server.sh
+├─ src
+│  ├─ answers
+│  │  ├─ answers.controller.spec.ts
+│  │  ├─ answers.controller.ts
+│  │  ├─ answers.module.ts
+│  │  ├─ answers.service.spec.ts
+│  │  ├─ answers.service.ts
+│  │  ├─ dto
+│  │  │  ├─ answer.body.dto.ts
+│  │  │  ├─ answer.days.dto.ts
+│  │  │  ├─ answer.dto.ts
+│  │  │  ├─ answers.dto.ts
+│  │  │  ├─ delete.answer.dto.ts
+│  │  │  ├─ diary.answers.dto.ts
+│  │  │  ├─ exist.answer.dto.ts
+│  │  │  ├─ list.answers.dto.ts
+│  │  │  ├─ month.answers.dto.ts
+│  │  │  └─ week.answer.dto.ts
+│  │  └─ exception
+│  │     ├─ exist.answer.exception.ts
+│  │     ├─ invalid.answer.id.exception.ts
+│  │     ├─ requrie.content.exception.ts
+│  │     └─ requrie.file.exception.ts
+│  ├─ app.controller.spec.ts
+│  ├─ app.controller.ts
+│  ├─ app.module.ts
+│  ├─ app.service.ts
+│  ├─ common
+│  │  ├─ database
+│  │  │  └─ database.module.ts
+│  │  ├─ decorators
+│  │  │  ├─ api-implicit-form-data.decorator.ts
+│  │  │  ├─ id.decorator.ts
+│  │  │  ├─ image.uploade.live.name.decorator.ts
+│  │  │  ├─ image.uploader.decorator.ts
+│  │  │  └─ token.user.id.decorator.ts
+│  │  ├─ dto
+│  │  │  └─ response.dto.ts
+│  │  ├─ entity
+│  │  │  ├─ Answer.entity.ts
+│  │  │  ├─ File.entity.ts
+│  │  │  ├─ Mission.entity.ts
+│  │  │  ├─ Question.entity.ts
+│  │  │  └─ User.entity.ts
+│  │  ├─ env
+│  │  │  ├─ env.module.ts
+│  │  │  ├─ env.service.spec.ts
+│  │  │  └─ env.service.ts
+│  │  ├─ exception
+│  │  │  ├─ custom.interval.server.error.exception.ts
+│  │  │  ├─ invalid.query.exception.ts
+│  │  │  ├─ invalid.token.exception.ts
+│  │  │  ├─ require.body.exception.ts
+│  │  │  ├─ require.id.exception.ts
+│  │  │  └─ require.token.exception.ts
+│  │  ├─ interceptors
+│  │  │  ├─ sentry.interceptor.ts
+│  │  │  ├─ transformInterceptor.interceptor.ts
+│  │  │  └─ undefined.interceptor.ts
+│  │  ├─ middlewares
+│  │  │  ├─ logger.middleware.ts
+│  │  │  └─ version.middleware.ts
+│  │  └─ util
+│  │     └─ date.ts
+│  ├─ files
+│  │  ├─ dto
+│  │  │  ├─ delete.file.dto.ts
+│  │  │  └─ file.dto.ts
+│  │  ├─ exception
+│  │  │  └─ invalid.file.id.exception.ts
+│  │  ├─ files.controller.spec.ts
+│  │  ├─ files.controller.ts
+│  │  ├─ files.module.ts
+│  │  ├─ files.service.spec.ts
+│  │  └─ files.service.ts
+│  ├─ main.ts
+│  ├─ missions
+│  │  ├─ decorators
+│  │  │  └─ valid.body.ts
+│  │  ├─ dto
+│  │  │  ├─ delete.mission.dto.ts
+│  │  │  ├─ mission.body.dto.ts
+│  │  │  ├─ mission.dto.ts
+│  │  │  └─ missions.dto.ts
+│  │  ├─ exception
+│  │  │  ├─ insufficient.refresh.count.exception.ts
+│  │  │  └─ invalid.mission.id.exception.ts
+│  │  ├─ missions.controller.spec.ts
+│  │  ├─ missions.controller.ts
+│  │  ├─ missions.module.ts
+│  │  ├─ missions.service.spec.ts
+│  │  └─ missions.service.ts
+│  ├─ questions
+│  │  ├─ decorators
+│  │  │  └─ valid.body.ts
+│  │  ├─ dto
+│  │  │  ├─ question.dto.ts
+│  │  │  ├─ questions.dto.ts
+│  │  │  ├─ questions.post.request.dto.ts
+│  │  │  └─ signin.response.dto.ts
+│  │  ├─ questions.controller.spec.ts
+│  │  ├─ questions.controller.ts
+│  │  ├─ questions.module.ts
+│  │  ├─ questions.service.spec.ts
+│  │  └─ questions.service.ts
+│  ├─ signin
+│  │  ├─ decorators
+│  │  │  ├─ token.decorator.ts
+│  │  │  └─ valid.body.ts
+│  │  ├─ dto
+│  │  │  ├─ signin.request.dto.ts
+│  │  │  └─ signin.response.dto.ts
+│  │  ├─ exception
+│  │  │  └─ valid.token.exception.ts
+│  │  ├─ signin.controller.spec.ts
+│  │  ├─ signin.controller.ts
+│  │  ├─ signin.module.ts
+│  │  ├─ signin.service.spec.ts
+│  │  └─ signin.service.ts
+│  └─ users
+│     ├─ decorators
+│     │  └─ valid.body.ts
+│     ├─ dto
+│     │  ├─ delete.user.dto.ts
+│     │  ├─ invalid.user.id.dto.ts
+│     │  ├─ user.body.dto.ts
+│     │  ├─ user.dto.ts
+│     │  └─ users.dto.ts
+│     ├─ exception
+│     │  └─ invalid.user.id.dto.ts
+│     ├─ users.controller.spec.ts
+│     ├─ users.controller.ts
+│     ├─ users.module.ts
+│     ├─ users.service.spec.ts
+│     └─ users.service.ts
+├─ test
+│  ├─ app.e2e-spec.ts
+│  └─ jest-e2e.json
+├─ tsconfig.build.json
+├─ tsconfig.json
+└─ webpack-hmr.config.js
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
-
-## 생각해 볼점
-
-- 사용자 토큰 검사를 커스텀 guard로 설정하는걸 고려
-- HttpException / Exception Filters 사용하기
+©generated by [Project Tree Generator](https://woochanleee.github.io/project-tree-generator)
