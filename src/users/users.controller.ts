@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { Id } from 'src/common/decorators/id.decorator';
 import { TokenUserId } from 'src/common/decorators/token.user.id.decorator';
+import { ImageUploader } from 'src/common/decorators/image.uploader.decorator';
 import { User } from 'src/common/entity/User.entity';
 import { CustomInternalServerErrorException } from 'src/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/common/exception/require.body.exception';
@@ -189,6 +190,32 @@ export class UsersController {
       const user = await this.usersService.checkUser({ id: userId });
       await this.usersService.deleteUser(user);
       return { data: null };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message);
+    }
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserDto,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: new InvalidUserIdException().statusCode,
+    type: InvalidUserIdException,
+    description: new InvalidUserIdException().message,
+  })
+  @ApiOperation({ summary: '프로필 이미지 업로드' })
+  @Put('upload')
+  async updateProfileImage(
+    @TokenUserId() userId,
+    @ImageUploader('profile') body,
+  ): Promise<UserDto> {
+    try {
+      const { file: imageUrl } = body;
+      const user = await this.usersService.checkUser({ id: userId });
+      const returnUser = await this.usersService.updateImageUrl(user, imageUrl);
+      return { data: returnUser };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
     }

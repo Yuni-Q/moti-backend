@@ -66,4 +66,10 @@ export class UsersService {
   async updateUser(body): Promise<User> {
     return this.userRepository.save(body);
   }
+
+  async updateImageUrl(user: User, imageUrl: string): Promise<User> {
+    user.profileImage = imageUrl;
+    const updateUser = this.userRepository.save(user);
+    return updateUser;
+  }
 }

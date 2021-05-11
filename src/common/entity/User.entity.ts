@@ -49,4 +49,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Answer, (answers) => answers.user)
   answers: Answer[];
+
+  @Column('varchar', { name: 'profileImage', nullable: true, length: 255 })
+  profileImage: string | null;
 }
