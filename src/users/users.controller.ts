@@ -206,7 +206,7 @@ export class UsersController {
     description: new InvalidUserIdException().message,
   })
   @ApiOperation({ summary: '프로필 이미지 업로드' })
-  @Put('upload')
+  @Put('profile')
   async updateProfileImage(
     @TokenUserId() userId,
     @ImageUploader('profile') body,
@@ -214,7 +214,10 @@ export class UsersController {
     try {
       const { file: imageUrl } = body;
       const user = await this.usersService.checkUser({ id: userId });
-      const returnUser = await this.usersService.updateImageUrl(user, imageUrl);
+      const returnUser = await this.usersService.updateProfileImage(
+        user,
+        imageUrl,
+      );
       return { data: returnUser };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
