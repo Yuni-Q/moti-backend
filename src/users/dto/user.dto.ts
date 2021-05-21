@@ -15,7 +15,7 @@ export class UserDto extends ResponseDto {
       mission: null,
       snsId: '1',
       snsType: 'google',
-      profileImage: 'https://via.placeholder.com/350x350',
+      profileUrl: 'https://via.placeholder.com/350x350',
       createdAt: '2020-03-19T15:27:18.000Z',
       updatedAt: '2020-03-19T15:27:18.000Z',
     },
