@@ -66,10 +66,4 @@ export class UsersService {
   async updateUser(body): Promise<User> {
     return this.userRepository.save(body);
   }
-
-  async updateProfileUrl(user: User, profileUrl: string): Promise<User> {
-    user.profileUrl = profileUrl;
-    const updateUser = this.userRepository.save(user);
-    return updateUser;
-  }
 }

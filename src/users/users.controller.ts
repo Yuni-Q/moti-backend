@@ -207,17 +207,15 @@ export class UsersController {
   })
   @ApiOperation({ summary: '프로필 이미지 업로드' })
   @Put('my/profile')
-  async updateProfileImage(
+  async updateProfileUrl(
     @TokenUserId() userId,
     @ImageUploader('profile') body,
   ): Promise<UserDto> {
     try {
-      const { file: imageUrl } = body;
+      const { file: profileUrl } = body;
       const user = await this.usersService.checkUser({ id: userId });
-      const returnUser = await this.usersService.updateProfileUrl(
-        user,
-        imageUrl,
-      );
+      const newUser = { ...user, profileUrl: profileUrl };
+      const returnUser = await this.usersService.updateMyInfo(newUser);
       return { data: returnUser };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
