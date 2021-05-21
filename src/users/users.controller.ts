@@ -206,7 +206,7 @@ export class UsersController {
     description: new InvalidUserIdException().message,
   })
   @ApiOperation({ summary: '프로필 이미지 업로드' })
-  @Put('profile')
+  @Put('my/profile')
   async updateProfileImage(
     @TokenUserId() userId,
     @ImageUploader('profile') body,
@@ -214,7 +214,7 @@ export class UsersController {
     try {
       const { file: imageUrl } = body;
       const user = await this.usersService.checkUser({ id: userId });
-      const returnUser = await this.usersService.updateProfileImage(
+      const returnUser = await this.usersService.updateProfileUrl(
         user,
         imageUrl,
       );
