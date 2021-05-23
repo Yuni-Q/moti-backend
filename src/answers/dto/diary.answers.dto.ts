@@ -6,8 +6,8 @@ import { Mission } from 'src/common/entity/Mission.entity';
 export class DiaryAnswersDto extends ResponseDto {
   @ApiProperty({
     example: {
-      lastId: 3420,
-      direction: 1,
+      date: '2021-01-18',
+      direction: 0,
       limit: 10,
       answers: [
         {
