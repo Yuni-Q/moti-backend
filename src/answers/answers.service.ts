@@ -94,21 +94,21 @@ export class AnswersService {
     });
   }
 
-  async getAnswersDiaryByLastId({
+  async getAnswersDiaryByDate({
     userId,
-    lastId,
+    date,
     limit,
     direction,
   }: {
     userId: number;
-    lastId: number;
+    date: string;
     limit: number;
     direction: number;
   }): Promise<Answer[]> {
-    const id = direction === 0 ? LessThan(lastId) : MoreThan(lastId);
+    const whereDate = direction === 0 ? LessThan(date) : MoreThan(date);
     return this.answersRepository.find({
       where: {
-        id,
+        date: whereDate,
         userId,
       },
       take: limit,
