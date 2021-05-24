@@ -8,7 +8,7 @@ const possible =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 export const ImageUploader = createParamDecorator(
-  async (data: unknown, ctx: ExecutionContext) => {
+  async (pathName: string, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const form = new formidable.IncomingForm();
     const file = await new Promise(function (resolve, reject) {
@@ -29,7 +29,7 @@ export const ImageUploader = createParamDecorator(
             fileName += possible.charAt(
               Math.floor(Math.random() * possible.length),
             );
-          const key = fileName + path.parse(file.name).ext;
+          const key = `${pathName}/${fileName}${path.parse(file.name).ext}`;
           s3.upload(
             {
               Bucket: process.env.buket as string,

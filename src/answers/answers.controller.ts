@@ -340,7 +340,10 @@ export class AnswersController {
     },
   })
   @Post('')
-  async post(@TokenUserId() userId, @ImageUploader() body): Promise<AnswerDto> {
+  async post(
+    @TokenUserId() userId,
+    @ImageUploader('answers') body,
+  ): Promise<AnswerDto> {
     try {
       const { file: imageUrl, content, missionId } = body;
       if ((!imageUrl && !content) || !missionId) {
@@ -435,7 +438,7 @@ export class AnswersController {
   @Put(':id')
   async put(
     @TokenUserId() userId,
-    @ImageUploader() body,
+    @ImageUploader('answers') body,
     @Id() id,
   ): Promise<AnswerDto> {
     try {

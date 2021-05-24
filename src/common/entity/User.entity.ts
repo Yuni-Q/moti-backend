@@ -49,4 +49,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Answer, (answers) => answers.user)
   answers: Answer[];
+
+  @Column('varchar', { name: 'profileUrl', nullable: true, length: 255 })
+  profileUrl: string | null;
 }
