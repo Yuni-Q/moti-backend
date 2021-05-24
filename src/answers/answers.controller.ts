@@ -155,26 +155,26 @@ export class AnswersController {
   @Get('diary')
   async diary(
     @TokenUserId() userId,
-    @Query('lastId') lastIdString,
+    @Query('date') dateString,
     @Query('limit') limitString,
     @Query('direction') directionString,
   ): Promise<DiaryAnswersDto> {
     try {
-      const lastId = parseInt(lastIdString || 0, 10);
+      const date = dateString ? getDateString({ date: dateString }) : null;
       const limit = parseInt(limitString || 100, 10);
       const direction = parseInt(directionString || 0, 10);
-      if (isNaN(lastId) || isNaN(limit) || isNaN(direction)) {
+      if (isNaN(limit) || isNaN(direction)) {
         throw new InvalidQueryException();
       }
-      const answers = lastId
-        ? await this.answersService.getAnswersDiaryByLastId({
+      const answers = date
+        ? await this.answersService.getAnswersDiaryByDate({
             userId,
-            lastId,
+            date,
             limit,
             direction,
           })
         : await await this.answersService.getAnswersDiary({ userId, limit });
-      return { data: { lastId, limit, direction, answers } };
+      return { data: { date, limit, direction, answers } };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
     }
