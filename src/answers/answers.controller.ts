@@ -138,9 +138,9 @@ export class AnswersController {
     description: '일기 형식으로 답변 조회',
   })
   @ApiQuery({
-    name: 'lastId',
+    name: 'date',
     required: false,
-    description: 'lastId',
+    description: 'date',
   })
   @ApiQuery({
     name: 'limit',

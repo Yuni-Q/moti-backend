@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConsumes,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -198,7 +199,21 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: UserDto,
-    description: '성공',
+    description: '프로필 필드 변경 성공',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: 'multipart/form-data',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: new InvalidUserIdException().statusCode,
