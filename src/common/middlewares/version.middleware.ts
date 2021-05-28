@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
 export class VersionMiddleware implements NestMiddleware {
-  private logger = new Logger('HTTP');
+  private logger = new Logger('VERSION');
 
   use(request: Request, response: Response, next: NextFunction): void {
     try {
@@ -30,6 +30,7 @@ export class VersionMiddleware implements NestMiddleware {
       next();
       return;
     }
+
     next();
   }
 }
