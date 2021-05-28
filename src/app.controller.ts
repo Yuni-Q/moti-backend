@@ -16,6 +16,11 @@ export class AppController {
     return { data: this.appService.getHello() };
   }
 
+  @Get('health')
+  getHealth(): any {
+    return 'OK';
+  }
+
   @Get('error')
   error(): any {
     throw new Error('error');
