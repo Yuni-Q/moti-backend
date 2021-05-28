@@ -10,7 +10,9 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "incremental": true,
     "baseUrl": "./",
-    "incremental": true
-  }
+    "jsx": "preserve"
+  },
+  "include": ["src/backend/**/*.ts"]
 }
