@@ -77,7 +77,7 @@ export default class CustomDocument extends Document<Props> {
           <meta property="og:description" content="yuni-q" />
           <meta property="og:site_name" content="yuni-q" />
           <meta property="og:locale" content="ko-KO" />
-          {Object.values(helmet).map((el) => el.toComponent())}
+          {Object.values(helmet).map((el: any) => el.toComponent())}
           <link rel="manifest" href="/manifest.json" />
           <link rel="shorcut icon" href="/favicon.png" />
           <meta name="theme-color" content="black" />
