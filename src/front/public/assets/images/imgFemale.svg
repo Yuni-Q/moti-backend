@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="92px" height="124px" viewBox="0 0 92 124" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>imgMan2 Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="imgMan2-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-65-Copy" transform="translate(15.000000, 0.000000)">
+            <path d="M1.70015,93.14055 C2.63865,93.14055 3.39965,93.90155 3.39965,94.84055 C3.39965,95.77955 2.63865,96.54055 1.70015,96.54055 C0.76115,96.54055 0.00015,95.77955 0.00015,94.84055 C0.00015,93.90155 0.76115,93.14055 1.70015,93.14055" id="Fill-1" fill="#F1DBCD"></path>
+            <path d="M8.1855,65.08365 C9.1245,65.08365 9.885,65.84465 9.885,66.78365 C9.885,67.72265 9.1245,68.48365 8.1855,68.48365 C7.2465,68.48365 6.4855,67.72265 6.4855,66.78365 C6.4855,65.84465 7.2465,65.08365 8.1855,65.08365" id="Fill-3" fill="#F1DBCD"></path>
+            <path d="M21.4355,29.8163 C22.3745,29.8163 23.135,30.5773 23.135,31.5163 C23.135,32.4553 22.3745,33.2163 21.4355,33.2163 C20.4965,33.2163 19.7355,32.4553 19.7355,31.5163 C19.7355,30.5773 20.4965,29.8163 21.4355,29.8163" id="Fill-5" fill="#F1DBCD"></path>
+            <path d="M53.13525,57.58535 C54.07425,57.58535 54.83525,58.34635 54.83525,59.28535 C54.83525,60.22435 54.07425,60.98535 53.13525,60.98535 C52.19675,60.98535 51.43575,60.22435 51.43575,59.28535 C51.43575,58.34635 52.19675,57.58535 53.13525,57.58535" id="Fill-7" fill="#F1DBCD"></path>
+            <path d="M61.02095,93.14055 C61.95995,93.14055 62.72045,93.90155 62.72045,94.84055 C62.72045,95.77955 61.95995,96.54055 61.02095,96.54055 C60.08195,96.54055 59.32095,95.77955 59.32095,94.84055 C59.32095,93.90155 60.08195,93.14055 61.02095,93.14055" id="Fill-9" fill="#F1DBCD"></path>
+            <line x1="1.70015" y1="94.8405" x2="61.02115" y2="94.8405" id="Stroke-11" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="31.38525" y1="87.39055" x2="31.38525" y2="110.24055" id="Stroke-13" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="31.38525" y1="72.0104" x2="31.38525" y2="81.1939" id="Stroke-15" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <polygon id="Fill-17" fill="#F1DBCD" points="30.10155 94.839 31.37405 93.566 32.64705 94.839 31.37405 96.1115"></polygon>
+            <path d="M46.33545,27.3605 C52.33545,31.9105 56.18545,39.1105 56.18545,47.1605 C56.18545,60.8605 45.08545,72.0105 31.33545,72.0105 C17.58545,72.0105 6.48545,60.9105 6.48545,47.1605 C6.48545,39.0605 10.33545,31.8605 16.33545,27.3605" id="Stroke-21" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M31.33545,37.7853 C36.80345,37.7853 41.23545,42.2178 41.23545,47.6853 C41.23545,53.1528 36.80345,57.5853 31.33545,57.5853 C25.86745,57.5853 21.43545,53.1528 21.43545,47.6853 C21.43545,42.2178 25.86745,37.7853 31.33545,37.7853" id="Fill-23" fill="#F1DBCD"></path>
+            <path d="M31.33545,19.76995 C41.88295,19.76995 50.43345,20.30095 50.43345,20.95595 C50.43345,21.61095 41.88295,22.14195 31.33545,22.14195 C20.78795,22.14195 12.23745,21.61095 12.23745,20.95595 C12.23745,20.30095 20.78795,19.76995 31.33545,19.76995 Z" id="Stroke-25" stroke="#F1DBCD" stroke-width="0.5"></path>
+            <path d="M31.33545,77.25505 C34.94395,77.25505 37.86845,80.18005 37.86845,83.78805 C37.86845,87.39655 34.94395,90.32155 31.33545,90.32155 C27.72695,90.32155 24.80245,87.39655 24.80245,83.78805 C24.80245,80.18005 27.72695,77.25505 31.33545,77.25505 Z" id="Stroke-27" stroke="#F1DBCD" stroke-width="0.5"></path>
+            <path d="M31.33545,28.5873 C41.88295,28.5873 50.43345,37.1378 50.43345,47.6853 C50.43345,58.2333 41.88295,66.7838 31.33545,66.7838 C20.78795,66.7838 12.23745,58.2333 12.23745,47.6853 C12.23745,37.1378 20.78795,28.5873 31.33545,28.5873 Z" id="Stroke-29" stroke="#F1DBCD" stroke-width="0.5005" stroke-dasharray="0.7055000066757202,0.7055000066757202"></path>
+            <path d="M27.7031,44.0529 C42.3411,29.4144 55.8346,19.1739 57.8406,21.1799 C59.8471,23.1864 49.6066,36.6794 34.9676,51.3179 C20.3296,65.9564 6.8366,76.1969 4.8301,74.1909 C2.8236,72.1849 13.0646,58.6914 27.7031,44.0529 Z" id="Stroke-31" stroke="#F1DBCD" stroke-width="0.5005" stroke-dasharray="0.7064999938011169,0.7064999938011169"></path>
+            <path d="M31.33545,115.2404 C32.27445,115.2404 33.03545,116.0014 33.03545,116.9404 C33.03545,117.8794 32.27445,118.6404 31.33545,118.6404 C30.39645,118.6404 29.63545,117.8794 29.63545,116.9404 C29.63545,116.0014 30.39645,115.2404 31.33545,115.2404 Z" id="Stroke-33" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M31.33545,110.2404 C31.94295,110.2404 32.43545,110.7329 32.43545,111.3404 C32.43545,111.9479 31.94295,112.4404 31.33545,112.4404 C30.72795,112.4404 30.23545,111.9479 30.23545,111.3404 C30.23545,110.7329 30.72795,110.2404 31.33545,110.2404 Z" id="Stroke-35" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M31.33545,121.4904 C31.94295,121.4904 32.43545,121.9829 32.43545,122.5904 C32.43545,123.1979 31.94295,123.6904 31.33545,123.6904 C30.72795,123.6904 30.23545,123.1979 30.23545,122.5904 C30.23545,121.9829 30.72795,121.4904 31.33545,121.4904" id="Fill-37" fill="#F1DBCD"></path>
+            <path d="M31.3105,18.2499 C32.1115,18.2499 32.76,18.8989 32.76,19.6999 C32.76,20.5004 32.1115,21.1499 31.3105,21.1499 C30.5095,21.1499 29.8605,20.5004 29.8605,19.6999 C29.8605,18.8989 30.5095,18.2499 31.3105,18.2499 Z" id="Stroke-41" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <line x1="34.0605" y1="18.1498" x2="39.3105" y2="15.0998" id="Stroke-43" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="32.9106" y1="16.9999" x2="36.9106" y2="10.0499" id="Stroke-45" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="29.76025" y1="16.9999" x2="25.76025" y2="10.0499" id="Stroke-47" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="28.61035" y1="18.1498" x2="23.36035" y2="15.0998" id="Stroke-49" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="30.5605" y1="16.6498" x2="29.3105" y2="11.8498" id="Stroke-51" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="29.11035" y1="17.44985" x2="25.66085" y2="13.89985" id="Stroke-53" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="28.3105" y1="18.84975" x2="23.51" y2="17.49975" id="Stroke-55" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="32.1606" y1="16.6498" x2="33.3601" y2="11.8498" id="Stroke-57" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="33.5605" y1="17.44985" x2="37.0605" y2="13.89985" id="Stroke-59" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="34.4106" y1="18.84975" x2="39.2106" y2="17.49975" id="Stroke-61" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+            <line x1="31.3105" y1="0.2499" x2="31.3105" y2="16.6499" id="Stroke-63" stroke="#F1DBCD" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"></line>
+        </g>
+    </g>
+</svg>

@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as Sentry from '@sentry/node';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
-import * as Sentry from '@sentry/node';
 import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 
 declare const module: any;

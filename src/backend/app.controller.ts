@@ -10,12 +10,11 @@ import { UndefinedToNullInterceptor } from './common/interceptors/undefined.inte
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  @UseInterceptors(TransformInterceptor)
-  getHello(): any {
-    return { data: this.appService.getHello() };
-  }
-
+  // @Get()
+  // @UseInterceptors(TransformInterceptor)
+  // getHello(): any {
+  //   return { data: this.appService.getHello() };
+  // }
   @Get('health')
   getHealth(): any {
     return 'OK';
