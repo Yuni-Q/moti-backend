@@ -124,10 +124,10 @@ export class User extends BaseEntity {
   @Column('text', { name: 'mission', nullable: true })
   mission: string | null;
 
-  // @ApiProperty({
-  //   type: Answer,
-  //   isArray: true,
-  // })
+  @ApiProperty({
+    type: Answer,
+    isArray: true,
+  })
   @OneToMany(() => Answer, (answers) => answers.user)
   answers: Answer[];
 }

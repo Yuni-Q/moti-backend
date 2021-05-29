@@ -67,10 +67,10 @@ export class File extends BaseEntity {
   @UpdateDateColumn({ type: 'datetime', name: 'updatedAt' })
   updatedAt: Date;
 
-  // @ApiProperty({
-  //   type: Answer,
-  //   isArray: true,
-  // })
+  @ApiProperty({
+    type: Answer,
+    isArray: true,
+  })
   @OneToMany(() => Answer, (answers) => answers.file)
   answers: Answer[];
 }

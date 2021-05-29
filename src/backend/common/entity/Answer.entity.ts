@@ -133,10 +133,10 @@ export class Answer extends BaseEntity {
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'fileId', referencedColumnName: 'id' }])
-  file: File | null;
+  file: File;
 
   @ApiProperty({
-    type: User,
+    type: OmitType(User, ['answers']),
   })
   @IsObject()
   @ManyToOne(() => User, (users) => users.answers, {
