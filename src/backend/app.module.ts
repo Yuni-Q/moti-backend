@@ -13,11 +13,8 @@ import { MissionsModule } from './missions/missions.module';
 import { QuestionsModule } from './questions/questions.module';
 import { SigninModule } from './signin/signin.module';
 import { UsersModule } from './users/users.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { ViewsModule } from './views/views.module';
-import { join } from 'path';
 
-console.log(999, join(__dirname, '..', 'static'));
 @Module({
   imports: [
     ConfigModule.forRoot(),

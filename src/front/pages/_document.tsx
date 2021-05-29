@@ -33,8 +33,8 @@ export default class CustomDocument extends Document<Props> {
             sheet.collectStyles(<App {...props} />),
         });
       const initialProps = await Document.getInitialProps(context);
-      const page = context.renderPage((App) => (props) =>
-        sheet.collectStyles(<App {...props} />),
+      const page = context.renderPage(
+        (App) => (props) => sheet.collectStyles(<App {...props} />),
       );
       const styles = (
         <>

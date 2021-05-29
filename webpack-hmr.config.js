@@ -5,7 +5,6 @@ module.exports = function (options, webpack) {
   return {
     ...options,
     entry: ['webpack/hot/poll?100', options.entry],
-    watch: true,
     externals: [
       nodeExternals({
         allowlist: ['webpack/hot/poll?100'],
