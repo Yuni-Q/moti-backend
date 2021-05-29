@@ -8,12 +8,14 @@ export class ResponseDto {
     required: true,
   })
   public status?: number;
+
   @ApiProperty({
     example: HttpStatus.OK,
     description: 'custom 상태 코드',
     required: true,
   })
   public statusCode?: number;
+
   @ApiProperty({
     example: '',
     description: '에러 메시지',
