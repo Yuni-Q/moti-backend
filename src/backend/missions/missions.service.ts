@@ -44,11 +44,7 @@ export class MissionsService {
     return user?.refreshDate === date;
   }
 
-  getOldMission({
-    mission,
-  }: {
-    mission: string;
-  }): {
+  getOldMission({ mission }: { mission: string }): {
     date: string;
     missions: Mission[];
   } {

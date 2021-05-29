@@ -3,6 +3,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -33,6 +34,7 @@ import {
 import { FilesService } from 'src/backend/files/files.service';
 import { MissionsService } from 'src/backend/missions/missions.service';
 import { InvalidQueryException } from '../common/exception/invalid.query.exception';
+import { QueryNumberValidationPipe } from '../common/pipe/query.number.validation.pipe';
 import { AnswersService } from './answers.service';
 import { AnswerDaysDto } from './dto/answer.days.dto';
 import { AnswerDto } from './dto/answer.dto';
@@ -160,16 +162,11 @@ export class AnswersController {
   async diary(
     @TokenUserId() userId,
     @Query('date') dateString,
-    @Query('limit') limitString,
-    @Query('direction') directionString,
+    @Query('limit', new QueryNumberValidationPipe(100)) limit,
+    @Query('direction', new QueryNumberValidationPipe(0)) direction,
   ): Promise<DiaryAnswersDto> {
     try {
       const date = dateString ? getDateString({ date: dateString }) : null;
-      const limit = parseInt(limitString || 100, 10);
-      const direction = parseInt(directionString || 0, 10);
-      if (isNaN(limit) || isNaN(direction)) {
-        throw new InvalidQueryException();
-      }
       const answers = date
         ? await this.answersService.getAnswersDiaryByDate({
             userId,

@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -22,11 +23,10 @@ import { TokenUserId } from 'src/backend/common/decorators/token.user.id.decorat
 import { User } from 'src/backend/common/entity/User.entity';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
-import { RequireIdException } from 'src/backend/common/exception/require.id.exception';
 import { RequireTokenException } from 'src/backend/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { ImageUploader } from '../common/decorators/image.uploader.decorator';
-import { ValidBody } from './decorators/valid.body';
+import { QueryNumberValidationPipe } from '../common/pipe/query.number.validation.pipe';
 import { DeleteUserDto } from './dto/delete.user.dto';
 import { UserBodyDto } from './dto/user.body.dto';
 import { UserDto } from './dto/user.dto';
@@ -60,14 +60,9 @@ export class UsersController {
   @Get()
   async getAll(
     @TokenUserId() userId: User,
-    @Query('id') idString: string,
+    @Query('id', new QueryNumberValidationPipe(10)) id,
   ): Promise<UsersDto> {
     try {
-      const id = parseInt(idString, 10);
-      if (isNaN(id)) {
-        console.log(id);
-        throw new RequireIdException();
-      }
       const users = await this.usersService.getAll(id);
       return { data: users };
     } catch (error) {
@@ -105,6 +100,15 @@ export class UsersController {
   @Get(':id')
   async getUserInfo(
     @TokenUserId() userId: User,
+    // @Param(
+    //   'id',
+    //   new ParseIntPipe({
+    //     exceptionFactory: (err) => {
+    //       throw new RequireIdException();
+    //     },
+    //   }),
+    // )
+    // id: number,
     @Id() id: number,
   ): Promise<UserDto> {
     try {
@@ -139,7 +143,7 @@ export class UsersController {
   @Put('')
   async updateUser(
     @TokenUserId() userId,
-    @ValidBody() body: UserBodyDto,
+    @Body() body: UserBodyDto,
   ): Promise<UserDto> {
     try {
       const user = await this.usersService.checkUser({ id: userId });

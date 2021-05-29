@@ -1,10 +1,4 @@
-import {
-  Controller,
-  HttpStatus,
-  Logger,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -63,10 +57,8 @@ export class SigninController {
       if (!user?.id) {
         throw new InvalidUserIdException();
       }
-      const {
-        accessToken,
-        refreshToken,
-      } = await this.SigninService.createToken(user);
+      const { accessToken, refreshToken } =
+        await this.SigninService.createToken(user);
       const signUp =
         !!user.name && !!user.birthday && !!user.email && !!user.gender;
       return {
@@ -121,10 +113,8 @@ export class SigninController {
       const newUser = user
         ? user
         : await this.usersService.createUser({ snsId, snsType, email } as User);
-      const {
-        accessToken,
-        refreshToken,
-      } = await this.SigninService.createToken(newUser);
+      const { accessToken, refreshToken } =
+        await this.SigninService.createToken(newUser);
       return {
         status: HttpStatus.CREATED,
         data: { accessToken, refreshToken, signUp },

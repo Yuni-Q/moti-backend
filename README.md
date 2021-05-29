@@ -164,7 +164,12 @@
 ## TODO
 
 - save 시 entity 활용하기
-- body validate 사용하기
 - 이미지 업로드 multer로 변경
 - db query entity로 옮기기
-- nest-next 만들기
+- PickType으로 중복 줄이기
+  - Partial : 옵셔널로 바꾸기
+  - Pick : 원하는 것만 뽑아오기
+  - Omit : 몇개만 지우고 싶을 때
+  - IntersectionType : 타입 2개 합칠때
+  - Composition : 위에 타입들을 섞어 쓸 수 있다.
+- class-validator 적용
