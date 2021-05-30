@@ -39,7 +39,6 @@ export const getLastDate = (now: Dayjs) => {
     parseInt(date.format('MM'), 10),
     0,
   );
-  console.log(222, day);
   return dayjs(day).locale('ko').format('YYYY-MM-DD');
 };
 

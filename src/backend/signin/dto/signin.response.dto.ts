@@ -9,6 +9,7 @@ export class SigninResponseDto extends ResponseDto {
     required: true,
   })
   public status?: number;
+
   @ApiProperty({
     example: {
       accessToken: 'accessToken',

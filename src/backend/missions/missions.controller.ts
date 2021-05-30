@@ -228,12 +228,11 @@ export class MissionsController {
     date: string;
     userId: number;
   }) {
-    const oneYearData = await this.answersService.getAnswersByUserIdAndDateRange(
-      {
+    const oneYearData =
+      await this.answersService.getAnswersByUserIdAndDateRange({
         userId,
         dateGt: oneYearAgo,
-      },
-    );
+      });
     const ids = [] as number[];
     oneYearData.forEach((answer: Answer) => {
       if (this.missionsService.hasMissionInAnswer({ answer, date })) {

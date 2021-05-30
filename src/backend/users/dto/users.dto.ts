@@ -1,27 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { isArray } from 'class-validator';
 import { ResponseDto } from 'src/backend/common/dto/response.dto';
 import { User } from 'src/backend/common/entity/User.entity';
 
 export class UsersDto extends ResponseDto {
   @ApiProperty({
-    example: [
-      {
-        id: 1,
-        birthday: '2020-03-18',
-        email: 'moti@gmail.com',
-        name: '모티',
-        gender: '여',
-        refreshDate: null,
-        refreshToken: null,
-        mission: null,
-        snsId: '1',
-        snsType: 'google',
-        createdAt: '2020-03-19T15:27:18.000Z',
-        updatedAt: '2020-03-19T15:27:18.000Z',
-      },
-    ],
-    description: '유저 정보 배열',
-    required: true,
+    type: OmitType(User, ['answers']),
+    isArray: true,
   })
   public data: User[];
 }

@@ -4,14 +4,7 @@ import { Question } from 'src/backend/common/entity/Question.entity';
 
 export class QuestionDto extends ResponseDto {
   @ApiProperty({
-    example: {
-      id: 1,
-      content: '나는 누구인가?',
-      updatedAt: '2020-02-23T08:07:59.120Z',
-      createdAt: '2020-02-23T08:07:59.120Z',
-    },
-    description: '질문',
-    required: true,
+    type: Question,
   })
   public data: Question;
 }

@@ -10,21 +10,16 @@ class DiaryAnswers {
   @ApiProperty({
     example: 0,
   })
-  direction: 0;
+  direction: number;
   @ApiProperty({
     example: 10,
   })
-  limit: 10;
+  limit: number;
   @ApiProperty({ type: Answer, isArray: true })
   answers: Answer[];
 }
 
 export class DiaryAnswersDto extends ResponseDto {
   @ApiProperty({ type: DiaryAnswers })
-  data: {
-    date: string;
-    limit: number;
-    direction: number;
-    answers: Answer[];
-  };
+  data: DiaryAnswers;
 }

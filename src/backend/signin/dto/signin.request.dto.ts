@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class SigninRequestDto {
   @ApiProperty({
@@ -6,5 +7,7 @@ export class SigninRequestDto {
     description: 'sns type',
     required: true,
   })
+  @IsString()
+  @IsNotEmpty()
   public snsType: string;
 }

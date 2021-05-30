@@ -3,7 +3,6 @@ import {
   Delete,
   Get,
   HttpStatus,
-  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -33,7 +32,6 @@ import {
 } from 'src/backend/common/util/date';
 import { FilesService } from 'src/backend/files/files.service';
 import { MissionsService } from 'src/backend/missions/missions.service';
-import { InvalidQueryException } from '../common/exception/invalid.query.exception';
 import { QueryNumberValidationPipe } from '../common/pipe/query.number.validation.pipe';
 import { AnswersService } from './answers.service';
 import { AnswerDaysDto } from './dto/answer.days.dto';
@@ -265,10 +263,9 @@ export class AnswersController {
   @Get('month')
   async month(
     @TokenUserId() userId,
-    @Query('date') dateString,
+    @Query('date') date,
   ): Promise<MonthAnswersDto> {
     try {
-      const date = dateString ? getDateString({ date: dateString }) : null;
       const now = getNow(date);
       const { firstDate, lastDate } = getMonthDate(now);
       const notGroupAnswers = await this.answersService.getMonthAnswers({
@@ -284,7 +281,7 @@ export class AnswersController {
         {},
       );
       const monthAnswer = Object.values(answers) as Answer[][];
-      return { data: { date, monthAnswer } };
+      return { data: { date: getDateString({ date }), monthAnswer } };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
     }
