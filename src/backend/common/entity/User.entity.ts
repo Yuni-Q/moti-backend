@@ -1,11 +1,5 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  isString,
-  IsString,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
   Column,
@@ -16,7 +10,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Answer } from './Answer.entity';
-import { Mission } from './Mission.entity';
 
 @Entity('users', { schema: 'chocopie' })
 export class User extends BaseEntity {
