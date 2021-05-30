@@ -1,4 +1,10 @@
-import { Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -16,7 +22,6 @@ import { TransformInterceptor } from 'src/backend/common/interceptors/transformI
 import { InvalidUserIdException } from 'src/backend/users/exception/invalid.user.id.dto';
 import { UsersService } from 'src/backend/users/users.service';
 import { Token } from './decorators/token.decorator';
-import { ValidBody } from './decorators/valid.body';
 import { SigninRequestDto } from './dto/signin.request.dto';
 import { SigninResponseDto } from './dto/signin.response.dto';
 import { ValidTokenException } from './exception/valid.token.exception';
@@ -86,7 +91,7 @@ export class SigninController {
   @Post('')
   async signin(
     @Token() token: string,
-    @ValidBody() body: SigninRequestDto,
+    @Body() body: SigninRequestDto,
   ): Promise<SigninResponseDto> {
     try {
       const { snsType } = body;

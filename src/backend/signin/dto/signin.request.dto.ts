@@ -7,7 +7,7 @@ export class SigninRequestDto {
     description: 'sns type',
     required: true,
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: '필수 파라이터가 없습니다.' })
+  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public snsType: string;
 }

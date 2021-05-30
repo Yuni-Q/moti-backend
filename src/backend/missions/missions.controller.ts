@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -24,7 +25,6 @@ import { RequireTokenException } from 'src/backend/common/exception/require.toke
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { getDateString } from 'src/backend/common/util/date';
 import { UsersService } from 'src/backend/users/users.service';
-import { ValidBody } from './decorators/valid.body';
 import { DeleteMissionDto } from './dto/delete.mission.dto';
 import { MissionBodyDto } from './dto/mission.body.dto';
 import { MissionDto } from './dto/mission.dto';
@@ -141,7 +141,10 @@ export class MissionsController {
     description: 'body',
   })
   @Post()
-  async create(@TokenUserId() userId, @ValidBody() body): Promise<MissionDto> {
+  async create(
+    @TokenUserId() _,
+    @Body() body: MissionBodyDto,
+  ): Promise<MissionDto> {
     try {
       const mission = await this.missionsService.createMission(body);
       return { status: HttpStatus.CREATED, data: mission };
@@ -177,8 +180,8 @@ export class MissionsController {
   })
   @Put(':id')
   async update(
-    @TokenUserId() userId,
-    @ValidBody() body,
+    @TokenUserId() _,
+    @Body() body: MissionBodyDto,
     @Id() id,
   ): Promise<MissionDto> {
     try {

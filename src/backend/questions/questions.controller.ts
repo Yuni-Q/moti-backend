@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpStatus,
@@ -10,7 +11,6 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { InvalidQueryException } from 'src/backend/common/exception/invalid.query.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
-import { ValidBody } from './decorators/valid.body';
 import { QuestionDto } from './dto/question.dto';
 import { QuestionsDto } from './dto/questions.dto';
 import { QuestionsPostRequestDto } from './dto/questions.post.request.dto';
@@ -29,7 +29,7 @@ export class QuestionsController {
   })
   @ApiOperation({ summary: '질문 등록' })
   @Post('')
-  async post(@ValidBody() body: QuestionsPostRequestDto): Promise<QuestionDto> {
+  async post(@Body() body: QuestionsPostRequestDto): Promise<QuestionDto> {
     try {
       const result = await this.QuestionsService.createQuestion(body.content);
       return { status: HttpStatus.CREATED, data: result };

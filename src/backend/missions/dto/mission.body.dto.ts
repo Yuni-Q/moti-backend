@@ -7,34 +7,37 @@ export class MissionBodyDto {
     description: '질문 제목',
     required: true,
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: '필수 파라이터가 없습니다.' })
+  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public title: string;
 
-  @IsBoolean()
-  @IsNotEmpty()
   @ApiProperty({
     example: true,
     description: '글 포함 유무',
     required: true,
   })
+  @IsBoolean({ message: '필수 파라이터가 없습니다.' })
+  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public isContent: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
   @ApiProperty({
     example: false,
     description: '이미지 포함 유무',
     required: true,
   })
+  @IsBoolean({ message: '필수 파라이터가 없습니다.' })
+  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public isImage: boolean;
 
-  @IsNumber()
-  @IsNotEmpty()
   @ApiProperty({
     example: 30,
     description: '질문 다시 묻지 않을 기간',
     required: true,
   })
+  @IsNumber(
+    { allowNaN: false, allowInfinity: false },
+    { message: '필수 파라이터가 없습니다.' },
+  )
+  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public cycle: number;
 }
