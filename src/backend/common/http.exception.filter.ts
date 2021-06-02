@@ -20,6 +20,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       data?: any;
       error?: string;
     }; // class-validator type
+    if (status === 403) {
+      err.statusCode = 1100
+      err.message = '올바르지 못한 토큰 입니다.'
+    }
     if (err.message instanceof Array) {
       return response.status(status).json({
         status: HttpStatus.PRECONDITION_FAILED,
@@ -31,7 +35,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (err.message) {
       return response.status(status).json({
-        status: status,
+        status: err.statusCode || status,
         statusCode: err.statusCode || status,
         message: err.message,
         data: err?.data?.data,
@@ -39,7 +43,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     response.status(status).json({
-      status: status,
+      status: err.statusCode || status,
       statusCode: err.statusCode || status,
       message: err,
       data: err?.data?.data,

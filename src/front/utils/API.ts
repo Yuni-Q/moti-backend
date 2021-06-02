@@ -135,9 +135,8 @@ export default class API<EXTRA = {}> {
       return Promise.reject();
 
     return this.axiosInstance({
-      url: `${
-        API.HOSTNAME + this.prefix + url
-      }${tsType}__ts=${new Date().getTime()}`,
+      url: `${API.HOSTNAME + this.prefix + url
+        }${tsType}__ts=${new Date().getTime()}`,
       method,
       headers: opt.headers,
       data: method !== 'GET' ? data : undefined,
@@ -155,7 +154,7 @@ export default class API<EXTRA = {}> {
             API.SERVER_TIME_GAP =
               (dayjs(parseInt(timestamp.toString(), 10)).toDate().getTime() -
                 new Date().getTime()) /
-                1000 ||
+              1000 ||
               API.SERVER_TIME_GAP ||
               0;
 
@@ -185,9 +184,9 @@ export default class API<EXTRA = {}> {
         return Promise.reject(
           result && result.data
             ? result.data.statusMessage ||
-                result.data.message ||
-                result.data.error ||
-                result.data.errorMessage
+            result.data.message ||
+            result.data.error ||
+            result.data.errorMessage
             : null,
         );
       })
@@ -229,9 +228,9 @@ export default class API<EXTRA = {}> {
         return Promise.reject(
           errorData
             ? errorData.statusMessage ||
-                errorData.message ||
-                errorData.error ||
-                errorData.errorMessage
+            errorData.message ||
+            errorData.error ||
+            errorData.errorMessage
             : null,
         );
       });
