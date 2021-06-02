@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Put,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -25,6 +26,7 @@ import { RequireTokenException } from 'src/backend/common/exception/require.toke
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { getDateString } from 'src/backend/common/util/date';
 import { UsersService } from 'src/backend/users/users.service';
+import { LoginGuard } from '../common/guard/login.guard';
 import { DeleteMissionDto } from './dto/delete.mission.dto';
 import { MissionBodyDto } from './dto/mission.body.dto';
 import { MissionDto } from './dto/mission.dto';
@@ -47,7 +49,7 @@ export class MissionsController {
     private readonly missionsService: MissionsService,
     private readonly answersService: AnswersService,
     private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -140,9 +142,9 @@ export class MissionsController {
     required: true,
     description: 'body',
   })
+  @UseGuards(LoginGuard)
   @Post()
   async create(
-    @TokenUserId() _,
     @Body() body: MissionBodyDto,
   ): Promise<MissionDto> {
     try {
@@ -178,9 +180,9 @@ export class MissionsController {
     required: true,
     description: 'path',
   })
+  @UseGuards(LoginGuard)
   @Put(':id')
   async update(
-    @TokenUserId() _,
     @Body() body: MissionBodyDto,
     @Id() id,
   ): Promise<MissionDto> {
