@@ -8,7 +8,7 @@ export class ViewsService implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     try {
-      this.server = next({ dev: true, dir: './src/front' });
+      this.server = next({ dev: process.env.NODE_ENV !== 'production', dir: './src/front' });
       await this.server.prepare();
     } catch (error) {
       console.log(error);
