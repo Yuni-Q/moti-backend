@@ -14,11 +14,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
-import { ImageUploaderLiveName } from 'src/backend/common/decorators/image.uploade.live.name.decorator';
+import { ImageUploaderLiveName } from 'src/backend/common/decorators/image-uploade-live-name.decorator';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
-import { DeleteFileDto } from './dto/delete.file.dto';
+import { DeleteFileDto } from './dto/delete-file.dto';
 import { FileDto } from './dto/file.dto';
 import { FilesService } from './files.service';
 
@@ -26,7 +26,7 @@ import { FilesService } from './files.service';
 @ApiTags('files')
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) {}
+  constructor(private readonly filesService: FilesService) { }
 
   @ApiResponse({
     status: HttpStatus.OK,

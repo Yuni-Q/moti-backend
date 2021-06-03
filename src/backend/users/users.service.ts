@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/backend/common/entity/User.entity';
 import { MoreThan, Repository } from 'typeorm';
-import { InvalidUserIdException } from './exception/invalid.user.id.dto';
+import { InvalidUserIdException } from './exception/invalid-user-id.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async createUser(body: User): Promise<User> {
     const user = await this.userRepository.create({ ...body });

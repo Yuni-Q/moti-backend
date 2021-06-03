@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { AnswersService } from 'src/backend/answers/answers.service';
 import { Id } from 'src/backend/common/decorators/id.decorator';
-import { TokenUserId } from 'src/backend/common/decorators/token.user.id.decorator';
+import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
 import { Answer } from 'src/backend/common/entity/Answer.entity';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
@@ -27,12 +27,12 @@ import { TransformInterceptor } from 'src/backend/common/interceptors/transformI
 import { getDateString } from 'src/backend/common/util/date';
 import { UsersService } from 'src/backend/users/users.service';
 import { LoginGuard } from '../common/guard/login.guard';
-import { DeleteMissionDto } from './dto/delete.mission.dto';
-import { MissionBodyDto } from './dto/mission.body.dto';
+import { DeleteMissionDto } from './dto/delete-mission.dto';
+import { MissionBodyDto } from './dto/mission-body.dto';
 import { MissionDto } from './dto/mission.dto';
 import { MissionsDto } from './dto/missions.dto';
-import { InsufficientRefreshCountException } from './exception/insufficient.refresh.count.exception';
-import { InvalidMissionIdException } from './exception/invalid.mission.id.exception';
+import { InsufficientRefreshCountException } from './exception/insufficient-refresh-count.exception';
+import { InvalidMissionIdException } from './exception/invalid-mission-id.exception';
 import { MissionsService } from './missions.service';
 
 @ApiResponse({

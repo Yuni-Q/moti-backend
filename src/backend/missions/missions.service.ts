@@ -5,15 +5,15 @@ import { Mission } from 'src/backend/common/entity/Mission.entity';
 import { User } from 'src/backend/common/entity/User.entity';
 import { getDateString } from 'src/backend/common/util/date';
 import { Repository } from 'typeorm';
-import { MissionBodyDto } from './dto/mission.body.dto';
-import { InvalidMissionIdException } from './exception/invalid.mission.id.exception';
+import { MissionBodyDto } from './dto/mission-body.dto';
+import { InvalidMissionIdException } from './exception/invalid-mission-id.exception';
 
 @Injectable()
 export class MissionsService {
   constructor(
     @InjectRepository(Mission)
     private missionRepository: Repository<Mission>,
-  ) {}
+  ) { }
   async deleteMission(body) {
     await this.missionRepository.remove(body);
   }

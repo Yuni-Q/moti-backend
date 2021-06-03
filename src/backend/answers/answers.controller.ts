@@ -18,8 +18,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
-import { ImageUploader } from 'src/backend/common/decorators/image.uploader.decorator';
-import { TokenUserId } from 'src/backend/common/decorators/token.user.id.decorator';
+import { ImageUploader } from 'src/backend/common/decorators/image-uploader.decorator';
+import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
 import { Answer } from 'src/backend/common/entity/Answer.entity';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
@@ -32,7 +32,7 @@ import {
 } from 'src/backend/common/util/date';
 import { FilesService } from 'src/backend/files/files.service';
 import { MissionsService } from 'src/backend/missions/missions.service';
-import { QueryNumberValidationPipe } from '../common/pipe/query.number.validation.pipe';
+import { QueryNumberValidationPipe } from '../common/pipe/query-number.validation.pipe';
 import { AnswersService } from './answers.service';
 import { AnswerDaysDto } from './dto/answer.days.dto';
 import { AnswerDto } from './dto/answer.dto';
@@ -60,7 +60,7 @@ export class AnswersController {
     private readonly answersService: AnswersService,
     private readonly missionsService: MissionsService,
     private readonly filesService: FilesService,
-  ) {}
+  ) { }
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -119,14 +119,14 @@ export class AnswersController {
       const answer = await this.answersService.getAnswerByUserId({ userId });
       const recentAnswers = !!answer?.setDate
         ? await this.answersService.getRecentAnswers({
-            userId,
-            setDate: answer.setDate,
-          })
+          userId,
+          setDate: answer.setDate,
+        })
         : ([] as Answer[]);
       // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
       const answers =
         !!recentAnswers &&
-        !this.answersService.hasSixParsAndNotToday(recentAnswers)
+          !this.answersService.hasSixParsAndNotToday(recentAnswers)
           ? recentAnswers
           : [];
       const today = getDateString({});
@@ -167,11 +167,11 @@ export class AnswersController {
       const date = dateString ? getDateString({ date: dateString }) : null;
       const answers = date
         ? await this.answersService.getAnswersDiaryByDate({
-            userId,
-            date,
-            limit,
-            direction,
-          })
+          userId,
+          date,
+          limit,
+          direction,
+        })
         : await await this.answersService.getAnswersDiary({ userId, limit });
       return { data: { date, limit, direction, answers } };
     } catch (error) {
@@ -200,9 +200,9 @@ export class AnswersController {
       for (let i = 0; i < 4; i++) {
         answer = answerId
           ? await this.answersService.getAnswerByUserIdAndLessThanId({
-              userId,
-              answerId,
-            })
+            userId,
+            answerId,
+          })
           : await this.answersService.getAnswerByUserId({ userId });
         if (!answer) {
           break;
@@ -362,9 +362,9 @@ export class AnswersController {
       // 데이터가 있어야 무언가를 할수가...
       const recentAnswers: Answer[] = !!lastAnswer?.setDate
         ? await this.answersService.getRecentAnswers({
-            userId,
-            setDate: lastAnswer.setDate,
-          })
+          userId,
+          setDate: lastAnswer.setDate,
+        })
         : [];
       // 6개의 파츠를 모두 모았다면 새로운 파츠를 시작한다.
       const setDate = this.answersService.getSetDate(recentAnswers);

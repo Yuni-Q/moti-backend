@@ -163,8 +163,6 @@
 
 ## TODO
 
-- 사용자 토큰 검사를 커스텀 guard로 설정하는걸 고려
-- HttpException / Exception Filters 사용하기
 - 이미지 업로드 multer로 변경
 - PickType으로 중복 줄이기
   - Partial : 옵셔널로 바꾸기
@@ -172,3 +170,4 @@
   - Omit : 몇개만 지우고 싶을 때
   - IntersectionType : 타입 2개 합칠때
   - Composition : 위에 타입들을 섞어 쓸 수 있다.
+- token에서 id 가져올 때 user entity에서 검증

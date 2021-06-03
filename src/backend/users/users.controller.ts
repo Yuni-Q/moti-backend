@@ -19,19 +19,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
-import { TokenUserId } from 'src/backend/common/decorators/token.user.id.decorator';
+import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
 import { User } from 'src/backend/common/entity/User.entity';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/backend/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
-import { ImageUploader } from '../common/decorators/image.uploader.decorator';
-import { QueryNumberValidationPipe } from '../common/pipe/query.number.validation.pipe';
-import { DeleteUserDto } from './dto/delete.user.dto';
-import { UserBodyDto } from './dto/user.body.dto';
+import { ImageUploader } from '../common/decorators/image-uploader.decorator';
+import { QueryNumberValidationPipe } from '../common/pipe/query-number.validation.pipe';
+import { DeleteUserDto } from './dto/delete-user.dto';
+import { UserBodyDto } from './dto/user-body.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersDto } from './dto/users.dto';
-import { InvalidUserIdException } from './exception/invalid.user.id.dto';
+import { InvalidUserIdException } from './exception/invalid-user-id.dto';
 import { UsersService } from './users.service';
 
 @UseInterceptors(TransformInterceptor)
@@ -44,7 +44,7 @@ import { UsersService } from './users.service';
 @ApiTags('users')
 @Controller('api/v1/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @ApiResponse({
     status: HttpStatus.OK,

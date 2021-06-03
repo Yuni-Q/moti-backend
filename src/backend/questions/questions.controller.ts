@@ -13,14 +13,14 @@ import { InvalidQueryException } from 'src/backend/common/exception/invalid.quer
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { QuestionDto } from './dto/question.dto';
 import { QuestionsDto } from './dto/questions.dto';
-import { QuestionsPostRequestDto } from './dto/questions.post.request.dto';
+import { QuestionsPostRequestDto } from './dto/questions-post-request.dto';
 import { QuestionsService } from './questions.service';
 
 @UseInterceptors(TransformInterceptor)
 @ApiTags('questions')
 @Controller('api/v1/questions')
 export class QuestionsController {
-  constructor(private readonly QuestionsService: QuestionsService) {}
+  constructor(private readonly QuestionsService: QuestionsService) { }
 
   @ApiResponse({
     status: HttpStatus.CREATED,

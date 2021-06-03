@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/http.exception.filter';
+import { HttpExceptionFilter } from './common/http-exception.filter';
 import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 
 declare const module: any;
