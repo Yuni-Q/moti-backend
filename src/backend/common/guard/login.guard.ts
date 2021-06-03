@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
+import { User } from '../entity/User.entity';
 
 
 // 권한 설정 같이 사용할 수 있을거 같습니다.
@@ -33,6 +34,10 @@ export class LoginGuard implements CanActivate {
       (!('user' in result) || !result.user.id)
     ) {
       console.log('token.user.id.decorator token2', token);
+      return false
+    }
+    const user = await User.findOne({ where: { id: result.user.id } })
+    if (!user?.id) {
       return false
     }
     return true

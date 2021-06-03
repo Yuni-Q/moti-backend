@@ -1,5 +1,6 @@
-import { createParamDecorator, ExecutionContext, Logger } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
+import { User } from '../entity/User.entity';
 import { InvalidTokenException } from '../exception/invalid.token.exception';
 import { RequireTokenException } from '../exception/require.token.exception';
 
@@ -30,6 +31,10 @@ export const TokenUserId = createParamDecorator(
       (!('user' in result) || !result.user.id)
     ) {
       console.log('token.user.id.decorator token2', token);
+      throw new InvalidTokenException();
+    }
+    const user = await User.findOne({ where: { id: result.user.id } })
+    if (!user?.id) {
       throw new InvalidTokenException();
     }
     return result.user.id as number;
