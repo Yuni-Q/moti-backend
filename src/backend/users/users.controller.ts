@@ -44,7 +44,7 @@ import { UsersService } from './users.service';
 @ApiTags('users')
 @Controller('api/v1/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
     status: HttpStatus.OK,

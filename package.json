@@ -12,15 +12,15 @@
     "start": "nest start",
     "pm2": "npx pm2 kill && NODE_ENV=production npx pm2 start ./dist/main.js",
     "start:dev-backup": "nest start --watch",
-    "start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
+    "start:dev": "NODE_ENV=test nest build --webpack --webpackPath webpack-hmr.config.js --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "NODE_ENV=test jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "NODE_ENV=test jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",
@@ -43,6 +43,7 @@
     "googleapis": "^74.2.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "multer-s3": "^2.9.0",
     "mysql2": "^2.2.5",
     "nest-morgan": "^2.0.0",
     "next": "^10.2.3",
@@ -55,6 +56,7 @@
     "rimraf": "^3.0.2",
     "run-script-webpack-plugin": "0.0.8",
     "rxjs": "^6.6.6",
+    "sqlite3": "^5.0.2",
     "styled-components": "^5.3.0",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.31",
@@ -67,6 +69,8 @@
     "@nestjs/testing": "^7.6.13",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.20",
+    "@types/multer": "^1.4.5",
+    "@types/multer-s3": "^2.7.9",
     "@types/node": "^14.14.35",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
@@ -84,11 +88,6 @@
     "typescript": "^4.1.5"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -98,6 +97,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }

@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/backend/app.module';
+import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -12,13 +13,15 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    // class-validator 적용
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  it('/ (GET)', async () => {
+    const response = await request(app.getHttpServer()).get('/health');
+    expect(response.status).toBe(200);
+    expect(response.text).toBe('OK');
   });
 });

@@ -15,10 +15,6 @@ import { File } from './File.entity';
 import { Mission } from './Mission.entity';
 import { User } from './User.entity';
 
-const MissionInAnswer = OmitType(Mission, ['answers']);
-const FileInAnswer = OmitType(File, ['answers']);
-const UserInAnswer = OmitType(User, ['answers']);
-
 @Index('missionId', ['missionId'], {})
 @Index('fileId', ['fileId'], {})
 @Index('userId', ['userId'], {})
@@ -136,7 +132,7 @@ export class Answer extends BaseEntity {
   file: File;
 
   @ApiProperty({
-    type: OmitType(User, ['answers']),
+    type: User,
   })
   @IsObject()
   @ManyToOne(() => User, (users) => users.answers, {
