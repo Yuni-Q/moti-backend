@@ -154,7 +154,7 @@ export class AnswersController {
   @ApiQuery({
     name: 'direction',
     required: false,
-    description: 'direction',
+    description: 'direction (0: get older diaries, 1: get new diaries)',
   })
   @Get('diary')
   async diary(
@@ -165,7 +165,7 @@ export class AnswersController {
   ): Promise<DiaryAnswersDto> {
     try {
       const date = dateString ? getDateString({ date: dateString }) : null;
-      const answers = date
+      let answers = date
         ? await this.answersService.getAnswersDiaryByDate({
           userId,
           date,
@@ -173,6 +173,20 @@ export class AnswersController {
           direction,
         })
         : await await this.answersService.getAnswersDiary({ userId, limit });
+      
+      if (date && direction === 0) {
+        // 날짜 오름차순으로 재 정렬
+        answers = answers.sort((answer, compareAnswer) => {
+          const answerDate = answer.date
+          const compareAnswerDate = compareAnswer.date
+
+          if (answerDate < compareAnswerDate) {
+            return -1;
+          }
+
+          return 1;
+        });
+      }
       return { data: { date, limit, direction, answers } };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message);
