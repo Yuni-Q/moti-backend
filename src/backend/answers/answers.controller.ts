@@ -177,14 +177,9 @@ export class AnswersController {
       if (date && direction === 0) {
         // 날짜 오름차순으로 재 정렬
         answers = answers.sort((answer, compareAnswer) => {
-          const answerDate = answer.date
-          const compareAnswerDate = compareAnswer.date
-
-          if (answerDate < compareAnswerDate) {
-            return -1;
-          }
-
-          return 1;
+          const answerDate = new Date(answer.date);
+          const compareAnswerDate = new Date(compareAnswer.date);
+          return answerDate.getTime() - compareAnswerDate.getTime();
         });
       }
       return { data: { date, limit, direction, answers } };
