@@ -106,6 +106,7 @@ export class AnswersService {
     direction: number;
   }): Promise<Answer[]> {
     const whereDate = direction === 0 ? LessThan(date) : MoreThan(date);
+    const orderById = direction === 0 ? "DESC" : "ASC";
     return this.answersRepository.find({
       where: {
         date: whereDate,
@@ -113,7 +114,7 @@ export class AnswersService {
       },
       take: limit,
       order: {
-        id: -1,
+        id: orderById,
       },
       relations,
     });
