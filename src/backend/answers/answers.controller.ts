@@ -78,7 +78,7 @@ export class AnswersController {
       });
       return { data: dateList };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -104,7 +104,7 @@ export class AnswersController {
         : await this.answersService.getAnswerByUserId({ userId });
       return { data: answer };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -132,7 +132,7 @@ export class AnswersController {
       const today = getDateString({});
       return { data: { today, answers } };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -173,7 +173,7 @@ export class AnswersController {
           direction,
         })
         : await await this.answersService.getAnswersDiary({ userId, limit });
-      
+
       if (date && direction === 0) {
         // 날짜 오름차순으로 재 정렬
         answers = answers.sort((answer, compareAnswer) => {
@@ -182,7 +182,7 @@ export class AnswersController {
       }
       return { data: { date, limit, direction, answers } };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -222,7 +222,7 @@ export class AnswersController {
       }
       return { data: answers };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -253,7 +253,7 @@ export class AnswersController {
       });
       return { data: answers };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -288,9 +288,9 @@ export class AnswersController {
         {},
       );
       const monthAnswer = Object.values(answers) as Answer[][];
-      return { data: { date: getDateString({ date }), monthAnswer } };
+      return { data: { date: firstDate, monthAnswer } };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -313,7 +313,7 @@ export class AnswersController {
       });
       return { data: result };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -404,7 +404,7 @@ export class AnswersController {
       });
       return { status: HttpStatus.CREATED, data: returnAnswer };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -473,7 +473,7 @@ export class AnswersController {
       });
       return { data: returnAnswer };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -494,7 +494,7 @@ export class AnswersController {
       await this.answersService.deleteAnswer(answer);
       return { data: null, message: new DeleteAnswerDto().message };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 }

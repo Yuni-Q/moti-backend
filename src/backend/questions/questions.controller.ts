@@ -34,7 +34,7 @@ export class QuestionsController {
       const result = await this.QuestionsService.createQuestion(body.content);
       return { status: HttpStatus.CREATED, data: result };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -67,7 +67,7 @@ export class QuestionsController {
       });
       return { data: result };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 }

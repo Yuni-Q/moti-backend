@@ -73,7 +73,7 @@ export class SigninController {
     } catch (error) {
       console.log('token', token);
       console.log(error);
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -127,7 +127,7 @@ export class SigninController {
     } catch (error) {
       console.log('token', token);
       console.log(error);
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 }

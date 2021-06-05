@@ -15,28 +15,37 @@ import { SigninModule } from './signin/signin.module';
 import { UsersModule } from './users/users.module';
 import { ViewsModule } from './views/views.module';
 
+const imports = process.env.NODE_ENV === 'test' ? [ConfigModule.forRoot(),
+  UsersModule,
+  DatabaseModule,
+  EnvModule,
+  SigninModule,
+  QuestionsModule,
+  MissionsModule,
+  AnswersModule,
+  FilesModule,
+  ViewsModule,] : [ConfigModule.forRoot(),
+  MorganModule,
+  UsersModule,
+  DatabaseModule,
+  EnvModule,
+  SigninModule,
+  QuestionsModule,
+  MissionsModule,
+  AnswersModule,
+  FilesModule,
+  ViewsModule,]
+
+const providers = process.env.NODE_ENV === 'test' ? [AppService] : [AppService,
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: MorganInterceptor('combined'),
+  },]
+
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    MorganModule,
-    UsersModule,
-    DatabaseModule,
-    EnvModule,
-    SigninModule,
-    QuestionsModule,
-    MissionsModule,
-    AnswersModule,
-    FilesModule,
-    ViewsModule,
-  ],
+  imports,
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: MorganInterceptor('combined'),
-    },
-  ],
+  providers,
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

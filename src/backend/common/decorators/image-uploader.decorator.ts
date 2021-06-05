@@ -30,20 +30,22 @@ export const ImageUploader = createParamDecorator(
               Math.floor(Math.random() * possible.length),
             );
           const key = `${pathName}/${fileName}${path.parse(file.name).ext}`;
-          s3.upload(
-            {
-              Bucket: process.env.buket as string,
-              Key: key,
-              ACL: 'public-read',
-              Body: fs.createReadStream(file.path),
-            },
-            (error: any, result: any) => {
-              if (error) {
-                console.log(error);
-                reject(error);
-              }
-            },
-          );
+          if (process.env.NODE_ENV !== 'test') {
+            s3.upload(
+              {
+                Bucket: process.env.buket as string,
+                Key: key,
+                ACL: 'public-read',
+                Body: fs.createReadStream(file.path),
+              },
+              (error: any, result: any) => {
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                }
+              },
+            );
+          }
 
           // unlink tmp files
           fs.unlinkSync(file.path);

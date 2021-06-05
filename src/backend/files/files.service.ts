@@ -16,7 +16,7 @@ export class FilesService {
     return this.fileRepository
       .createQueryBuilder('files')
       .where(`part=${part}`)
-      .orderBy('RAND()')
+      .orderBy(process.env.NODE_ENV !== 'test' ? 'RAND()' : 'RANDOM()')
       .getOne();
   }
 
