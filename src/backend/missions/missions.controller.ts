@@ -76,7 +76,7 @@ export class MissionsController {
       await this.usersService.updateUser(newUser);
       return { data: { refresh, missions } };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -108,7 +108,7 @@ export class MissionsController {
       await this.usersService.updateUser(newUser);
       return { status: HttpStatus.OK, data: { refresh: false, missions } };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -128,7 +128,7 @@ export class MissionsController {
       const mission = await this.missionsService.getMissionById({ id });
       return { data: mission };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -151,7 +151,7 @@ export class MissionsController {
       const mission = await this.missionsService.createMission(body);
       return { status: HttpStatus.CREATED, data: mission };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -194,7 +194,7 @@ export class MissionsController {
       );
       return { data: returnMission };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -220,7 +220,7 @@ export class MissionsController {
       await this.missionsService.deleteMission(mission);
       return { data: null };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 

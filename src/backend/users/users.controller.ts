@@ -60,13 +60,13 @@ export class UsersController {
   @Get()
   async getAll(
     @TokenUserId() userId: User,
-    @Query('id', new QueryNumberValidationPipe(10)) id,
+    @Query('id', new QueryNumberValidationPipe(0)) id,
   ): Promise<UsersDto> {
     try {
       const users = await this.usersService.getAll(id);
       return { data: users };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -82,7 +82,7 @@ export class UsersController {
       const user = await this.usersService.getUserById({ id: userId });
       return { data: user };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -115,7 +115,7 @@ export class UsersController {
       const user = await this.usersService.getUserById({ id });
       return { data: user };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -151,7 +151,7 @@ export class UsersController {
       const returnUser = await this.usersService.updateMyInfo(newUser);
       return { data: returnUser };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -174,7 +174,7 @@ export class UsersController {
       const returnUser = await this.usersService.updateMyInfo(newUser);
       return { data: returnUser };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -196,7 +196,7 @@ export class UsersController {
       await this.usersService.deleteUser(user);
       return { data: null };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -237,7 +237,7 @@ export class UsersController {
       const returnUser = await this.usersService.updateMyInfo(newUser);
       return { data: returnUser };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message);
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 }

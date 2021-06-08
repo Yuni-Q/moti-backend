@@ -29,7 +29,7 @@ export class QuestionsService {
     const question = await this.questionRepository.create({
       content,
     } as Question);
-    this.questionRepository.save(question);
-    return question;
+    const newQuestion = this.questionRepository.save(question);
+    return newQuestion;
   }
 }

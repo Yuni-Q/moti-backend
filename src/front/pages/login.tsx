@@ -35,11 +35,10 @@ const Login: React.FC = () => {
       />
       <div className="d-flex flex-column align-items-center">
         <a
-          href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${
-            process.env.NODE_ENV === 'production'
-              ? 'https://yuni-q.herokuapp.com'
+          href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${process.env.NODE_ENV === 'production'
+              ? 'https://moti.company'
               : 'http://localhost:8000'
-          }/api/google&response_type=code&client_id=507319569465-nrfi50380ihnc22f4fsk13cii6e90pff.apps.googleusercontent.com`}
+            }/api/google&response_type=code&client_id=507319569465-nrfi50380ihnc22f4fsk13cii6e90pff.apps.googleusercontent.com`}
         >
           <StyledAppleLoginButton>
             <img src="/assets/images/icApple.png" alt="icApple" />

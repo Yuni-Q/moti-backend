@@ -10,24 +10,33 @@ import { Question } from 'src/backend/common/entity/Question.entity';
 
 function DatabaseOrmModule(): DynamicModule {
   const config = new EnvService().read();
-
-  return TypeOrmModule.forRoot({
-    name: 'default',
-    type: 'mysql',
-    host: config.DB_HOST,
-    port: 3306,
-    username: config.DB_USERNAME,
-    password: config.DB_PASSWORD,
-    database: config.DATABASE,
-    synchronize: false,
-    logging: true,
-    timezone: '+09:00',
-    entities: [User, Answer, File, Mission, Question], // 설정 부분
-  });
+  return TypeOrmModule.forRoot(process.env.NODE_ENV !== 'test'
+    ? {
+      name: 'default',
+      type: 'mysql',
+      host: config.DB_HOST,
+      port: 3306,
+      username: config.DB_USERNAME,
+      password: config.DB_PASSWORD,
+      database: config.DATABASE,
+      synchronize: false,
+      logging: true,
+      timezone: '+09:00',
+      entities: [User, Answer, File, Mission, Question], // 설정 부분
+    }
+    : {
+      keepConnectionAlive: true,
+      type: 'sqlite',
+      database: 'moti',
+      logging: false,
+      verboseRetryLog: false,
+      synchronize: true,
+      entities: [User, Answer, File, Mission, Question], // 설정 부분
+    });
 }
 
 @Global()
 @Module({
   imports: [EnvModule, DatabaseOrmModule()],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

@@ -86,7 +86,7 @@ export class MissionsService {
         .createQueryBuilder('missions')
         // 과거 데이터가 없으면 에러...
         .where(`id NOT IN (${ids.length > 0 ? ids.join(', ') : 0})`)
-        .orderBy('RAND()')
+        .orderBy(process.env.NODE_ENV !== 'test' ? 'RAND()' : 'RANDOM()')
         .limit(limit)
         .getMany()
     );

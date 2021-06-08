@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-const status = HttpStatus.INTERNAL_SERVER_ERROR;
+const defaultStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
 export class CustomInternalServerErrorException extends HttpException {
   @ApiProperty({
-    example: status,
+    example: defaultStatus,
     description: '상태 코드',
     required: true,
   })
-  public statusCode = status;
+  public statusCode = defaultStatus;
 
   @ApiProperty({
     example: '알 수 없는 에러가 발생했습니다.',
@@ -18,8 +18,8 @@ export class CustomInternalServerErrorException extends HttpException {
   })
   public message;
 
-  constructor(message) {
+  constructor(message, status, statusCode) {
     // TODO : status 제거
-    super({ status, statusCode: status, message }, status);
+    super({ status: status || statusCode || defaultStatus, statusCode: status || statusCode || defaultStatus, message }, status);
   }
 }

@@ -9,7 +9,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async createUser(body: User): Promise<User> {
     const user = await this.userRepository.create({ ...body });

@@ -13,7 +13,7 @@ export class AnswersService {
   constructor(
     @InjectRepository(Answer)
     private answersRepository: Repository<Answer>,
-  ) {}
+  ) { }
 
   async getDays({
     userId,
@@ -34,7 +34,7 @@ export class AnswersService {
         id,
         userId,
       },
-      order: { id: -1 },
+      relations,
     });
   }
 

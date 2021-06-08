@@ -9,10 +9,9 @@ export default async (
   res: NextApiResponse,
 ): Promise<void> => {
   try {
-    console.log(111);
     const HOST =
       process.env.NODE_ENV === 'production'
-        ? 'https://yuni-q.herokuapp.com'
+        ? 'https://moti.company'
         : 'http://localhost:8000';
     const oauth2Client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
