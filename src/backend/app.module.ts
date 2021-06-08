@@ -15,7 +15,7 @@ import { SigninModule } from './signin/signin.module';
 import { UsersModule } from './users/users.module';
 import { ViewsModule } from './views/views.module';
 
-const imports = process.env.NODE_ENV === 'test' ? [ConfigModule.forRoot(),
+const imports = [ConfigModule.forRoot(),
   UsersModule,
   DatabaseModule,
   EnvModule,
@@ -24,17 +24,10 @@ const imports = process.env.NODE_ENV === 'test' ? [ConfigModule.forRoot(),
   MissionsModule,
   AnswersModule,
   FilesModule,
-  ViewsModule,] : [ConfigModule.forRoot(),
-  MorganModule,
-  UsersModule,
-  DatabaseModule,
-  EnvModule,
-  SigninModule,
-  QuestionsModule,
-  MissionsModule,
-  AnswersModule,
-  FilesModule,
-  ViewsModule,]
+  ViewsModule,];
+if (process.env.NODE_ENV !== 'test') {
+    imports.push(MorganModule);
+}
 
 const providers = process.env.NODE_ENV === 'test' ? [AppService] : [AppService,
   {
