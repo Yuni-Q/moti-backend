@@ -1,12 +1,10 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { isArray } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { ResponseDto } from 'src/backend/common/dto/response.dto';
-import { User } from 'src/backend/common/entity/User.entity';
-
+import { OmitUser } from 'src/backend/common/entity/User.entity';
 export class UsersDto extends ResponseDto {
   @ApiProperty({
-    type: OmitType(User, ['answers']),
+    type: OmitUser,
     isArray: true,
   })
-  public data: User[];
+  public data: OmitUser[];
 }

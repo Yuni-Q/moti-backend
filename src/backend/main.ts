@@ -1,6 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
@@ -32,13 +32,20 @@ async function bootstrap() {
       },
       'authorization', // This name here is important for matching up with @ApiBearerAuth() in your controller!
     )
-    .setTitle('API')
+    .setTitle('Moti API Docs')
     .setDescription('개발을 위한 API 문서입니다.')
     .setVersion('1.0.0')
     .addCookieAuth('connect.id')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('apiDocs', app, document);
+  const customOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customSiteTitle: 'Moti API Docs',
+  };
+  SwaggerModule.setup('apiDocs', app, document, customOptions);
+
   await app.listen(port);
   console.log(`listening on port ${port}`);
 
