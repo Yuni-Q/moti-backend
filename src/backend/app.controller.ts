@@ -1,12 +1,11 @@
 import {
   Controller,
   Get,
-  HttpException,
-  UseInterceptors,
+  Param,
+  UseInterceptors
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { InvalidQueryException } from './common/exception/invalid.query.exception';
 import { UndefinedToNullInterceptor } from './common/interceptors/undefined.interceptor';
 
 @UseInterceptors(UndefinedToNullInterceptor)
@@ -23,9 +22,16 @@ export class AppController {
   //     return 'OK';
   //     throw new HttpException('No', 400);
   //   }
-  // }
+  // }.
+
+  
+   /**
+   * 테스트
+   * @param page 페이지(1~). 기본값: 1
+   * @param limit 페이지 당 엔티티 수. 기본값 10
+   */
   @Get('health')
-  getHealth(): any {
+  getHealth(@Param('page') page, @Param('limit') limit): any {
     return 'OK';
   }
 

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
@@ -70,8 +70,7 @@ export class User extends BaseEntity {
   refreshToken: string | null;
 
   @ApiProperty({
-    example: '12412412512',
-    description: '유저의 snsId와 snsType 값의 합은 유니한 값 입니다.',
+    enum: ['apple', 'google', 'web']
   })
   @IsString()
   @Column('varchar', { name: 'snsId', nullable: true, length: 255 })
@@ -124,3 +123,6 @@ export class User extends BaseEntity {
   @OneToMany(() => Answer, (answers) => answers.user)
   answers: Answer[];
 }
+
+
+export class OmitUser extends OmitType(User, ['answers']){}

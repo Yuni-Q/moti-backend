@@ -11,9 +11,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { File } from './File.entity';
-import { Mission } from './Mission.entity';
-import { User } from './User.entity';
+import { File, OmitFile } from './File.entity';
+import { Mission, OmitMission } from './Mission.entity';
+import { OmitUser, User } from './User.entity';
 
 @Index('missionId', ['missionId'], {})
 @Index('fileId', ['fileId'], {})
@@ -110,7 +110,7 @@ export class Answer extends BaseEntity {
   userId: number | null;
 
   @ApiProperty({
-    type: Mission,
+    type: OmitMission,
   })
   @IsObject()
   @ManyToOne(() => Mission, (missions) => missions.answers, {
@@ -121,7 +121,7 @@ export class Answer extends BaseEntity {
   mission: Mission;
 
   @ApiProperty({
-    type: File,
+    type: OmitFile,
   })
   @IsObject()
   @ManyToOne(() => File, (files) => files.answers, {
@@ -132,7 +132,7 @@ export class Answer extends BaseEntity {
   file: File;
 
   @ApiProperty({
-    type: User,
+    type: OmitUser,
   })
   @IsObject()
   @ManyToOne(() => User, (users) => users.answers, {

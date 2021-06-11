@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
@@ -74,3 +74,5 @@ export class Mission extends BaseEntity {
   @OneToMany(() => Answer, (answers) => answers.mission)
   answers: Answer[];
 }
+
+export class OmitMission extends OmitType(Mission, ['answers']){}

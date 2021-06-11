@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { isArray, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
   Column,
@@ -7,7 +7,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { Answer } from './Answer.entity';
 
@@ -74,3 +74,5 @@ export class File extends BaseEntity {
   @OneToMany(() => Answer, (answers) => answers.file)
   answers: Answer[];
 }
+
+export class OmitFile extends OmitType(File, ['answers']){}
