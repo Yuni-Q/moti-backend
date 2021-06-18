@@ -171,3 +171,5 @@
   - IntersectionType : 타입 2개 합칠때
   - Composition : 위에 타입들을 섞어 쓸 수 있다.
 - token에서 id 가져올 때 user entity에서 검증
+
+## 배포 !
