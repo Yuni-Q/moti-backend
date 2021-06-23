@@ -4,13 +4,12 @@ import { File } from 'src/backend/common/entity/File.entity';
 import { Repository } from 'typeorm';
 import { InvalidFileIdException } from './exception/invalid-file-id.exception';
 
-
 @Injectable()
 export class FilesService {
   constructor(
     @InjectRepository(File)
     private fileRepository: Repository<File>,
-  ) { }
+  ) {}
 
   async getFileByPart(part: number) {
     return this.fileRepository

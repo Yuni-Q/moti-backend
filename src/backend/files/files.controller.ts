@@ -26,7 +26,7 @@ import { FilesService } from './files.service';
 @ApiTags('files')
 @Controller('api/v1/files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) { }
+  constructor(private readonly filesService: FilesService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -68,7 +68,11 @@ export class FilesController {
       const result = await this.filesService.create({ cardUrl, part });
       return { statusCode: HttpStatus.CREATED, data: result };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
+      throw new CustomInternalServerErrorException(
+        error.message,
+        error.status,
+        error.statusCode,
+      );
     }
   }
 
@@ -121,7 +125,11 @@ export class FilesController {
       });
       return { data: returnFile };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
+      throw new CustomInternalServerErrorException(
+        error.message,
+        error.status,
+        error.statusCode,
+      );
     }
   }
 
@@ -174,7 +182,11 @@ export class FilesController {
       });
       return { data: returnFile };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
+      throw new CustomInternalServerErrorException(
+        error.message,
+        error.status,
+        error.statusCode,
+      );
     }
   }
 
@@ -195,7 +207,11 @@ export class FilesController {
       await this.filesService.deleteFile(file);
       return { data: null, message: new DeleteFileDto().message };
     } catch (error) {
-      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
+      throw new CustomInternalServerErrorException(
+        error.message,
+        error.status,
+        error.statusCode,
+      );
     }
   }
 }

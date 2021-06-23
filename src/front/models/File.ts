@@ -1,19 +1,21 @@
 import API from '../utils/API';
 
 export default class File {
-	protected static readonly api: API = new API('/api');
+  protected static readonly api: API = new API('/api');
 
-	id?: number;
+  id?: number;
 
-	cardUrl?: string;
+  cardUrl?: string;
 
-	cardSvgUrl?: string;
+  cardSvgUrl?: string;
 
-	cardPngUrl?: string;
+  cardPngUrl?: string;
 
-	part?: number;
+  cardPdfUrl?: string;
 
-	createdAt?: Date;
+  part?: number;
 
-	updatedAt?: Date;
+  createdAt?: Date;
+
+  updatedAt?: Date;
 }

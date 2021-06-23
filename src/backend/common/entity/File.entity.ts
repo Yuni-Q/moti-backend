@@ -7,7 +7,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import { Answer } from './Answer.entity';
 
@@ -44,6 +44,13 @@ export class File extends BaseEntity {
   cardPngUrl: string | null;
 
   @ApiProperty({
+    example: 'https://cdn.moti.company/J9smJXN7.pdf',
+    description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
+  })
+  @Column('varchar', { name: 'cardPdfUrl', nullable: true, length: 255 })
+  cardPdfUrl: string | null;
+
+  @ApiProperty({
     example: '1',
     description: '드림캐처 파츠의 구분 번호 입니다.',
   })
@@ -75,4 +82,4 @@ export class File extends BaseEntity {
   answers: Answer[];
 }
 
-export class OmitFile extends OmitType(File, ['answers']){}
+export class OmitFile extends OmitType(File, ['answers']) {}
