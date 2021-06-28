@@ -14,5 +14,6 @@
     "baseUrl": "./",
     "jsx": "react"
   },
-  "include": ["src/backend/**/*.ts", "./jest-setup.ts"]
+  "include": ["src/backend/**/*.ts", "./jest-setup.ts"],
+  "skipLibCheck": true
 }
