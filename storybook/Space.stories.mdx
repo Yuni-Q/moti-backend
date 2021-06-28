@@ -1,0 +1,70 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide|Space" />
+
+# 간격
+간격은 기본적으로 8의 배수를 사용합니다.<br/>
+클랙스 표기법은 bootstrap과 비슷합니다.
+```
+{property}{sides}-{minus}-{size}
+```
+
+## property
+- m : margin
+- p : padding
+
+## sides
+- t : top
+- r : right
+- b : bottom
+- l : left
+- y : top & bottom
+- x : right & left
+
+## size
+- 0 : 0
+- 1 : 8
+- 2 : 16
+- 3 : 24
+- harf : 4
+
+## minus 여부
+- m : 표기시 margin에 음수 적용
+
+## 예시
+### margin
+```css
+.m-1 {
+    margin: 8px;
+}
+.mt-2 {
+    margin-top: 16px;
+}
+.mx-2 {
+    margin-right: 16px;
+    margin-left: 16px;
+}
+.mb-half {
+    margin-bottom: 4px;
+}
+.mx-m-1 {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+```
+
+### padding
+```css
+.p-1 {
+    padding: 8px;
+}
+.pt-2 {
+    padding-top: 16px;
+}
+.px-2 {
+    padding-right: 16px;
+    padding-left: 16px;
+}
+```
+
+
