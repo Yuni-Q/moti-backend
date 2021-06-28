@@ -4,4 +4,4 @@ echo 'Running install_dependencies'
 echo '============================'
 
 cd /home/ubuntu/moti-backend
-yarn install 
+npx yarn install
