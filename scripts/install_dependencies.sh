@@ -3,5 +3,6 @@ echo '============================'
 echo 'Running install_dependencies'
 echo '============================'
 
-# cd /home/ubuntu/moti-backend
-# npx yarn install
+cd /home/ubuntu/moti-backend
+# npm ci
+npm install --production

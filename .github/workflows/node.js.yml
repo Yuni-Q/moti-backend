@@ -25,8 +25,8 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # - name: Remove node_modules
-      #   run: rm -rf node_modules
+      - name: Remove node_modules
+        run: rm -rf node_modules
 
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip .
