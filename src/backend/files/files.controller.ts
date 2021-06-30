@@ -1,23 +1,11 @@
-import {
-  Controller,
-  Delete,
-  HttpStatus,
-  Post,
-  Put,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Delete, Get, HttpStatus, Post, Put, UseInterceptors } from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
 import { ImageUploaderLiveName } from 'src/backend/common/decorators/image-uploade-live-name.decorator';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
+
 import { DeleteFileDto } from './dto/delete-file.dto';
 import { FileDto } from './dto/file.dto';
 import { FilesService } from './files.service';
@@ -27,6 +15,19 @@ import { FilesService } from './files.service';
 @Controller('api/v1/files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
+
+  @Get()
+  async getAllFiles() {
+    const files = await this.filesService.getAllFiles();
+    // await Promise.all(
+    //   files.map(async (f) => {
+    //     const ss = f.cardUrl.split('parts/');
+    //     f.cardPdfUrl = ss[0] + 'parts/headless/' + ss[1];
+    //     await this.filesService.updateFile(f);
+    //   }),
+    // );
+    return { data: files };
+  }
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -59,20 +60,14 @@ export class FilesController {
       if (!cardUrl || !partString) {
         throw new RequireBodyException();
       }
-      const part = partString
-        ? parseInt(partString, 10)
-        : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+      const part = partString ? parseInt(partString, 10) : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
       if (isNaN(part)) {
         throw new RequireBodyException();
       }
       const result = await this.filesService.create({ cardUrl, part });
       return { statusCode: HttpStatus.CREATED, data: result };
     } catch (error) {
-      throw new CustomInternalServerErrorException(
-        error.message,
-        error.status,
-        error.statusCode,
-      );
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -111,9 +106,7 @@ export class FilesController {
       if (!cardSvgUrl || !partString) {
         throw new RequireBodyException();
       }
-      const part = partString
-        ? parseInt(partString, 10)
-        : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
+      const part = partString ? parseInt(partString, 10) : parseInt(cardSvgUrl.split('.pdf')[0].split('_').pop(), 10);
       if (isNaN(part)) {
         throw new RequireBodyException();
       }
@@ -125,11 +118,7 @@ export class FilesController {
       });
       return { data: returnFile };
     } catch (error) {
-      throw new CustomInternalServerErrorException(
-        error.message,
-        error.status,
-        error.statusCode,
-      );
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -168,9 +157,7 @@ export class FilesController {
       if (!cardUrl || !partString) {
         throw new RequireBodyException();
       }
-      const part = partString
-        ? parseInt(partString, 10)
-        : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
+      const part = partString ? parseInt(partString, 10) : parseInt(cardUrl.split('.pdf')[0].split('_').pop(), 10);
       if (isNaN(part)) {
         throw new RequireBodyException();
       }
@@ -182,11 +169,7 @@ export class FilesController {
       });
       return { data: returnFile };
     } catch (error) {
-      throw new CustomInternalServerErrorException(
-        error.message,
-        error.status,
-        error.statusCode,
-      );
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 
@@ -207,11 +190,7 @@ export class FilesController {
       await this.filesService.deleteFile(file);
       return { data: null, message: new DeleteFileDto().message };
     } catch (error) {
-      throw new CustomInternalServerErrorException(
-        error.message,
-        error.status,
-        error.statusCode,
-      );
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
     }
   }
 }
