@@ -22,7 +22,7 @@ const defaultSettingsOfPrettier = {
   vueIndentScriptAndStyle: false, // Vue 파일의 script와 style 태그의 들여쓰기 여부 (v1.19.0)
   endOfLine: 'lf', // EoF 방식, OS별로 처리 방식이 다름
   embeddedLanguageFormatting: 'auto', // First available in v2.1.0
-}
+};
 
 // for custom settings
 module.exports = {
@@ -31,4 +31,4 @@ module.exports = {
   jsxBracketSameLine: true,
   singleQuote: true,
   parser: 'typescript',
-}
+};

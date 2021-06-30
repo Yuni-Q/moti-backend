@@ -16,9 +16,6 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2021,
-    project: 'tsconfig.json',
-    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
       modules: true,
@@ -27,13 +24,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-    'import',
-    'unused-imports',
-    'react-hooks',
-  ],
+  plugins: ['react', '@typescript-eslint', 'import', 'unused-imports', 'react-hooks'],
   root: true,
   ignorePatterns: ['.eslintrc.js'],
   // 0 = off, 1 = warning, 2 = error (you passed "3")
@@ -41,21 +32,13 @@ module.exports = {
     'react/jsx-key': 2,
     'react/jsx-no-target-blank': [0, { enforceDynamicLinks: 'always' }],
     'react/prop-types': 0,
-    semi: [2, 'never'],
-    'import/no-unresolved': 'off',
-    'import/no-named-as-default': 'off',
+    semi: 0,
+    'import/no-unresolved': 0,
+    'import/no-named-as-default': 0,
     'import/order': [
-      'error',
+      2,
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-          'object',
-        ],
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
         'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
@@ -63,8 +46,8 @@ module.exports = {
         },
       },
     ],
-    'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
-    'unused-imports/no-unused-imports': 'error',
+    'no-unused-vars': 0, // or "@typescript-eslint/no-unused-vars": "off",
+    'unused-imports/no-unused-imports': 2,
     'unused-imports/no-unused-vars': [
       'warn',
       {
@@ -75,7 +58,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/naming-convention': [
-      'error',
+      0,
       {
         selector: 'interface',
         format: ['PascalCase'],
@@ -85,7 +68,7 @@ module.exports = {
         },
       },
     ],
-    curly: 'error',
+    curly: 2,
   },
   settings: {
     'import/resolver': {
