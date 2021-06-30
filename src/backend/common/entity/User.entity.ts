@@ -1,18 +1,11 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
 import { Answer } from './Answer.entity';
 
 @Entity('users', { schema: 'chocopie' })
-export class User extends BaseEntity {
+export class User {
   @ApiProperty({
     example: '1',
     description: '유니크한 값입니다.',
@@ -70,7 +63,7 @@ export class User extends BaseEntity {
   refreshToken: string | null;
 
   @ApiProperty({
-    enum: ['apple', 'google', 'web']
+    enum: ['apple', 'google', 'web'],
   })
   @IsString()
   @Column('varchar', { name: 'snsId', nullable: true, length: 255 })
@@ -124,5 +117,4 @@ export class User extends BaseEntity {
   answers: Answer[];
 }
 
-
-export class OmitUser extends OmitType(User, ['answers']){}
+export class OmitUser extends OmitType(User, ['answers']) {}

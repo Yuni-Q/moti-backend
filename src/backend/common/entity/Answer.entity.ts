@@ -1,7 +1,6 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmpty, IsNumber, IsObject, IsString } from 'class-validator';
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -11,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { File, OmitFile } from './File.entity';
 import { Mission, OmitMission } from './Mission.entity';
 import { OmitUser, User } from './User.entity';
@@ -19,7 +19,7 @@ import { OmitUser, User } from './User.entity';
 @Index('fileId', ['fileId'], {})
 @Index('userId', ['userId'], {})
 @Entity('answers', { schema: 'chocopie' })
-export class Answer extends BaseEntity {
+export class Answer {
   @ApiProperty({
     example: 1,
     description: '유니크한 값입니다.',

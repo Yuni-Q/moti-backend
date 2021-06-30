@@ -1,18 +1,11 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
 import { Answer } from './Answer.entity';
 
 @Entity('files', { schema: 'chocopie' })
-export class File extends BaseEntity {
+export class File {
   @ApiProperty({
     example: 1,
     description: '유니크한 값입니다.',

@@ -1,16 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('questions', { schema: 'chocopie' })
-export class Question extends BaseEntity {
+export class Question {
   @ApiProperty({
     example: 1,
     description: '유니크한 값 입니다.',
