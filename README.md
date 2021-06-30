@@ -16,7 +16,7 @@
 <h3> <a href="https://www.behance.net/gallery/102667213/MOTI-Make-Own-True-Identity" target="_blank">🎨 behance</a></h3>
 
 
-## 🎬 시현 영상
+## 🎬 시연 영상
 
 
 <a href="https://www.youtube.com/watch?v=m91rLvwMmXo" target="_black"><img src="https://img.youtube.com/vi/m91rLvwMmXo/0.jpg"></a>
