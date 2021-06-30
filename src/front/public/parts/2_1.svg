@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_9" width="247" height="421">
+
+<defs>
+    <clipPath  id="1">
+
+    <path id=""  clip-rule="evenodd" transform="matrix(1 0 0 1 0 0)"  d="M0 316L0 0L0 0L185 0L185 0L185 316L185 316L0 316z" />    </clipPath>
+    <clipPath  id="2">
+
+    <path id=""  clip-rule="evenodd" transform="matrix(1 0 0 1 0 0)"  d="M0 0L185 0L185 0L185 316L185 316L0 316z" />    </clipPath>
+</defs>
+
+<g transform="matrix(1.3333 0 0 1.3333 0 0)">
+	<g clip-path="url(#1)" >
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M92.5002 223.589L90.5402 229.294L90.5402 229.294L92.5002 233.547L92.5002 233.547L94.4602 229.294z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M86.5159 221.9854L81.9659 225.9454L81.9659 225.9454L81.536896 230.60939L81.536896 230.60939L85.3609 227.9054z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M82.135 217.6046L76.214005 218.7596L76.214005 218.7596L73.511 222.5836L73.511 222.5836L78.174 222.1546z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M80.5315 211.6202L74.8265 209.66019L74.8265 209.66019L70.5735 211.6202L70.5735 211.6202L74.8265 213.5802z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M82.135 205.6358L78.174 201.0858L78.174 201.0858L73.511 200.6568L73.511 200.6568L76.214005 204.4808z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M86.5159 201.255L85.3609 195.335L85.3609 195.335L81.536896 192.63101L81.536896 192.63101L81.9659 197.295z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M92.5002 199.6515L94.4602 193.9465L94.4602 193.9465L92.5002 189.69351L92.5002 189.69351L90.5402 193.9465z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M98.4846 201.255L103.0346 197.295L103.0346 197.295L103.46359 192.63101L103.46359 192.63101L99.638596 195.335z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M102.8655 205.6358L108.7855 204.4808L108.7855 204.4808L111.4885 200.6568L111.4885 200.6568L106.8255 201.0858z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M104.469 211.6202L110.173004 213.5802L110.173004 213.5802L114.427 211.6202L114.427 211.6202L110.173004 209.66019z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M102.8655 217.6046L106.8255 222.1546L106.8255 222.1546L111.4885 222.5836L111.4885 222.5836L108.7855 218.7596z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M98.4846 221.9854L99.638596 227.9054L99.638596 227.9054L103.46359 230.60939L103.46359 230.60939L103.0346 225.9454z" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+		<g clip-path="url(#2)" >
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M103.1301 211.6202C 103.1301 205.74919 98.37109 200.99019 92.5001 200.99019C 86.6291 200.99019 81.869095 205.74919 81.869095 211.6202C 81.869095 217.4912 86.6291 222.2502 92.5001 222.2502C 98.37109 222.2502 103.1301 217.4912 103.1301 211.6202" stroke="none" fill="#E7BC9E" fill-rule="nonzero" />
+		</g>
+	</g>
+</g>
+</svg>

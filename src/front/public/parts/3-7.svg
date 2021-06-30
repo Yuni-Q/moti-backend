@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_3" width="247" height="421">
+
+<defs>
+    <clipPath  id="1">
+
+    <path id=""  clip-rule="evenodd" transform="matrix(1 0 0 1 0 0)"  d="M0 316L0 0L0 0L185 0L185 0L185 316L185 316L0 316z" />    </clipPath>
+    <clipPath  id="2">
+
+    <path id=""  clip-rule="evenodd" transform="matrix(1 0 0 1 0 0)"  d="M0 0L185 0L185 0L185 316L185 316L0 316z" />    </clipPath>
+</defs>
+
+<g transform="matrix(1.3333 0 0 1.3333 0 0)">
+	<g clip-path="url(#1)" >
+		<g clip-path="url(#2)" >
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M122.6896 162.5791C 116.709595 152.09511 105.4266 145.02611 92.4936 145.02611C 79.5596 145.02611 68.276596 152.09511 62.295597 162.5791" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M62.296 260.6611C 68.276 271.1451 79.56 278.2141 92.493004 278.2141C 105.427 278.2141 116.709 271.1451 122.69 260.6621" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M43.4523 181.4238C 32.9683 187.4038 25.899302 198.6868 25.899302 211.6198C 25.899302 224.5538 32.9683 235.83679 43.4513 241.8178" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M141.5343 241.8174C 152.0183 235.8374 159.0873 224.5534 159.0873 211.62039C 159.0873 198.6864 152.0183 187.4044 141.5343 181.4234" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M43.714 241.9785C 40.526 247.1385 41.169 253.9945 45.645 258.4685C 50.119 262.9445 56.975 263.5875 62.134003 260.3995" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M62.1349 162.8418C 56.9749 159.6538 50.1189 160.2968 45.644897 164.77179C 41.1689 169.2458 40.5259 176.1028 43.713898 181.2618" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M141.2716 181.2617C 144.45961 176.1027 143.8166 169.2467 139.34161 164.7717C 134.8676 160.2967 128.0106 159.6537 122.85161 162.8417" stroke="#E7BC9E" stroke-width="1" fill="none" />
+    <path id=""  transform="matrix(1 0 0 -1 0 316)"  d="M122.8517 260.3994C 128.0107 263.5874 134.8667 262.94443 139.3417 258.4684C 143.8167 253.99442 144.4597 247.13841 141.2727 241.97942" stroke="#E7BC9E" stroke-width="1" fill="none" />
+		</g>
+	</g>
+</g>
+</svg>
