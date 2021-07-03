@@ -43,6 +43,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.4",
+    "dotenv-webpack": "^7.0.3",
     "eslint-plugin-react-hooks": "^4.2.0",
     "formidable": "^1.2.2",
     "googleapis": "^74.2.0",
