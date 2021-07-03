@@ -8,6 +8,7 @@ import { TransformInterceptor } from 'src/backend/common/interceptors/transformI
 
 import { DeleteFileDto } from './dto/delete-file.dto';
 import { FileDto } from './dto/file.dto';
+import { FilesDto } from './dto/files.dto';
 import { FilesService } from './files.service';
 
 @UseInterceptors(TransformInterceptor)
@@ -16,17 +17,26 @@ import { FilesService } from './files.service';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: FilesDto,
+    description: '성공',
+  })
   @Get()
-  async getAllFiles() {
-    const files = await this.filesService.getAllFiles();
-    // await Promise.all(
-    //   files.map(async (f) => {
-    //     const ss = f.cardUrl.split('parts/');
-    //     f.cardPdfUrl = ss[0] + 'parts/headless/' + ss[1];
-    //     await this.filesService.updateFile(f);
-    //   }),
-    // );
-    return { data: files };
+  async getAllFiles(): Promise<FilesDto> {
+    try {
+      const files = await this.filesService.getAllFiles();
+      // await Promise.all(
+      //   files.map(async (f) => {
+      //     const ss = f.cardUrl.split('parts/');
+      //     f.cardPdfUrl = ss[0] + 'parts/headless/' + ss[1];
+      //     await this.filesService.updateFile(f);
+      //   }),
+      // );
+      return { data: files };
+    } catch (error) {
+      throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
+    }
   }
 
   @ApiResponse({
