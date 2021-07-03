@@ -1,4 +1,4 @@
-import { css } from "styled-components";
+import { css } from 'styled-components';
 
 export const W000 = '#fff';
 
@@ -47,83 +47,85 @@ export const warningColor = O500;
 export const errorColor = R500;
 
 const Color = css`
-	a, .link {
-		text-decoration: none;
-		color: ${B600};
-		cursor: pointer;
+  a,
+  .link {
+    text-decoration: none;
+    color: ${B600};
+    cursor: pointer;
 
-		&.hover:hover {
-			text-decoration: underline;
-		}
-	}
+    &.hover:hover {
+      text-decoration: underline;
+    }
+  }
 
-	:disabled, .disabled {
-		color: ${CG400};
-	}
+  :disabled,
+  .disabled {
+    color: ${CG400};
+  }
 
-	.text-default {
-		color: ${textDefault};
-		&:hover,
-		&:focus {
-			color: darken(${textDefault}, 15%) !important;
-		}
-	}
-	.text-light {
-		color: ${white};
-		&:hover,
-		&:focus {
-			color: darken(${white}, 15%) !important;
-		}
-	}
-	.text-muted {
-		color: ${CG400};
-		&:hover,
-		&:focus {
-			color: darken(${CG400}, 15%) !important;
-		}
-	}
-	.text-danger {
-		color: ${R500};
-		&:hover,
-		&:focus {
-			color: darken(${R500}, 15%) !important;
-		}
-	}
-	.text-warning {
-		color: ${O500};
-		&:hover,
-		&:focus {
-			color: darken(${O500}, 15%) !important;
-		}
-	}
-	.text-active {
-		color: ${B600};
-		&:hover,
-		&:focus {
-			color: darken(${B600}, 15%) !important;
-		}
-	}
-	.text-progress {
-		color: ${G500};
-		&:hover,
-		&:focus {
-			color: darken(${G500}, 15%) !important;
-		}
-	}
-	.text-sub {
-		color: ${subColor};
-		&:hover,
-		&:focus {
-			color: darken(${subColor}, 15%) !important;
-		}
-	}
-	.text-disabled {
-		color: ${disabledTxtColor};
-		&:hover,
-		&:focus {
-			color: darken(${disabledTxtColor}, 15%) !important;
-		}
-	}
+  .text-default {
+    color: ${textDefault};
+    &:hover,
+    &:focus {
+      color: darken(${textDefault}, 15%) !important;
+    }
+  }
+  .text-light {
+    color: ${white};
+    &:hover,
+    &:focus {
+      color: darken(${white}, 15%) !important;
+    }
+  }
+  .text-muted {
+    color: ${CG400};
+    &:hover,
+    &:focus {
+      color: darken(${CG400}, 15%) !important;
+    }
+  }
+  .text-danger {
+    color: ${R500};
+    &:hover,
+    &:focus {
+      color: darken(${R500}, 15%) !important;
+    }
+  }
+  .text-warning {
+    color: ${O500};
+    &:hover,
+    &:focus {
+      color: darken(${O500}, 15%) !important;
+    }
+  }
+  .text-active {
+    color: ${B600};
+    &:hover,
+    &:focus {
+      color: darken(${B600}, 15%) !important;
+    }
+  }
+  .text-progress {
+    color: ${G500};
+    &:hover,
+    &:focus {
+      color: darken(${G500}, 15%) !important;
+    }
+  }
+  .text-sub {
+    color: ${subColor};
+    &:hover,
+    &:focus {
+      color: darken(${subColor}, 15%) !important;
+    }
+  }
+  .text-disabled {
+    color: ${disabledTxtColor};
+    &:hover,
+    &:focus {
+      color: darken(${disabledTxtColor}, 15%) !important;
+    }
+  }
 `;
 
 export default Color;

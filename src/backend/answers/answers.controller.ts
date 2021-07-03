@@ -1,22 +1,5 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Post,
-  Put,
-  Query,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Delete, Get, HttpStatus, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
 import { ImageUploader } from 'src/backend/common/decorators/image-uploader.decorator';
 import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
@@ -25,14 +8,12 @@ import { CustomInternalServerErrorException } from 'src/backend/common/exception
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/backend/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
-import {
-  getDateString,
-  getMonthDate,
-  getNow,
-} from 'src/backend/common/util/date';
+import { getDateString, getMonthDate, getNow } from 'src/backend/common/util/date';
 import { FilesService } from 'src/backend/files/files.service';
 import { MissionsService } from 'src/backend/missions/missions.service';
+
 import { QueryNumberValidationPipe } from '../common/pipe/query-number.validation.pipe';
+
 import { AnswersService } from './answers.service';
 import { AnswerDaysDto } from './dto/answer.days.dto';
 import { AnswerDto } from './dto/answer.dto';
@@ -60,7 +41,7 @@ export class AnswersController {
     private readonly answersService: AnswersService,
     private readonly missionsService: MissionsService,
     private readonly filesService: FilesService,
-  ) { }
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -93,10 +74,7 @@ export class AnswersController {
     description: '답변을 원하는 날짜',
   })
   @Get()
-  async date(
-    @TokenUserId() userId,
-    @Query('date') dateString,
-  ): Promise<AnswerDto> {
+  async date(@TokenUserId() userId, @Query('date') dateString): Promise<AnswerDto> {
     try {
       const date = dateString ? getDateString({ date: dateString }) : null;
       const answer = date
@@ -117,18 +95,14 @@ export class AnswersController {
   async week(@TokenUserId() userId): Promise<WeekAnswerDto> {
     try {
       const answer = await this.answersService.getAnswerByUserId({ userId });
-      const recentAnswers = !!answer?.setDate
+      const recentAnswers = answer?.setDate
         ? await this.answersService.getRecentAnswers({
-          userId,
-          setDate: answer.setDate,
-        })
+            userId,
+            setDate: answer.setDate,
+          })
         : ([] as Answer[]);
       // 6개의 파츠를 모두 모은 날이 오늘이 아니면 새로운 것을 준다
-      const answers =
-        !!recentAnswers &&
-          !this.answersService.hasSixParsAndNotToday(recentAnswers)
-          ? recentAnswers
-          : [];
+      const answers = !!recentAnswers && !this.answersService.hasSixParsAndNotToday(recentAnswers) ? recentAnswers : [];
       const today = getDateString({});
       return { data: { today, answers } };
     } catch (error) {
@@ -167,17 +141,17 @@ export class AnswersController {
       const date = dateString ? getDateString({ date: dateString }) : null;
       let answers = date
         ? await this.answersService.getAnswersDiaryByDate({
-          userId,
-          date,
-          limit,
-          direction,
-        })
+            userId,
+            date,
+            limit,
+            direction,
+          })
         : await await this.answersService.getAnswersDiary({ userId, limit });
 
       if (date && direction === 0) {
         // 날짜 오름차순으로 재 정렬
         answers = answers.sort((answer, compareAnswer) => {
-          return answer.date > compareAnswer.date ? 1 : -1
+          return answer.date > compareAnswer.date ? 1 : -1;
         });
       }
       return { data: { date, limit, direction, answers } };
@@ -197,19 +171,16 @@ export class AnswersController {
     description: '특정 날짜의 답변',
   })
   @Get('list')
-  async list(
-    @TokenUserId() userId,
-    @Query('answerId') answerId,
-  ): Promise<ListAnswersDto> {
+  async list(@TokenUserId() userId, @Query('answerId') answerId): Promise<ListAnswersDto> {
     try {
       let answer: Answer;
       const answers = [] as Answer[][];
       for (let i = 0; i < 4; i++) {
         answer = answerId
           ? await this.answersService.getAnswerByUserIdAndLessThanId({
-            userId,
-            answerId,
-          })
+              userId,
+              answerId,
+            })
           : await this.answersService.getAnswerByUserId({ userId });
         if (!answer) {
           break;
@@ -268,10 +239,7 @@ export class AnswersController {
     description: '특정 날짜의 답변',
   })
   @Get('month')
-  async month(
-    @TokenUserId() userId,
-    @Query('date') date,
-  ): Promise<MonthAnswersDto> {
+  async month(@TokenUserId() userId, @Query('date') date): Promise<MonthAnswersDto> {
     try {
       const now = getNow(date);
       const { firstDate, lastDate } = getMonthDate(now);
@@ -345,10 +313,7 @@ export class AnswersController {
     },
   })
   @Post('')
-  async post(
-    @TokenUserId() userId,
-    @ImageUploader('answers') body,
-  ): Promise<AnswerDto> {
+  async post(@TokenUserId() userId, @ImageUploader('answers') body): Promise<AnswerDto> {
     try {
       const { file: imageUrl, content, missionId } = body;
       if ((!imageUrl && !content) || !missionId) {
@@ -359,7 +324,7 @@ export class AnswersController {
         userId,
         date,
       });
-      if (!!answer) {
+      if (answer) {
         throw new ExistAnswerException();
       }
 
@@ -367,11 +332,11 @@ export class AnswersController {
         userId,
       });
       // 데이터가 있어야 무언가를 할수가...
-      const recentAnswers: Answer[] = !!lastAnswer?.setDate
+      const recentAnswers: Answer[] = lastAnswer?.setDate
         ? await this.answersService.getRecentAnswers({
-          userId,
-          setDate: lastAnswer.setDate,
-        })
+            userId,
+            setDate: lastAnswer.setDate,
+          })
         : [];
       // 6개의 파츠를 모두 모았다면 새로운 파츠를 시작한다.
       const setDate = this.answersService.getSetDate(recentAnswers);
@@ -441,11 +406,7 @@ export class AnswersController {
     description: 'id',
   })
   @Put(':id')
-  async put(
-    @TokenUserId() userId,
-    @ImageUploader('answers') body,
-    @Id() id,
-  ): Promise<AnswerDto> {
+  async put(@TokenUserId() userId, @ImageUploader('answers') body, @Id() id): Promise<AnswerDto> {
     try {
       const { file, content, missionId } = body;
       if (!file && !content) {

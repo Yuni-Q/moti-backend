@@ -1,5 +1,6 @@
-import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+
+import * as dotenv from 'dotenv';
 
 export interface EnvData {
   APP_ENV: string;

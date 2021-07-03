@@ -20,6 +20,9 @@ export class CustomInternalServerErrorException extends HttpException {
 
   constructor(message, status, statusCode) {
     // TODO : status 제거
-    super({ status: status || statusCode || defaultStatus, statusCode: status || statusCode || defaultStatus, message }, status);
+    super(
+      { status: status || statusCode || defaultStatus, statusCode: status || statusCode || defaultStatus, message },
+      status,
+    );
   }
 }

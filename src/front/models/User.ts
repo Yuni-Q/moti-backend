@@ -1,67 +1,68 @@
 import { IncomingMessage } from 'http';
+
 import API from '../utils/API';
 
 export default class User {
-	protected static readonly api: API = new API('/api');
+  protected static readonly api: API = new API('/api');
 
-	id?: number;
+  id?: number;
 
-	birthday?: string;
+  birthday?: string;
 
-	email?: string;
+  email?: string;
 
-	name?: string;
+  name?: string;
 
-	gender?: string;
+  gender?: string;
 
-	refreshDate?: string;
+  refreshDate?: string;
 
-	refreshToken?: string;
+  refreshToken?: string;
 
-	mission?: string;
+  mission?: string;
 
-	snsId?: string;
+  snsId?: string;
 
-	snsType?: 'google' | 'apple';
+  snsType?: 'google' | 'apple';
 
-	createdAt?: string;
+  createdAt?: string;
 
-	updatedAt?: string;
+  updatedAt?: string;
 
-	public static getUsersMy({ token, req }: { token: string; req?: IncomingMessage }): Promise<User> {
-		return this.api.get(
-			`/v1/users/my/`,
-			{},
-			{
-				headers: { Authorization: token },
-				extra: { req },
-			},
-		);
-	}
+  public static getUsersMy({ token, req }: { token: string; req?: IncomingMessage }): Promise<User> {
+    return this.api.get(
+      `/v1/users/my/`,
+      {},
+      {
+        headers: { Authorization: token },
+        extra: { req },
+      },
+    );
+  }
 
-	public static deleteUser({ token, req }: { token: string; req?: IncomingMessage }): Promise<void> {
-		return this.api.delete(
-			`/v1/users/`,
-			{},
-			{
-				headers: { Authorization: token },
-				extra: { req },
-			},
-		);
-	}
+  public static deleteUser({ token, req }: { token: string; req?: IncomingMessage }): Promise<void> {
+    return this.api.delete(
+      `/v1/users/`,
+      {},
+      {
+        headers: { Authorization: token },
+        extra: { req },
+      },
+    );
+  }
 
-	public static putUser({
-		token,
-		body,
-		req,
-	}: {
-		token: string;
-		body: { name: string; gender: string; birthday?: string };
-		req?: IncomingMessage;
-	}): Promise<void> {
-		return this.api.put(`/v1/users/`, body, {
-			headers: { Authorization: token },
-			extra: { req },
-		});
-	}
+  public static putUser({
+    token,
+    body,
+    req,
+  }: {
+    token: string;
+    body: { name: string; gender: string; birthday?: string };
+    req?: IncomingMessage;
+  }): Promise<void> {
+    return this.api.put(`/v1/users/`, body, {
+      headers: { Authorization: token },
+      extra: { req },
+    });
+  }
 }

@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+
 import { Answer } from '../common/entity/Answer.entity';
+
 import { AnswersService } from './answers.service';
 
 class MockAnswersRepository {}

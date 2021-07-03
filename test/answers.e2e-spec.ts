@@ -1,16 +1,18 @@
+import path from 'path';
+
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import path from 'path';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { Answer } from '../src/backend/common/entity/Answer.entity';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
 import { getDateString, getFirstDate, getNow } from '../src/backend/common/util/date';
+
 import { hasFileKeys, postFile } from './util/files';
 import { hasMissionKeys, postMission } from './util/missions';
 import { signin } from './util/signin';
 import { checkStatus } from './util/status';
-
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -32,8 +34,7 @@ describe('AppController (e2e)', () => {
     app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
 
-    req = request(app.getHttpServer())
-      ;
+    req = request(app.getHttpServer());
 
     const {
       body: {
@@ -282,15 +283,33 @@ describe('AppController (e2e)', () => {
 });
 
 const hasAnswerKeys = (data: Answer) => {
-  if (!('id' in data)) throw new Error('missing id key');
-  if (!('userId' in data)) throw new Error('missing userId key');
-  if (!('missionId' in data)) throw new Error('missing missionId key');
-  if (!('fileId' in data)) throw new Error('missing fileId key');
-  if (!('imageUrl' in data)) throw new Error('missing imageUrl key');
-  if (!('content' in data)) throw new Error('missing content key');
-  if (!('date' in data)) throw new Error('missing date key');
-  if (!('setDate' in data)) throw new Error('missing setDate key');
-  if (!('no' in data)) throw new Error('missing no key');
+  if (!('id' in data)) {
+    throw new Error('missing id key');
+  }
+  if (!('userId' in data)) {
+    throw new Error('missing userId key');
+  }
+  if (!('missionId' in data)) {
+    throw new Error('missing missionId key');
+  }
+  if (!('fileId' in data)) {
+    throw new Error('missing fileId key');
+  }
+  if (!('imageUrl' in data)) {
+    throw new Error('missing imageUrl key');
+  }
+  if (!('content' in data)) {
+    throw new Error('missing content key');
+  }
+  if (!('date' in data)) {
+    throw new Error('missing date key');
+  }
+  if (!('setDate' in data)) {
+    throw new Error('missing setDate key');
+  }
+  if (!('no' in data)) {
+    throw new Error('missing no key');
+  }
 };
 
 const getAnswerByDate = async ({
@@ -302,9 +321,7 @@ const getAnswerByDate = async ({
   date?: string;
   token: string;
 }) => {
-  return req
-    .get(`/api/v1/answers${date ? `?date=${date}` : ''}`)
-    .set('Authorization', token);
+  return req.get(`/api/v1/answers${date ? `?date=${date}` : ''}`).set('Authorization', token);
 };
 
 const deleteAnswerById = async ({
@@ -360,11 +377,7 @@ const postAnswer = async ({
       .field('content', content);
     // file만 있는 경우
   } else if (!content && !!file) {
-    return req
-      .post('/api/v1/answers')
-      .set('Authorization', token)
-      .field('missionId', missionId)
-      .attach('file', file);
+    return req.post('/api/v1/answers').set('Authorization', token).field('missionId', missionId).attach('file', file);
   }
   throw 'content, file 둘 중 하나는 있어야 합니다.';
 };
@@ -383,34 +396,18 @@ const putAnswer = async ({
   file?: string;
 }) => {
   if (!!content && !!file) {
-    return req
-      .put(`/api/v1/answers/${id}`)
-      .set('Authorization', token)
-      .field('content', content)
-      .attach('file', file);
+    return req.put(`/api/v1/answers/${id}`).set('Authorization', token).field('content', content).attach('file', file);
     // content만 있는 경우
   } else if (!file && !!content) {
-    return req
-      .put(`/api/v1/answers/${id}`)
-      .set('Authorization', token)
-      .field('content', content);
+    return req.put(`/api/v1/answers/${id}`).set('Authorization', token).field('content', content);
     // file만 있는 경우
   } else if (!content && !!file) {
-    return req
-      .put(`/api/v1/answers/${id}`)
-      .set('Authorization', token)
-      .attach('file', file);
+    return req.put(`/api/v1/answers/${id}`).set('Authorization', token).attach('file', file);
   }
   throw 'content, file 둘 중 하나는 있어야 합니다.';
 };
 
-const getAnswersWeek = async ({
-  req,
-  token,
-}: {
-  req: request.SuperTest<request.Test>;
-  token: string;
-}) => {
+const getAnswersWeek = async ({ req, token }: { req: request.SuperTest<request.Test>; token: string }) => {
   return req.get('/api/v1/answers/week').set('Authorization', token);
 };
 
@@ -423,15 +420,10 @@ const getAnswersMonthByDate = async ({
   token: string;
   date: string;
 }) => {
-  return req
-    .get(`/api/v1/answers/month${date ? `?date=${date}` : ''}`)
-    .set('Authorization', token);
+  return req.get(`/api/v1/answers/month${date ? `?date=${date}` : ''}`).set('Authorization', token);
 };
 
-const checkAnswer = async ({ req, token }: {
-  req: request.SuperTest<request.Test>;
-  token: string;
-}) => {
+const checkAnswer = async ({ req, token }: { req: request.SuperTest<request.Test>; token: string }) => {
   // 기존에 데이터가 있다면 제거
   const date = getDateString({});
   let response = await getAnswerByDate({ req, token });

@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
+
 import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/http-exception.filter';

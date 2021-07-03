@@ -1,8 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
+
 import { hasMissionKeys, postMission } from './util/missions';
 import { signin } from './util/signin';
 import { checkStatus } from './util/status';
@@ -102,13 +104,11 @@ describe('AppController (e2e)', () => {
   let mission3: request.Response;
 
   beforeAll(async () => {
-    let app: INestApplication;
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    const app = moduleFixture.createNestApplication();
     // class-validator 적용
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
@@ -123,7 +123,6 @@ describe('AppController (e2e)', () => {
     } = await signin(req);
     token = accessToken;
   });
-
 
   it('Post /api/v1/missions', async () => {
     const title = '안녕';
@@ -194,17 +193,10 @@ describe('AppController (e2e)', () => {
   });
 
   it('Delete /api/v1/missions/{id}', async () => {
-    mission1 = await req
-      .delete(`/api/v1/missions/${mission1.body.data.id}`)
-      .set('Authorization', token);
-    mission2 = await req
-      .delete(`/api/v1/missions/${mission2.body.data.id}`)
-      .set('Authorization', token);
-    mission3 = await req
-      .delete(`/api/v1/missions/${mission3.body.data.id}`)
-      .set('Authorization', token);
+    mission1 = await req.delete(`/api/v1/missions/${mission1.body.data.id}`).set('Authorization', token);
+    mission2 = await req.delete(`/api/v1/missions/${mission2.body.data.id}`).set('Authorization', token);
+    mission3 = await req.delete(`/api/v1/missions/${mission3.body.data.id}`).set('Authorization', token);
   });
-
 });
 
 const getMissionById = async ({
@@ -236,10 +228,7 @@ const putMission = async ({
   isImage: boolean;
   cycle: number;
 }) => {
-  return req
-    .put(`/api/v1/missions/${id}`)
-    .set('Authorization', token)
-    .send({ title, isContent, isImage, cycle });
+  return req.put(`/api/v1/missions/${id}`).set('Authorization', token).send({ title, isContent, isImage, cycle });
 };
 
 const deleteMission = async ({
@@ -258,12 +247,6 @@ const getMissions = async ({ req, token }: { req: request.SuperTest<request.Test
   return req.get(`/api/v1/missions`).set('Authorization', token);
 };
 
-const getMissionRefresh = async ({
-  req,
-  token,
-}: {
-  req: request.SuperTest<request.Test>;
-  token: string;
-}) => {
+const getMissionRefresh = async ({ req, token }: { req: request.SuperTest<request.Test>; token: string }) => {
   return req.get(`/api/v1/missions/refresh`).set('Authorization', token);
 };

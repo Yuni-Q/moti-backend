@@ -34,10 +34,7 @@ export class MissionBodyDto {
     description: '질문 다시 묻지 않을 기간',
     required: true,
   })
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false },
-    { message: '필수 파라이터가 없습니다.' },
-  )
+  @IsNumber({ allowNaN: false, allowInfinity: false }, { message: '필수 파라이터가 없습니다.' })
   @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   public cycle: number;
 }

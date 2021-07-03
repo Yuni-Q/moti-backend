@@ -5,6 +5,7 @@ import { Mission } from 'src/backend/common/entity/Mission.entity';
 import { User } from 'src/backend/common/entity/User.entity';
 import { getDateString } from 'src/backend/common/util/date';
 import { Repository } from 'typeorm';
+
 import { MissionBodyDto } from './dto/mission-body.dto';
 import { InvalidMissionIdException } from './exception/invalid-mission-id.exception';
 
@@ -13,7 +14,7 @@ export class MissionsService {
   constructor(
     @InjectRepository(Mission)
     private missionRepository: Repository<Mission>,
-  ) { }
+  ) {}
   async deleteMission(body) {
     await this.missionRepository.remove(body);
   }
@@ -55,13 +56,7 @@ export class MissionsService {
     return !user.refreshDate || (!!user.refreshDate && user.refreshDate < date);
   }
 
-  hasOldMissions({
-    mission,
-    date,
-  }: {
-    mission: { date: string; missions: Mission[] };
-    date: string;
-  }) {
+  hasOldMissions({ mission, date }: { mission: { date: string; missions: Mission[] }; date: string }) {
     return mission?.date === date && mission?.missions?.length > 0;
   }
 
@@ -73,13 +68,7 @@ export class MissionsService {
       getDateString({ date: answer.date, day: answer.mission.cycle }) >= date
     );
   }
-  async getMissionsByNotInIdAndLimit({
-    ids,
-    limit = 3,
-  }: {
-    ids: number[];
-    limit?: number;
-  }) {
+  async getMissionsByNotInIdAndLimit({ ids, limit = 3 }: { ids: number[]; limit?: number }) {
     // TODO : .orderBy('RAND()')가 아직 지원하지 않아서 createQueryBuilder 사용
     return (
       this.missionRepository

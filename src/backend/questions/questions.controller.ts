@@ -1,26 +1,19 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  Post,
-  Query,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
 import { InvalidQueryException } from 'src/backend/common/exception/invalid.query.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
+
 import { QuestionDto } from './dto/question.dto';
-import { QuestionsDto } from './dto/questions.dto';
 import { QuestionsPostRequestDto } from './dto/questions-post-request.dto';
+import { QuestionsDto } from './dto/questions.dto';
 import { QuestionsService } from './questions.service';
 
 @UseInterceptors(TransformInterceptor)
 @ApiTags('questions')
 @Controller('api/v1/questions')
 export class QuestionsController {
-  constructor(private readonly QuestionsService: QuestionsService) { }
+  constructor(private readonly QuestionsService: QuestionsService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -47,10 +40,7 @@ export class QuestionsController {
   @ApiQuery({ name: 'limit', required: false, description: 'limit' })
   @ApiOperation({ summary: '질문 조회' })
   @Get('')
-  async get(
-    @Query('page') pageString,
-    @Query('limit') limitString,
-  ): Promise<QuestionsDto> {
+  async get(@Query('page') pageString, @Query('limit') limitString): Promise<QuestionsDto> {
     try {
       const page = parseInt(pageString || 1, 10);
       const limit = parseInt(limitString || 1, 10);

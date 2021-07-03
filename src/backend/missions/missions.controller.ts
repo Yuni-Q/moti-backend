@@ -1,21 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Post,
-  Put,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpStatus, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AnswersService } from 'src/backend/answers/answers.service';
 import { Id } from 'src/backend/common/decorators/id.decorator';
 import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
@@ -26,7 +10,9 @@ import { RequireTokenException } from 'src/backend/common/exception/require.toke
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { getDateString } from 'src/backend/common/util/date';
 import { UsersService } from 'src/backend/users/users.service';
+
 import { LoginGuard } from '../common/guard/login.guard';
+
 import { DeleteMissionDto } from './dto/delete-mission.dto';
 import { MissionBodyDto } from './dto/mission-body.dto';
 import { MissionDto } from './dto/mission.dto';
@@ -49,7 +35,7 @@ export class MissionsController {
     private readonly missionsService: MissionsService,
     private readonly answersService: AnswersService,
     private readonly usersService: UsersService,
-  ) { }
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -144,9 +130,7 @@ export class MissionsController {
   })
   @UseGuards(LoginGuard)
   @Post()
-  async create(
-    @Body() body: MissionBodyDto,
-  ): Promise<MissionDto> {
+  async create(@Body() body: MissionBodyDto): Promise<MissionDto> {
     try {
       const mission = await this.missionsService.createMission(body);
       return { status: HttpStatus.CREATED, data: mission };
@@ -182,16 +166,11 @@ export class MissionsController {
   })
   @UseGuards(LoginGuard)
   @Put(':id')
-  async update(
-    @Body() body: MissionBodyDto,
-    @Id() id,
-  ): Promise<MissionDto> {
+  async update(@Body() body: MissionBodyDto, @Id() id): Promise<MissionDto> {
     try {
       const mission = await this.missionsService.checkMission({ id });
       const newMission = { ...mission, ...body };
-      const returnMission = await this.missionsService.updateMission(
-        newMission,
-      );
+      const returnMission = await this.missionsService.updateMission(newMission);
       return { data: returnMission };
     } catch (error) {
       throw new CustomInternalServerErrorException(error.message, error.status, error.statusCode);
@@ -224,20 +203,11 @@ export class MissionsController {
     }
   }
 
-  async getNewMission({
-    oneYearAgo,
-    date,
-    userId,
-  }: {
-    oneYearAgo: string;
-    date: string;
-    userId: number;
-  }) {
-    const oneYearData =
-      await this.answersService.getAnswersByUserIdAndDateRange({
-        userId,
-        dateGt: oneYearAgo,
-      });
+  async getNewMission({ oneYearAgo, date, userId }: { oneYearAgo: string; date: string; userId: number }) {
+    const oneYearData = await this.answersService.getAnswersByUserIdAndDateRange({
+      userId,
+      dateGt: oneYearAgo,
+    });
     const ids = [] as number[];
     oneYearData.forEach((answer: Answer) => {
       if (this.missionsService.hasMissionInAnswer({ answer, date })) {

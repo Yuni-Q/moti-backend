@@ -1,10 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 
 @Catch(HttpException)
@@ -21,8 +15,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error?: string;
     }; // class-validator type
     if (status === 403) {
-      err.statusCode = 1100
-      err.message = '올바르지 못한 토큰 입니다.'
+      err.statusCode = 1100;
+      err.message = '올바르지 못한 토큰 입니다.';
     }
     if (err.message instanceof Array) {
       return response.status(status).json({

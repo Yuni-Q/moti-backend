@@ -1,73 +1,74 @@
 import { IncomingMessage } from 'http';
+
 import API from '../utils/API';
 
 export default class Mission {
-	protected static readonly api: API = new API('/api');
+  protected static readonly api: API = new API('/api');
 
-	id?: number;
+  id?: number;
 
-	title?: string;
+  title?: string;
 
-	isContent?: boolean;
+  isContent?: boolean;
 
-	isImage?: boolean;
+  isImage?: boolean;
 
-	cycle?: number;
+  cycle?: number;
 
-	createdAt?: Date;
+  createdAt?: Date;
 
-	updatedAt?: Date;
+  updatedAt?: Date;
 
-	public static getMissionsId({
-		id,
-		token,
-		req,
-	}: {
-		id: string;
-		token: string;
-		req?: IncomingMessage;
-	}): Promise<Mission> {
-		return this.api.get(
-			`/v1/missions/${id}/`,
-			{},
-			{
-				headers: { Authorization: token },
-				extra: { req },
-			},
-		);
-	}
+  public static getMissionsId({
+    id,
+    token,
+    req,
+  }: {
+    id: string;
+    token: string;
+    req?: IncomingMessage;
+  }): Promise<Mission> {
+    return this.api.get(
+      `/v1/missions/${id}/`,
+      {},
+      {
+        headers: { Authorization: token },
+        extra: { req },
+      },
+    );
+  }
 
-	public static getMissions({
-		token,
-		req,
-	}: {
-		token: string;
-		req?: IncomingMessage;
-	}): Promise<{ missions: Mission[]; refresh: boolean }> {
-		return this.api.get(
-			`/v1/missions/`,
-			{},
-			{
-				headers: { Authorization: token },
-				extra: { req },
-			},
-		);
-	}
+  public static getMissions({
+    token,
+    req,
+  }: {
+    token: string;
+    req?: IncomingMessage;
+  }): Promise<{ missions: Mission[]; refresh: boolean }> {
+    return this.api.get(
+      `/v1/missions/`,
+      {},
+      {
+        headers: { Authorization: token },
+        extra: { req },
+      },
+    );
+  }
 
-	public static getMissionsRefresh({
-		token,
-		req,
-	}: {
-		token: string;
-		req?: IncomingMessage;
-	}): Promise<{ missions: Mission[]; refresh: boolean }> {
-		return this.api.get(
-			`/v1/missions/refresh/`,
-			{},
-			{
-				headers: { Authorization: token },
-				extra: { req },
-			},
-		);
-	}
+  public static getMissionsRefresh({
+    token,
+    req,
+  }: {
+    token: string;
+    req?: IncomingMessage;
+  }): Promise<{ missions: Mission[]; refresh: boolean }> {
+    return this.api.get(
+      `/v1/missions/refresh/`,
+      {},
+      {
+        headers: { Authorization: token },
+        extra: { req },
+      },
+    );
+  }
 }

@@ -1,9 +1,11 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { Question } from '../src/backend/common/entity/Question.entity';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
+
 import { checkStatus } from './util/status';
 
 describe('AppController (e2e)', () => {
@@ -44,8 +46,12 @@ describe('AppController (e2e)', () => {
 });
 
 const hasPostApiV1Questions = (data: Question) => {
-  if (!('id' in data)) throw new Error('missing id key');
-  if (!('content' in data)) throw new Error('missing content key');
+  if (!('id' in data)) {
+    throw new Error('missing id key');
+  }
+  if (!('content' in data)) {
+    throw new Error('missing content key');
+  }
 };
 
 const postQuestion = async ({ req, content }: { req: request.SuperTest<request.Test>; content: string }) => {
