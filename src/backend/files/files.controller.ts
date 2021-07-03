@@ -7,6 +7,7 @@ import { RequireBodyException } from 'src/backend/common/exception/require.body.
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 
 import { DeleteFileDto } from './dto/delete-file.dto';
+import { FileBodyDto } from './dto/file-body.dto';
 import { FileDto } from './dto/file.dto';
 import { FilesDto } from './dto/files.dto';
 import { FilesService } from './files.service';
@@ -63,7 +64,7 @@ export class FilesController {
     },
   })
   @Post()
-  async createFile(@ImageUploaderLiveName() body): Promise<FileDto> {
+  async createFile(@ImageUploaderLiveName() body: FileBodyDto): Promise<FileDto> {
     try {
       // TODO svg와 png도 함께 올리기
       const { file: cardUrl, part: partString } = body;
@@ -110,7 +111,7 @@ export class FilesController {
     description: 'id',
   })
   @Put(':id/svg')
-  async updateSvg(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
+  async updateSvg(@ImageUploaderLiveName() body: FileBodyDto, @Id() id: number): Promise<FileDto> {
     try {
       const { file: cardSvgUrl, part: partString } = body;
       if (!cardSvgUrl || !partString) {
@@ -161,7 +162,7 @@ export class FilesController {
     description: 'id',
   })
   @Put(':id')
-  async updatePdf(@ImageUploaderLiveName() body, @Id() id): Promise<FileDto> {
+  async updatePdf(@ImageUploaderLiveName() body: FileBodyDto, @Id() id: number): Promise<FileDto> {
     try {
       const { file: cardUrl, part: partString } = body;
       if (!cardUrl || !partString) {
@@ -194,7 +195,7 @@ export class FilesController {
     description: 'id',
   })
   @Delete(':id')
-  async destroy(@Id() id): Promise<DeleteFileDto> {
+  async destroy(@Id() id: number): Promise<DeleteFileDto> {
     try {
       const file = await this.filesService.checkFile({ id });
       await this.filesService.deleteFile(file);

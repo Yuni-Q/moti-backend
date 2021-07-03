@@ -51,7 +51,10 @@ export class UsersController {
     description: 'id',
   })
   @Get()
-  async getAll(@TokenUserId() userId: User, @Query('id', new QueryNumberValidationPipe(0)) id): Promise<UsersDto> {
+  async getAll(
+    @TokenUserId() userId: User,
+    @Query('id', new QueryNumberValidationPipe(0)) id: number,
+  ): Promise<UsersDto> {
     try {
       const users = await this.usersService.getAll(id);
       return { data: users };
@@ -67,7 +70,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '내 정보 조회' })
   @Get('my')
-  async getMyInfo(@TokenUserId() userId): Promise<UserDto> {
+  async getMyInfo(@TokenUserId() userId: number): Promise<UserDto> {
     try {
       const user = await this.usersService.getUserById({ id: userId });
       return { data: user };
