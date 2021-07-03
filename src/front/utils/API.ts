@@ -43,7 +43,7 @@ export interface APIGatewayResponse<T> {
 export default class API<EXTRA = {}> {
   public static SERVER_TIME_GAP = 0;
 
-  public static HOSTNAME = 'http://localhost:8000';
+  public static HOSTNAME = process.env.NODE_ENV === 'production' ? 'https://moti.company' : 'http://localhost:8000';
 
   public static HEADERS: { [key: string]: any } = {};
 
