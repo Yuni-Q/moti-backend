@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+
 import Header from '../components/Header';
 import {
   StyledBody,
@@ -13,6 +14,7 @@ import User from '../models/User';
 import Cookie from '../utils/Cookie';
 import { consoleError } from '../utils/log';
 import { redirectLogin, redirectRoot } from '../utils/redirect';
+
 import { PageContext } from './_app';
 
 const StyledSignUpButton = styled.button`
