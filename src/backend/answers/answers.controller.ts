@@ -1,5 +1,14 @@
 import { Controller, Delete, Get, HttpStatus, Post, Put, Query, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Id } from 'src/backend/common/decorators/id.decorator';
 import { ImageUploader } from 'src/backend/common/decorators/image-uploader.decorator';
 import { TokenUserId } from 'src/backend/common/decorators/token-user-id.decorator';
@@ -160,6 +169,7 @@ export class AnswersController {
     }
   }
 
+  @ApiOperation({ summary: '드림캐처를 최신부터 4개씩 불러오기' })
   @ApiResponse({
     status: HttpStatus.OK,
     type: ListAnswersDto,
@@ -168,7 +178,7 @@ export class AnswersController {
   @ApiQuery({
     name: 'answerId',
     required: false,
-    description: '특정 날짜의 답변',
+    description: '해당 답변 다음의 리스트 호출을 위한 id',
   })
   @Get('list')
   async list(@TokenUserId() userId, @Query('answerId') answerId): Promise<ListAnswersDto> {
