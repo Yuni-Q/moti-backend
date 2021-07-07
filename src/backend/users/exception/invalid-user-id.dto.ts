@@ -10,7 +10,7 @@ export class InvalidUserIdException extends HttpException {
     description: '상태 코드',
     required: true,
   })
-  public statusCode = status;
+  public statusCode: number = status;
 
   @ApiProperty({
     example: message,

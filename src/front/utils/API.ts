@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import dayjs from 'dayjs';
 import { IncomingMessage } from 'http';
 import QueryString from 'querystring';
+
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import dayjs from 'dayjs';
+
 import Cookie from './Cookie';
 import { LocalCacheWithTTL } from './LocalCache';
 import { consoleError } from './log';
@@ -41,7 +43,7 @@ export interface APIGatewayResponse<T> {
 export default class API<EXTRA = {}> {
   public static SERVER_TIME_GAP = 0;
 
-  public static HOSTNAME = 'http://localhost:8000';
+  public static HOSTNAME = process.env.NODE_ENV === 'production' ? 'https://moti.company' : 'http://localhost:8000';
 
   public static HEADERS: { [key: string]: any } = {};
 
@@ -53,18 +55,9 @@ export default class API<EXTRA = {}> {
     public prefix: string = '',
     private options?: {
       header?: { [key: string]: any };
-      onRequest?: (
-        method: APIMethod,
-        url: string,
-        data: any,
-        opt: APIOptionWithCache<EXTRA>,
-      ) => Promise<boolean>;
-      onResponse?: <T>(
-        result: AxiosResponse<APIGatewayResponse<T>>,
-      ) => Promise<any>;
-      onError?: <T>(
-        result: AxiosError<APIGatewayResponse<T>> | string,
-      ) => Promise<any>;
+      onRequest?: (method: APIMethod, url: string, data: any, opt: APIOptionWithCache<EXTRA>) => Promise<boolean>;
+      onResponse?: <T>(result: AxiosResponse<APIGatewayResponse<T>>) => Promise<any>;
+      onError?: <T>(result: AxiosError<APIGatewayResponse<T>> | string) => Promise<any>;
     },
   ) {
     this.headers = options?.header || {};
@@ -78,27 +71,25 @@ export default class API<EXTRA = {}> {
   // 메모리 캐시 저장소
   private cache: MemoryCache = new MemoryCache();
 
-  private async call<T>(
-    method: APIMethod,
-    url: string,
-    data?: any,
-    opt?: APIOptionWithCache<EXTRA>,
-  ): Promise<T> {
+  private async call<T>(method: APIMethod, url: string, data?: any, opt?: APIOptionWithCache<EXTRA>): Promise<T> {
     opt = opt || {};
     let cacheKey: string | undefined;
     if (method === 'GET' && opt.cacheId) {
       // API.getCache()를 통해 요청되었다면
       cacheKey = `API.Cache:${url}`;
       // QueryString
-      if (data && typeof data !== 'string')
+      if (data && typeof data !== 'string') {
         cacheKey += (url.match(/\?/) ? '&' : '?') + QueryString.stringify(data);
+      }
 
       // 메모리 캐시에서 찾아봄
       return QueueRunner(opt.cacheId, async (resolved, rejected) => {
         if (!opt?.cacheInvalidate) {
           if (cacheKey) {
             const cached = this.cache.get(cacheKey);
-            if (cached) return resolved(cached);
+            if (cached) {
+              return resolved(cached);
+            }
 
             if (opt?.cacheType !== 'MEMORY') {
               // 브라우저 IndexedDB에서 찾아봄
@@ -131,12 +122,12 @@ export default class API<EXTRA = {}> {
 
     const tsType = url.includes('?') ? '&' : '?';
 
-    if ((await this.options?.onRequest?.(method, url, data, opt)) === false)
+    if ((await this.options?.onRequest?.(method, url, data, opt)) === false) {
       return Promise.reject();
+    }
 
     return this.axiosInstance({
-      url: `${API.HOSTNAME + this.prefix + url
-        }${tsType}__ts=${new Date().getTime()}`,
+      url: `${API.HOSTNAME + this.prefix + url}${tsType}__ts=${new Date().getTime()}`,
       method,
       headers: opt.headers,
       data: method !== 'GET' ? data : undefined,
@@ -150,19 +141,16 @@ export default class API<EXTRA = {}> {
           const timestamp = result?.data?.timestamp;
 
           // SERVER_TIME_GAP 설정
-          if (timestamp)
+          if (timestamp) {
             API.SERVER_TIME_GAP =
-              (dayjs(parseInt(timestamp.toString(), 10)).toDate().getTime() -
-                new Date().getTime()) /
-              1000 ||
+              (dayjs(parseInt(timestamp.toString(), 10)).toDate().getTime() - new Date().getTime()) / 1000 ||
               API.SERVER_TIME_GAP ||
               0;
+          }
 
           if (result.status === 200 || result.status === 201) {
             const returnData: T =
-              (typeof result?.data?.data !== 'undefined'
-                ? result.data.data
-                : undefined) ||
+              (typeof result?.data?.data !== 'undefined' ? result.data.data : undefined) ||
               result?.data?.data ||
               result?.data?.result ||
               (result.data as any); // 응답이 바로 내려오는 케이스 추가  (profile.. 등등)
@@ -171,8 +159,9 @@ export default class API<EXTRA = {}> {
             if (cacheKey) {
               this.cache.set(cacheKey, data, opt?.cacheTTL);
               // 캐시 시간 설정
-              if (opt.cacheType !== 'MEMORY')
+              if (opt.cacheType !== 'MEMORY') {
                 LocalCacheWithTTL.set(cacheKey, data, opt.cacheTTL);
+              }
             }
             return Promise.resolve(returnData);
           }
@@ -183,10 +172,7 @@ export default class API<EXTRA = {}> {
         // 성공에 걸리지 못하면 실패
         return Promise.reject(
           result && result.data
-            ? result.data.statusMessage ||
-            result.data.message ||
-            result.data.error ||
-            result.data.errorMessage
+            ? result.data.statusMessage || result.data.message || result.data.error || result.data.errorMessage
             : null,
         );
       })
@@ -223,24 +209,14 @@ export default class API<EXTRA = {}> {
           return Promise.reject(result);
         }
 
-        const errorData =
-          result && result.response ? result.response.data : null;
+        const errorData = result && result.response ? result.response.data : null;
         return Promise.reject(
-          errorData
-            ? errorData.statusMessage ||
-            errorData.message ||
-            errorData.error ||
-            errorData.errorMessage
-            : null,
+          errorData ? errorData.statusMessage || errorData.message || errorData.error || errorData.errorMessage : null,
         );
       });
   }
 
-  public async get<T = any>(
-    url: string,
-    data?: any,
-    opt?: APIOption<EXTRA>,
-  ): Promise<T> {
+  public async get<T = any>(url: string, data?: any, opt?: APIOption<EXTRA>): Promise<T> {
     return this.call('GET', url, data, opt);
   }
 
@@ -255,27 +231,15 @@ export default class API<EXTRA = {}> {
     return this.call('GET', url, data, opt);
   }
 
-  public async post<T = any>(
-    url: string,
-    data?: any,
-    opt?: APIOption<EXTRA>,
-  ): Promise<T> {
+  public async post<T = any>(url: string, data?: any, opt?: APIOption<EXTRA>): Promise<T> {
     return this.call('POST', url, data, opt);
   }
 
-  public async put<T = any>(
-    url: string,
-    data?: any,
-    opt?: APIOption<EXTRA>,
-  ): Promise<T> {
+  public async put<T = any>(url: string, data?: any, opt?: APIOption<EXTRA>): Promise<T> {
     return this.call('PUT', url, data, opt);
   }
 
-  public async delete<T = any>(
-    url: string,
-    data?: any,
-    opt?: APIOption<EXTRA>,
-  ): Promise<T> {
+  public async delete<T = any>(url: string, data?: any, opt?: APIOption<EXTRA>): Promise<T> {
     return this.call('DELETE', url, data, opt);
   }
 

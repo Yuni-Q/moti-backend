@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/backend/common/entity/User.entity';
 import { MoreThan, Repository } from 'typeorm';
+
 import { InvalidUserIdException } from './exception/invalid-user-id.dto';
 
 @Injectable()
@@ -34,13 +35,7 @@ export class UsersService {
     });
   }
 
-  async getUserBySnsIdAndSnsType({
-    snsId,
-    snsType,
-  }: {
-    snsId: string;
-    snsType: string;
-  }): Promise<User> {
+  async getUserBySnsIdAndSnsType({ snsId, snsType }: { snsId: string; snsType: string }): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { snsId, snsType },
     });

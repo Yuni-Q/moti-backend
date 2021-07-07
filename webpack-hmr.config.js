@@ -1,5 +1,5 @@
-const nodeExternals = require('webpack-node-externals');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = function (options, webpack) {
   return {

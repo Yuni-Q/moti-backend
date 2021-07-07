@@ -1,17 +1,5 @@
-import {
-  Body,
-  Controller,
-  HttpStatus,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import jwt from 'jsonwebtoken';
 import { User } from 'src/backend/common/entity/User.entity';
 import { CustomInternalServerErrorException } from 'src/backend/common/exception/custom.interval.server.error.exception';
@@ -21,6 +9,7 @@ import { RequireTokenException } from 'src/backend/common/exception/require.toke
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
 import { InvalidUserIdException } from 'src/backend/users/exception/invalid-user-id.dto';
 import { UsersService } from 'src/backend/users/users.service';
+
 import { Token } from './decorators/token.decorator';
 import { SigninRequestDto } from './dto/signin-request.dto';
 import { SigninResponseDto } from './dto/signin-response.dto';
@@ -37,10 +26,7 @@ import { SigninService } from './signin.service';
 @ApiTags('signin')
 @Controller('api/v1/signin')
 export class SigninController {
-  constructor(
-    private readonly SigninService: SigninService,
-    private readonly usersService: UsersService,
-  ) { }
+  constructor(private readonly SigninService: SigninService, private readonly usersService: UsersService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -62,10 +48,8 @@ export class SigninController {
       if (!user?.id) {
         throw new InvalidUserIdException();
       }
-      const { accessToken, refreshToken } =
-        await this.SigninService.createToken(user);
-      const signUp =
-        !!user.name && !!user.birthday && !!user.email && !!user.gender;
+      const { accessToken, refreshToken } = await this.SigninService.createToken(user);
+      const signUp = !!user.name && !!user.birthday && !!user.email && !!user.gender;
       return {
         status: HttpStatus.CREATED,
         data: { accessToken, refreshToken, signUp },
@@ -89,10 +73,7 @@ export class SigninController {
     description: 'body',
   })
   @Post('')
-  async signin(
-    @Token() token: string,
-    @Body() body: SigninRequestDto,
-  ): Promise<SigninResponseDto> {
+  async signin(@Token() token: string, @Body() body: SigninRequestDto): Promise<SigninResponseDto> {
     try {
       const { snsType } = body;
       let snsId, email;
@@ -114,12 +95,9 @@ export class SigninController {
         snsId,
         snsType: snsType === 'web' ? 'google' : snsType,
       });
-      const signUp = !user ? false : !!user.name ? true : false;
-      const newUser = user
-        ? user
-        : await this.usersService.createUser({ snsId, snsType, email } as User);
-      const { accessToken, refreshToken } =
-        await this.SigninService.createToken(newUser);
+      const signUp = !user ? false : user.name ? true : false;
+      const newUser = user ? user : await this.usersService.createUser({ snsId, snsType, email } as User);
+      const { accessToken, refreshToken } = await this.SigninService.createToken(newUser);
       return {
         status: HttpStatus.CREATED,
         data: { accessToken, refreshToken, signUp },

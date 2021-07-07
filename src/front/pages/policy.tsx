@@ -1,12 +1,11 @@
 import React from 'react';
 
 const Policy: React.FC = () => {
-
-    return (
-        <div className="m-4" style={{ width: '100vw', height: '100vh', overflow: 'scroll' }}>
-            <h1>[MOTI 개인정보취급방침]</h1>
-            <div className="m-4" style={{    whiteSpace: 'break-spaces'}}>
-{`개인정보처리방침(시행일 : 2020년 01월 29일 ~ 현재)
+  return (
+    <div className="m-4" style={{ width: '100vw', height: '100vh', overflow: 'scroll' }}>
+      <h1>[MOTI 개인정보취급방침]</h1>
+      <div className="m-4" style={{ whiteSpace: 'break-spaces' }}>
+        {`개인정보처리방침(시행일 : 2020년 01월 29일 ~ 현재)
 이용자에게 다양한 서비스를 제공함에 있어 아래 기준을 준수합니다.
 아홉수(Ahobsu)(이하 ‘아홉수’)는 이용자의 동의를 기반으로 개인정보를 수집•이용 및 제공하고 있으며, 이용자의 권리(개인정보 자기결정권)를 적극적으로 보장합니다.
 아홉수는 정보통신서비스제공자가 준수하여야 하는 대한민국의 관계 법령 및 개인정보보호 규정, 가이드라인을 준수하고 있습니다.
@@ -124,9 +123,9 @@ const Policy: React.FC = () => {
 위 내용에 대한 추가, 삭제 및 수정이 있을 경우에는 시행하는 날로부터 최소 7일전에 공지사항 등을 통해 이용자에게 설명 드리겠습니다. 다만 이용자의 소중한 권리 또는 의무에 중요한 내용 변경은 최소 30일 전에 알려 드리겠습니다.
 
 개인정보처리방침 시행일자: 2020년 01월 29일`}
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Policy;

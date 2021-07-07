@@ -1,48 +1,80 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2021,
-    project: 'tsconfig.json',
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-      modules: true,
-      experimentalObjectRestSpread: true,
-    },
-  },
-  plugins: ['@typescript-eslint', 'react-hooks'],
-  extends: [
-    'prettier',
-    'prettier/react',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-  ],
-  root: true,
   env: {
     browser: true,
     node: true,
     es6: true,
     jest: true,
   },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+      modules: true,
+      experimentalObjectRestSpread: true,
+    },
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
+  plugins: ['react', '@typescript-eslint', 'import', 'unused-imports', 'react-hooks'],
+  root: true,
   ignorePatterns: ['.eslintrc.js'],
+  // 0 = off, 1 = warning, 2 = error (you passed "3")
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.ts'] }],
-    'prettier/prettier': 0,
-    'react/jsx-props-no-spreading': 'off',
-    'no-param-reassign': 0,
+    'react/jsx-key': 2,
+    'react/jsx-no-target-blank': [0, { enforceDynamicLinks: 'always' }],
     'react/prop-types': 0,
-    indent: 0,
-    'jsx-a11y/anchor-is-valid': 0,
-    'consistent-return': 0,
-    'jsx-a11y/label-has-associated-control': 0,
-    'no-alert': 0,
-    'no-empty-function': 0,
+    semi: 0,
+    'import/no-unresolved': 0,
+    'import/no-named-as-default': 0,
+    'import/order': [
+      2,
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    'no-unused-vars': 0, // or "@typescript-eslint/no-unused-vars": "off",
+    'unused-imports/no-unused-imports': 2,
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
+    '@typescript-eslint/naming-convention': [
+      0,
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: true,
+        },
+      },
+    ],
+    curly: 2,
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: 'src',
+      },
+    },
   },
 };

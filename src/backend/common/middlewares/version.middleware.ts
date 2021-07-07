@@ -13,10 +13,7 @@ export class VersionMiddleware implements NestMiddleware {
       }
       if (
         !!(request.headers.appVersion || request.headers.appversion) &&
-        parseInt(
-          (request.headers.appVersion || request.headers.appversion) as string,
-          10,
-        ) <= 2
+        parseInt((request.headers.appVersion || request.headers.appversion) as string, 10) <= 2
       ) {
         response.status(200).json({
           status: 1200,

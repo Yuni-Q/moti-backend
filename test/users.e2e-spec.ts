@@ -1,8 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
+
 import { signin } from './util/signin';
 import { checkStatus } from './util/status';
 import { hasUserKeys } from './util/users';
@@ -73,7 +75,6 @@ describe('AppController (e2e)', () => {
   // });
 });
 
-
 const putUser = async ({
   req,
   token,
@@ -87,35 +88,18 @@ const putUser = async ({
   birthday: string;
   gender: string;
 }) => {
-  return req
-    .put(`/api/v1/users`)
-    .set('Authorization', token)
-    .send({ name, birthday, gender });
+  return req.put(`/api/v1/users`).set('Authorization', token).send({ name, birthday, gender });
 };
 
 const getUsers = async ({ req, token }: { req: request.SuperTest<request.Test>; token: string }) => {
   return req.get(`/api/v1/users`).set('Authorization', token);
 };
 
-const getUserByToken = async ({
-  req,
-  token,
-}: {
-  req: request.SuperTest<request.Test>;
-  token: string;
-}) => {
+const getUserByToken = async ({ req, token }: { req: request.SuperTest<request.Test>; token: string }) => {
   return req.get(`/api/v1/users/my`).set('Authorization', token);
 };
 
-const getUser = async ({
-  req,
-  token,
-  id,
-}: {
-  req: request.SuperTest<request.Test>;
-  token: string;
-  id: number;
-}) => {
+const getUser = async ({ req, token, id }: { req: request.SuperTest<request.Test>; token: string; id: number }) => {
   return req.get(`/api/v1/users/${id}`).set('Authorization', token);
 };
 

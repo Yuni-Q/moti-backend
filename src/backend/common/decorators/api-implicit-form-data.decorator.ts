@@ -12,10 +12,7 @@ export const ApiImplicitFormData = (metadata: {
   type: any;
 }): MethodDecorator => {
   const param = {
-    name:
-      metadata.name === null || metadata.name === undefined
-        ? initialMetadata.name
-        : metadata.name,
+    name: metadata.name === null || metadata.name === undefined ? initialMetadata.name : metadata.name,
     in: 'formData',
     description: metadata.description || '',
     required: metadata.required || false,

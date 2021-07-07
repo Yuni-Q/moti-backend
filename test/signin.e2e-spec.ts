@@ -1,8 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
+
 import { signin } from './util/signin';
 import { checkStatus } from './util/status';
 
@@ -42,14 +44,16 @@ describe('AppController (e2e)', () => {
   });
 });
 
-const hasPostApiV1SigninRefreshKeys = (data: {
-  accessToken: string;
-  refreshToken: string;
-  signUp: boolean;
-}) => {
-  if (!('accessToken' in data)) throw new Error('missing accessToken key');
-  if (!('refreshToken' in data)) throw new Error('missing refreshToken key');
-  if (!('signUp' in data)) throw new Error('missing signUp key');
+const hasPostApiV1SigninRefreshKeys = (data: { accessToken: string; refreshToken: string; signUp: boolean }) => {
+  if (!('accessToken' in data)) {
+    throw new Error('missing accessToken key');
+  }
+  if (!('refreshToken' in data)) {
+    throw new Error('missing refreshToken key');
+  }
+  if (!('signUp' in data)) {
+    throw new Error('missing signUp key');
+  }
 };
 
 const checkRefreshToken = async ({

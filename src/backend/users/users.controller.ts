@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Put,
-  Query,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Put, Query, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,8 +16,10 @@ import { CustomInternalServerErrorException } from 'src/backend/common/exception
 import { RequireBodyException } from 'src/backend/common/exception/require.body.exception';
 import { RequireTokenException } from 'src/backend/common/exception/require.token.exception';
 import { TransformInterceptor } from 'src/backend/common/interceptors/transformInterceptor.interceptor';
+
 import { ImageUploader } from '../common/decorators/image-uploader.decorator';
 import { QueryNumberValidationPipe } from '../common/pipe/query-number.validation.pipe';
+
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { UserBodyDto } from './dto/user-body.dto';
 import { UserDto } from './dto/user.dto';
@@ -44,7 +37,7 @@ import { UsersService } from './users.service';
 @ApiTags('users')
 @Controller('api/v1/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -60,7 +53,7 @@ export class UsersController {
   @Get()
   async getAll(
     @TokenUserId() userId: User,
-    @Query('id', new QueryNumberValidationPipe(0)) id,
+    @Query('id', new QueryNumberValidationPipe(0)) id: number,
   ): Promise<UsersDto> {
     try {
       const users = await this.usersService.getAll(id);
@@ -77,7 +70,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '내 정보 조회' })
   @Get('my')
-  async getMyInfo(@TokenUserId() userId): Promise<UserDto> {
+  async getMyInfo(@TokenUserId() userId: number): Promise<UserDto> {
     try {
       const user = await this.usersService.getUserById({ id: userId });
       return { data: user };
@@ -141,10 +134,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '내 정보 수정' })
   @Put('')
-  async updateUser(
-    @TokenUserId() userId,
-    @Body() body: UserBodyDto,
-  ): Promise<UserDto> {
+  async updateUser(@TokenUserId() userId, @Body() body: UserBodyDto): Promise<UserDto> {
     try {
       const user = await this.usersService.checkUser({ id: userId });
       const newUser = { ...user, ...body };
@@ -226,10 +216,7 @@ export class UsersController {
   })
   @ApiOperation({ summary: '프로필 이미지 업로드' })
   @Put('my/profile')
-  async updateProfileUrl(
-    @TokenUserId() userId,
-    @ImageUploader('profile') body,
-  ): Promise<UserDto> {
+  async updateProfileUrl(@TokenUserId() userId, @ImageUploader('profile') body): Promise<UserDto> {
     try {
       const { file: profileUrl } = body;
       const user = await this.usersService.checkUser({ id: userId });

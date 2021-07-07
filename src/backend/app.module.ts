@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { MorganInterceptor, MorganModule } from 'nest-morgan';
+
 import { AnswersModule } from './answers/answers.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,7 +16,8 @@ import { SigninModule } from './signin/signin.module';
 import { UsersModule } from './users/users.module';
 import { ViewsModule } from './views/views.module';
 
-const imports = [ConfigModule.forRoot(),
+const imports = [
+  ConfigModule.forRoot(),
   UsersModule,
   DatabaseModule,
   EnvModule,
@@ -24,16 +26,22 @@ const imports = [ConfigModule.forRoot(),
   MissionsModule,
   AnswersModule,
   FilesModule,
-  ViewsModule,];
+  ViewsModule,
+];
 if (process.env.NODE_ENV !== 'test') {
-    imports.push(MorganModule);
+  imports.push(MorganModule);
 }
 
-const providers = process.env.NODE_ENV === 'test' ? [AppService] : [AppService,
-  {
-    provide: APP_INTERCEPTOR,
-    useClass: MorganInterceptor('combined'),
-  },]
+const providers =
+  process.env.NODE_ENV === 'test'
+    ? [AppService]
+    : [
+        AppService,
+        {
+          provide: APP_INTERCEPTOR,
+          useClass: MorganInterceptor('combined'),
+        },
+      ];
 
 @Module({
   imports,

@@ -1,14 +1,9 @@
 import { AppType, RenderPageResult } from 'next/dist/next-server/lib/utils';
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from 'next/document';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 import Helmet, { HelmetData } from 'react-helmet';
 import { ServerStyleSheet } from 'styled-components';
+
 import { consoleError } from '../utils/log';
 
 interface Props {
@@ -21,21 +16,16 @@ interface Props {
 type getInitialPropsRuturnType = RenderPageResult | Props;
 
 export default class CustomDocument extends Document<Props> {
-  static async getInitialProps(
-    context: DocumentContext,
-  ): Promise<getInitialPropsRuturnType> {
+  static async getInitialProps(context: DocumentContext): Promise<getInitialPropsRuturnType> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = context.renderPage;
     try {
       context.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App: AppType) => (props) =>
-            sheet.collectStyles(<App {...props} />),
+          enhanceApp: (App: AppType) => (props) => sheet.collectStyles(<App {...props} />),
         });
       const initialProps = await Document.getInitialProps(context);
-      const page = context.renderPage(
-        (App) => (props) => sheet.collectStyles(<App {...props} />),
-      );
+      const page = context.renderPage((App) => (props) => sheet.collectStyles(<App {...props} />));
       const styles = (
         <>
           <link href="/reset.css" rel="stylesheet" />
@@ -71,7 +61,7 @@ export default class CustomDocument extends Document<Props> {
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
           <meta name="description" content="yuni-q" />
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="http://localhost:8000/" />
+          <meta property="og:url" content="https://moti.company/" />
           <meta property="og:title" content="yuni-q" />
           <meta property="og:image" content="/favicon.png" />
           <meta property="og:description" content="yuni-q" />

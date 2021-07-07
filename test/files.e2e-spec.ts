@@ -1,9 +1,12 @@
+import path from 'path';
+
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import path from 'path';
 import request from 'supertest';
+
 import { AppModule } from '../src/backend/app.module';
 import { HttpExceptionFilter } from '../src/backend/common/http-exception.filter';
+
 import { hasFileKeys, postFile } from './util/files';
 import { signin } from './util/signin';
 import { checkStatus } from './util/status';
@@ -84,9 +87,5 @@ const putFile = async ({
   file: string;
   part: number;
 }) => {
-  return req
-    .put(`/api/v1/files/${id}`)
-    .set('Authorization', token)
-    .field('part', part)
-    .attach('file', file);
+  return req.put(`/api/v1/files/${id}`).set('Authorization', token).field('part', part).attach('file', file);
 };

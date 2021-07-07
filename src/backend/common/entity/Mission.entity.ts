@@ -1,18 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
 import { Answer } from './Answer.entity';
 
 @Entity('missions', { schema: 'chocopie' })
-export class Mission extends BaseEntity {
+export class Mission {
   @ApiProperty({
     example: 1,
     description: '유니크한 값입니다.',
@@ -74,3 +67,5 @@ export class Mission extends BaseEntity {
   @OneToMany(() => Answer, (answers) => answers.mission)
   answers: Answer[];
 }
+
+export class OmitMission extends OmitType(Mission, ['answers']) {}

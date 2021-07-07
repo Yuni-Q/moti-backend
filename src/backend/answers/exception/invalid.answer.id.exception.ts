@@ -20,9 +20,6 @@ export class InvalidAnswerIdException extends HttpException {
   public message = message;
 
   constructor() {
-    super(
-      { status, statusCode: status, message: '존재하지않는 answerId.' },
-      status,
-    );
+    super({ status, statusCode: status, message: '존재하지않는 answerId.' }, status);
   }
 }

@@ -4,6 +4,7 @@ import { NumberAttributeValue } from 'aws-sdk/clients/dynamodb';
 import { Answer } from 'src/backend/common/entity/Answer.entity';
 import { getDateString } from 'src/backend/common/util/date';
 import { Between, LessThan, MoreThan, Repository } from 'typeorm';
+
 import { InvalidAnswerIdException } from './exception/invalid.answer.id.exception';
 
 const relations = ['file', 'mission', 'user'];
@@ -13,13 +14,9 @@ export class AnswersService {
   constructor(
     @InjectRepository(Answer)
     private answersRepository: Repository<Answer>,
-  ) { }
+  ) {}
 
-  async getDays({
-    userId,
-  }: {
-    userId: NumberAttributeValue;
-  }): Promise<Answer[]> {
+  async getDays({ userId }: { userId: NumberAttributeValue }): Promise<Answer[]> {
     return this.answersRepository.find({
       select: ['date'],
       where: {
@@ -57,13 +54,7 @@ export class AnswersService {
     });
   }
 
-  async getAnswerByUserIdAndLessThanId({
-    userId,
-    answerId,
-  }: {
-    userId: number;
-    answerId: number;
-  }): Promise<Answer> {
+  async getAnswerByUserIdAndLessThanId({ userId, answerId }: { userId: number; answerId: number }): Promise<Answer> {
     return this.answersRepository.findOne({
       where: {
         userId,
@@ -75,13 +66,7 @@ export class AnswersService {
     });
   }
 
-  async getAnswersDiary({
-    userId,
-    limit,
-  }: {
-    userId: number;
-    limit: number;
-  }): Promise<Answer[]> {
+  async getAnswersDiary({ userId, limit }: { userId: number; limit: number }): Promise<Answer[]> {
     return this.answersRepository.find({
       where: {
         userId,
@@ -106,7 +91,7 @@ export class AnswersService {
     direction: number;
   }): Promise<Answer[]> {
     const whereDate = direction === 0 ? LessThan(date) : MoreThan(date);
-    const orderById = direction === 0 ? "DESC" : "ASC";
+    const orderById = direction === 0 ? 'DESC' : 'ASC';
     return this.answersRepository.find({
       where: {
         date: whereDate,
@@ -128,13 +113,7 @@ export class AnswersService {
     return this.answersRepository.save(body);
   }
 
-  async checkAnswerId({
-    id,
-    userId,
-  }: {
-    id: number;
-    userId: number;
-  }): Promise<Answer> {
+  async checkAnswerId({ id, userId }: { id: number; userId: number }): Promise<Answer> {
     const answer = await this.answersRepository.findOne({
       where: { id, userId },
       relations,
@@ -174,34 +153,20 @@ export class AnswersService {
     }
   }
 
-  async getMonthAnswers({
-    firstDate,
-    lastDate,
-    userId,
-  }: {
-    firstDate: string;
-    lastDate: string;
-    userId: number;
-  }) {
+  async getMonthAnswers({ firstDate, lastDate, userId }: { firstDate: string; lastDate: string; userId: number }) {
     return this.answersRepository.find({
       where: {
         userId,
         setDate: Between(firstDate, lastDate),
       },
       order: {
-        no: -1,
+        id: -1,
       },
       relations,
     });
   }
 
-  async getRecentAnswers({
-    userId,
-    setDate,
-  }: {
-    userId: number;
-    setDate: string;
-  }): Promise<Answer[]> {
+  async getRecentAnswers({ userId, setDate }: { userId: number; setDate: string }): Promise<Answer[]> {
     const answers = await this.answersRepository.find({
       where: {
         userId,
@@ -213,20 +178,10 @@ export class AnswersService {
   }
 
   hasSixParsAndNotToday(answers: Answer[]) {
-    return (
-      answers.length === 6 &&
-      answers[5] &&
-      answers[5].date !== getDateString({})
-    );
+    return answers.length === 6 && answers[5] && answers[5].date !== getDateString({});
   }
 
-  async getAnswerByDateAndUserId({
-    userId,
-    date,
-  }: {
-    userId: number;
-    date: string;
-  }) {
+  async getAnswerByDateAndUserId({ userId, date }: { userId: number; date: string }) {
     return this.answersRepository.findOne({
       where: {
         userId,
@@ -248,13 +203,7 @@ export class AnswersService {
     });
   }
 
-  async getAnswersByUserIdAndDateRange({
-    userId,
-    dateGt,
-  }: {
-    userId: number;
-    dateGt: string;
-  }): Promise<Answer[]> {
+  async getAnswersByUserIdAndDateRange({ userId, dateGt }: { userId: number; dateGt: string }): Promise<Answer[]> {
     return this.answersRepository.find({
       relations,
       where: {

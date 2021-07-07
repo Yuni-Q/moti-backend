@@ -1,18 +1,11 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { isArray, IsNumber, IsString } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { IsNumber, IsString } from 'class-validator';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
 import { Answer } from './Answer.entity';
 
 @Entity('files', { schema: 'chocopie' })
-export class File extends BaseEntity {
+export class File {
   @ApiProperty({
     example: 1,
     description: '유니크한 값입니다.',
@@ -42,6 +35,13 @@ export class File extends BaseEntity {
   })
   @Column('varchar', { name: 'cardPngUrl', nullable: true, length: 255 })
   cardPngUrl: string | null;
+
+  @ApiProperty({
+    example: 'https://cdn.moti.company/J9smJXN7.pdf',
+    description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
+  })
+  @Column('varchar', { name: 'cardPdfUrl', nullable: true, length: 255 })
+  cardPdfUrl: string | null;
 
   @ApiProperty({
     example: '1',
@@ -74,3 +74,5 @@ export class File extends BaseEntity {
   @OneToMany(() => Answer, (answers) => answers.file)
   answers: Answer[];
 }
+
+export class OmitFile extends OmitType(File, ['answers']) {}

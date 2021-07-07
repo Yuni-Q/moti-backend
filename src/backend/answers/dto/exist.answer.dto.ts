@@ -11,7 +11,7 @@ export class ExistAnswerDto extends ResponseDto {
     description: '상태 코드',
     required: true,
   })
-  public status = status;
+  public status: number = status;
 
   @ApiProperty({
     example: message,

@@ -12,7 +12,8 @@
     "outDir": "./dist",
     "incremental": true,
     "baseUrl": "./",
-    "jsx": "preserve"
+    "jsx": "react"
   },
-  "include": ["src/backend/**/*.ts"]
+  "include": ["src/backend/**/*.ts", "./jest-setup.ts"],
+  "skipLibCheck": true
 }
