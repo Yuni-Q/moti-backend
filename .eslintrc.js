@@ -57,18 +57,7 @@ module.exports = {
         argsIgnorePattern: '^_',
       },
     ],
-    '@typescript-eslint/naming-convention': [
-      0,
-      {
-        selector: 'interface',
-        format: ['PascalCase'],
-        custom: {
-          regex: '^I[A-Z]',
-          match: true,
-        },
-      },
-    ],
-    curly: 2,
+    '@typescript-eslint/naming-convention': 0,
   },
   settings: {
     'import/resolver': {
