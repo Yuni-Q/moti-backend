@@ -12,6 +12,7 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/$1',
+    '\\.(gif|png|jpg|svg)$': '<rootDir>/mediaFileTransformer.js',
   },
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
 };
