@@ -24,6 +24,11 @@ describe('Error', () => {
       const text = screen.getByText('재접속');
       expect(text).toBeInTheDocument();
     });
+    it('style test', () => {
+      render(<Error errorMessage="error" />);
+      const text = screen.getByText('재접속');
+      expect(text).toHaveStyleRule('background-color', 'rgb(222,226,230)');
+    });
     it('click 재접속 button', () => {
       const reload = jest.fn();
       (useRouter as jest.Mock).mockImplementation(() => {
