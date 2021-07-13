@@ -14,5 +14,8 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/$1',
     '\\.(gif|png|jpg|svg)$': '<rootDir>/mediaFileTransformer.js',
   },
+  globals: {
+    'process.env.NODE_ENV': 'test',
+  },
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
 };
