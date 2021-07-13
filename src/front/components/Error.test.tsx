@@ -1,7 +1,8 @@
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import renderer from 'react-test-renderer';
+import 'jest-styled-components';
 
 import Error from './Error';
 
@@ -15,6 +16,13 @@ describe('Error', () => {
       const { container } = render(<Error errorMessage="error" />);
       expect(container).toHaveTextContent('재접속');
       expect(container).toHaveTextContent('알 수 없는 오류가 발생했습니다.');
+      const text = screen.getByText('재접속');
+      expect(text).toBeInTheDocument();
+    });
+    it('screen 사용', () => {
+      render(<Error errorMessage="error" />);
+      const text = screen.getByText('재접속');
+      expect(text).toBeInTheDocument();
     });
     it('click 재접속 button', () => {
       const reload = jest.fn();
@@ -39,15 +47,54 @@ describe('Error', () => {
   });
   context('matches snapshot', () => {
     it('toMatchInlineSnapshot 안에 내용은 자동으로 채워집니다', () => {
-      const tree = renderer.create(<Error />);
+      const tree = renderer.create(<Error />).toJSON();
       expect(tree).toMatchInlineSnapshot(`
+        .c2 {
+          display: block;
+          margin: 24px 0 36px;
+          width: 112px;
+          height: 40px;
+          background-color: rgb(222,226,230);
+          color: rgb(212,161,125);
+          border-radius: 30px;
+          box-shadow: 0 0 10px 0 rgb(252,222,227);
+        }
+
+        .c0 {
+          text-align: center;
+          -webkit-flex: 1;
+          -ms-flex: 1;
+          flex: 1;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          -webkit-box-pack: justify;
+          -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          -webkit-align-items: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+        }
+
+        .c1 {
+          display: block;
+          margin: 0 auto;
+          background: initial;
+        }
+
         <div
-          className="sc-iqAclL dqaLjA justify-content-center"
+          className="c0 justify-content-center"
         >
           <div>
             <img
               alt="error"
-              className="sc-crzoAE iZXZAL"
+              className="c1"
               height="114"
               src="/assets/images/internet.png"
               width="114"
@@ -63,7 +110,7 @@ describe('Error', () => {
             </div>
           </div>
           <button
-            className="sc-kEqXSa feeVXd"
+            className="c2"
             onClick={[Function]}
             type="button"
             width={112}
