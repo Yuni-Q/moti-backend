@@ -6,7 +6,7 @@ export const getDateString = ({
   month,
   day,
 }: {
-  date?: string;
+  date?: string | Date;
   years?: number;
   month?: number;
   day?: number;
