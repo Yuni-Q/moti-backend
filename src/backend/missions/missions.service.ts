@@ -52,8 +52,22 @@ export class MissionsService {
     return mission && JSON.parse(mission);
   }
 
-  isRefresh({ user, date }: { user: User; date: string }) {
-    return !user.refreshDate || (!!user.refreshDate && user.refreshDate < date);
+  isRefresh({ user, date }: { user: User; date: string }): boolean {
+    const isNextDate = this.isNextDate({ userRefreshDate: user.refreshDate, date });
+    const isOverInitializingTime = this.isOverInitializingTime();
+    return isNextDate && isOverInitializingTime;
+  }
+
+  isNextDate({ userRefreshDate, date }: { userRefreshDate: string; date: string }): boolean {
+    return !userRefreshDate || (!!userRefreshDate && userRefreshDate < date);
+  }
+
+  isOverInitializingTime(): boolean {
+    const INIT_TIME = '05:00';
+    const nowDate = new Date();
+    const nowTime = `${('0' + nowDate.getHours()).slice(-2)}:${('0' + nowDate.getMinutes()).slice(-2)}`;
+
+    return nowTime >= INIT_TIME;
   }
 
   hasOldMissions({ mission, date }: { mission: { date: string; missions: Mission[] }; date: string }) {
