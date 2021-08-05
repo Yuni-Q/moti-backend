@@ -16,6 +16,7 @@ module.exports = {
   },
   globals: {
     'process.env.NODE_ENV': 'test',
+    'process.env.TZ': 'Asia/Seoul',
   },
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
 };
