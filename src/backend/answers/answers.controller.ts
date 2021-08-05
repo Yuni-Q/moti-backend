@@ -424,6 +424,11 @@ export class AnswersController {
       }
       const answer = await this.answersService.checkAnswerId({ id, userId });
 
+      const date = getDateString({});
+      if (this.missionsService.isRefresh({ user: answer.user, date: date })) {
+        throw new TimeoutAnswerUpdateException();
+      }
+
       const imageUrl = file ? file : answer.imageUrl;
       if (!!answer.mission.isImage && !imageUrl) {
         throw new RequireFileException();
