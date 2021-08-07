@@ -35,6 +35,7 @@ import { WeekAnswerDto } from './dto/week.answer.dto';
 import { ExistAnswerException } from './exception/exist.answer.exception';
 import { RequireContentException } from './exception/requrie.content.exception';
 import { RequireFileException } from './exception/requrie.file.exception';
+import { TimeoutAnswerUpdateException } from './exception/timeout.answer.update.exception';
 
 @ApiResponse({
   status: new RequireTokenException().getStatus(),
