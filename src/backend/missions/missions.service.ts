@@ -52,7 +52,7 @@ export class MissionsService {
     return mission && JSON.parse(mission);
   }
 
-  isRefresh({ user, date }: { user: User; date: string }) {
+  isRefresh({ user, date }: { user: User; date: string }): boolean {
     return !user.refreshDate || (!!user.refreshDate && user.refreshDate < date);
   }
 

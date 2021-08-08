@@ -6,16 +6,19 @@ export const getDateString = ({
   month,
   day,
 }: {
-  date?: string;
+  date?: string | Date;
   years?: number;
   month?: number;
   day?: number;
 }) => {
+  const INIT_HOUR = 5;
+
   return dayjs(date)
     .locale('ko')
     .add(years || 0, 'years')
     .add(month || 0, 'months')
     .add(day || 0, 'days')
+    .subtract(typeof date === 'string' ? 0 : INIT_HOUR, 'hours')
     .format('YYYY-MM-DD');
 };
 

@@ -35,6 +35,7 @@ import { WeekAnswerDto } from './dto/week.answer.dto';
 import { ExistAnswerException } from './exception/exist.answer.exception';
 import { RequireContentException } from './exception/requrie.content.exception';
 import { RequireFileException } from './exception/requrie.file.exception';
+import { TimeoutAnswerUpdateException } from './exception/timeout.answer.update.exception';
 
 @ApiResponse({
   status: new RequireTokenException().getStatus(),
@@ -423,6 +424,11 @@ export class AnswersController {
         throw new RequireBodyException();
       }
       const answer = await this.answersService.checkAnswerId({ id, userId });
+
+      const date = getDateString({});
+      if (this.missionsService.isRefresh({ user: answer.user, date: date })) {
+        throw new TimeoutAnswerUpdateException();
+      }
 
       const imageUrl = file ? file : answer.imageUrl;
       if (!!answer.mission.isImage && !imageUrl) {
