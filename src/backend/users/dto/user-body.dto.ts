@@ -18,7 +18,6 @@ export class UserBodyDto {
   public name: string;
 
   @IsString({ message: '파라미터가 올바르지 않습니다.' })
-  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   @ApiProperty({
     example: '2020-03-18',
     description: '생일',
@@ -27,7 +26,6 @@ export class UserBodyDto {
   public birthday: string;
 
   @IsString({ message: '파라미터가 올바르지 않습니다.' })
-  @IsNotEmpty({ message: '필수 파라이터가 없습니다.' })
   @ApiProperty({
     example: '남',
     description: '성별',
