@@ -426,7 +426,7 @@ export class AnswersController {
       const answer = await this.answersService.checkAnswerId({ id, userId });
 
       const date = getDateString({});
-      if (this.missionsService.isRefresh({ user: answer.user, date: date })) {
+      if (answer.date !== date) {
         throw new TimeoutAnswerUpdateException();
       }
 
