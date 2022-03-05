@@ -29,7 +29,7 @@ export class Answer {
   id: number;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/C3EWCyEU',
+    example: 'https://storage.moti.company/C3EWCyEU',
     description: '이미지가 없을 경우에는 null 입니다.',
   })
   @IsString()

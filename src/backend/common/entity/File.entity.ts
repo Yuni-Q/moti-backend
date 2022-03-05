@@ -15,7 +15,7 @@ export class File {
   id: number;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/J9smJXN7.pdf',
+    example: 'https://storage.moti.company/J9smJXN7.pdf',
     description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
   })
   @IsString()
@@ -23,21 +23,21 @@ export class File {
   cardUrl: string | null;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/J9smJXN7.svg',
+    example: 'https://storage.moti.company/J9smJXN7.svg',
     description: '드림캐처 파츠의 svg 이미지 주소 입니다.',
   })
   @Column('varchar', { name: 'cardSvgUrl', nullable: true, length: 255 })
   cardSvgUrl: string | null;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/J9smJXN7.png',
+    example: 'https://storage.moti.company/J9smJXN7.png',
     description: '드림캐처 파츠의 png 이미지 주소 입니다.',
   })
   @Column('varchar', { name: 'cardPngUrl', nullable: true, length: 255 })
   cardPngUrl: string | null;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/J9smJXN7.pdf',
+    example: 'https://storage.moti.company/J9smJXN7.pdf',
     description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
   })
   @Column('varchar', { name: 'cardPdfUrl', nullable: true, length: 255 })

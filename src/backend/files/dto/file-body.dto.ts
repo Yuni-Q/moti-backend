@@ -11,7 +11,7 @@ export class FileBodyDto {
   public part?: string;
 
   @ApiProperty({
-    example: 'https://cdn.moti.company/J9smJXN7.pdf',
+    example: 'https://storage.moti.company/J9smJXN7.pdf',
     description: '파츠 이미지 url',
     required: false,
   })
