@@ -33,7 +33,7 @@ __decorate([
 ], Answer.prototype, "id", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/C3EWCyEU',
+        example: 'https://cdn.moti.company/C3EWCyEU',
         description: '이미지가 없을 경우에는 null 입니다.',
     }),
     class_validator_1.IsString(),

@@ -29,7 +29,7 @@ __decorate([
 ], FileBodyDto.prototype, "part", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7.pdf',
+        example: 'https://cdn.moti.company/J9smJXN7.pdf',
         description: '파츠 이미지 url',
         required: false,
     }),
