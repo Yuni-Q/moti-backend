@@ -102,7 +102,7 @@ __decorate([
 ], User.prototype, "snsType", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7',
+        example: 'https://cdn.moti.company/J9smJXN7',
         description: '유저의 프로필 이미지 주소 입니다.',
     }),
     class_validator_1.IsString(),

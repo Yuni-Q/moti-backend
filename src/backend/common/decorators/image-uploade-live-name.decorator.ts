@@ -40,7 +40,7 @@ export const ImageUploaderLiveName = createParamDecorator(async (data: unknown, 
 
         // unlink tmp files
         fs.unlinkSync(file.path);
-        const baseUrl = 'https://cdn.moti.company/';
+        const baseUrl = process.env.STORAGE_BASE_URL;
         const imageUrl = baseUrl + key;
         resolve(imageUrl);
       } catch (error) {

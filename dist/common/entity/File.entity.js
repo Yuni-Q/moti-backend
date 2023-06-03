@@ -31,7 +31,7 @@ __decorate([
 ], File.prototype, "id", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7.pdf',
+        example: 'https://cdn.moti.company/J9smJXN7.pdf',
         description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
     }),
     class_validator_1.IsString(),
@@ -40,7 +40,7 @@ __decorate([
 ], File.prototype, "cardUrl", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7.svg',
+        example: 'https://cdn.moti.company/J9smJXN7.svg',
         description: '드림캐처 파츠의 svg 이미지 주소 입니다.',
     }),
     typeorm_1.Column('varchar', { name: 'cardSvgUrl', nullable: true, length: 255 }),
@@ -48,7 +48,7 @@ __decorate([
 ], File.prototype, "cardSvgUrl", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7.png',
+        example: 'https://cdn.moti.company/J9smJXN7.png',
         description: '드림캐처 파츠의 png 이미지 주소 입니다.',
     }),
     typeorm_1.Column('varchar', { name: 'cardPngUrl', nullable: true, length: 255 }),
@@ -56,7 +56,7 @@ __decorate([
 ], File.prototype, "cardPngUrl", void 0);
 __decorate([
     swagger_1.ApiProperty({
-        example: 'https://storage.moti.company/J9smJXN7.pdf',
+        example: 'https://cdn.moti.company/J9smJXN7.pdf',
         description: '드림캐처 파츠의 pdf 이미지 주소 입니다.',
     }),
     typeorm_1.Column('varchar', { name: 'cardPdfUrl', nullable: true, length: 255 }),

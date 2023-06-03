@@ -39,7 +39,7 @@ exports.ImageUploaderLiveName = common_1.createParamDecorator(async (data, ctx) 
                     });
                 }
                 fs_1.default.unlinkSync(file.path);
-                const baseUrl = 'https://storage.moti.company/';
+                const baseUrl = process.env.STORAGE_BASE_URL;
                 const imageUrl = baseUrl + key;
                 resolve(imageUrl);
             }
